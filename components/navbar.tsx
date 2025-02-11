@@ -32,7 +32,7 @@ export function Navbar() {
                                             asChild
                                             className={navigationMenuTriggerStyle()}
                                         >
-                                            <Link href="/">主页</Link>
+                                            <Link href="/latex-ocr">主页</Link>
                                         </NavigationMenuLink>
                                     </li>
                                     <li>
@@ -40,7 +40,7 @@ export function Navbar() {
                                             asChild
                                             className={navigationMenuTriggerStyle()}
                                         >
-                                            <Link href="/history">历史记录</Link>
+                                            <Link href="/latex-ocr/history">历史记录</Link>
                                         </NavigationMenuLink>
                                     </li>
                                 </ul>
@@ -55,7 +55,7 @@ export function Navbar() {
                                             asChild
                                             className={navigationMenuTriggerStyle()}
                                         >
-                                            <Link href="/">主页</Link>
+                                            <Link href="/latex-ocr">主页</Link>
                                         </NavigationMenuLink>
                                     </li>
                                     <li>
@@ -63,7 +63,7 @@ export function Navbar() {
                                             asChild
                                             className={navigationMenuTriggerStyle()}
                                         >
-                                            <Link href="/history">历史记录</Link>
+                                            <Link href="/latex-ocr/history">历史记录</Link>
                                         </NavigationMenuLink>
                                     </li>
                                 </ul>

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FormulaRecord } from '@/lib/types';
-import { getFormulaRecord, deleteFormulaRecord } from '@/lib/store';
+import { FormulaRecord } from '@/lib/latex-ocr/types';
+import { getAllFormulaRecords, getFormulaRecordById, deleteFormulaRecord } from '@/lib/latex-ocr/store';
 import { InlineMath } from 'react-katex';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,7 +25,7 @@ export default function DetailPage({ params }: { params: { id: string } }) {
     const router = useRouter();
 
     useEffect(() => {
-        const foundRecord = getFormulaRecord(params.id);
+        const foundRecord = getFormulaRecordById(params.id);
         if (foundRecord) {
             setRecord(foundRecord);
         }
