@@ -55,19 +55,18 @@ export function Navbar() {
                                             asChild
                                             className={navigationMenuTriggerStyle()}
                                         >
-                                            <Link href="/pub-finder">主页</Link>
-                                        </NavigationMenuLink>
-                                    </li>
-                                    <li>
-                                        <NavigationMenuLink
-                                            asChild
-                                            className={navigationMenuTriggerStyle()}
-                                        >
-                                            <Link href="/pub-finder/history">历史记录</Link>
+                                            <Link href="/pub-finder">文献查询</Link>
                                         </NavigationMenuLink>
                                     </li>
                                 </ul>
                             </NavigationMenuContent>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <Link href="/about" legacyBehavior passHref>
+                                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                    关于
+                                </NavigationMenuLink>
+                            </Link>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink
