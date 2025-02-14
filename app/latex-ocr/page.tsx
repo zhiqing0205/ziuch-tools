@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { v4 as uuidv4 } from 'uuid';
 import { saveFormulaRecord } from '@/lib/latex-ocr/store';
+import Link from 'next/link';
 
 const LatexRecognition = () => {
     const { toast } = useToast();
@@ -400,7 +401,12 @@ const LatexRecognition = () => {
                 <div className="grid gap-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>LaTeX 公式识别</CardTitle>
+                            <div className="flex justify-between items-center">
+                                <CardTitle>LaTeX 公式识别</CardTitle>
+                                <Button size="sm" asChild>
+                                    <Link href="/latex-ocr/history">历史记录</Link>
+                                </Button>
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">

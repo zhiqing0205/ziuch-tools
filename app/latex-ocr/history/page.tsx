@@ -124,16 +124,16 @@ export default function HistoryPage() {
     };
 
     return (
-        <div className="container mx-auto py-8">
-            <div className="max-w-6xl mx-auto space-y-8">
-                <div className="flex justify-between items-center">
-                    <h1 className="text-3xl font-bold">历史记录</h1>
-                    <Button variant="outline" asChild>
-                        <Link href="/latex-ocr">返回</Link>
-                    </Button>
-                </div>
+        <div className="container mx-auto px-6 py-6">
+            <Card>
+                <div className="max-w-6xl mx-auto space-y-8">
+                    <div className="flex justify-between items-center mt-6">
+                        <h1 className="text-2xl font-bold">历史记录</h1>
+                        <Button variant="outline" asChild>
+                            <Link href="/latex-ocr">返回</Link>
+                        </Button>
+                    </div>
 
-                <Card>
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -213,23 +213,23 @@ export default function HistoryPage() {
                             </Pagination>
                         </div>
                     )}
-                </Card>
+                </div>
+            </Card>
 
-                <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>确认删除？</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                此操作将永久删除该记录，且不可恢复。
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>取消</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleDelete}>确认</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-            </div>
+            <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>确认删除？</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            此操作将永久删除该记录，且不可恢复。
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>取消</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDelete}>确认</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }
