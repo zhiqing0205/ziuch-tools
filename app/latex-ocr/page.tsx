@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Upload, Undo } from 'lucide-react';
+import { Upload, Undo, Info } from 'lucide-react';
 import { ProgressWithColor } from "@/components/ui/progress-with-color";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast"
@@ -121,6 +121,34 @@ const LatexRecognition = () => {
             context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
             setStrokes([]);
             setShowClearDialog(false);
+        }
+    };
+
+    const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = canvasRef.current?.getBoundingClientRect();
+        if (rect) {
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            setIsDrawing(true);
+            if (context) {
+                context.beginPath();
+                context.moveTo(x, y);
+            }
+        }
+    };
+
+    const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+        e.preventDefault();
+        if (!isDrawing) return;
+        const touch = e.touches[0];
+        const rect = canvasRef.current?.getBoundingClientRect();
+        if (rect && context) {
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            context.lineTo(x, y);
+            context.stroke();
         }
     };
 
@@ -368,15 +396,16 @@ const LatexRecognition = () => {
     return (
         <>
             {loading && <Loading text="正在识别中..." />}
-            <div className="min-h-screen flex flex-col">
-                <div className="flex-1 container mx-auto p-4">
-                    <Card className="max-w-4xl mx-auto">
+            <div className="container mx-auto py-6">
+                <div className="grid gap-6">
+                    <Card>
                         <CardHeader>
                             <CardTitle>LaTeX 公式识别</CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4">
+                        <CardContent>
                             <div className="space-y-4">
                                 <Alert>
+                                    {/* <Info className="h-4 w-4" /> */}
                                     <AlertDescription>
                                         支持上传图片文件或直接粘贴截图，推荐使用清晰的公式图片以获得更好的识别效果。
                                     </AlertDescription>
@@ -384,7 +413,17 @@ const LatexRecognition = () => {
 
                                 <div className={`grid ${recognizedFormula ? 'grid-cols-2' : ''} gap-4`}>
                                     <div className="space-y-4">
-                                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                                        {previewImage && (
+                                            <div>
+                                                <img
+                                                    src={previewImage}
+                                                    alt="预览"
+                                                    className="max-w-full h-auto border rounded-lg"
+                                                />
+                                            </div>
+                                        )}
+
+                                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                                             <input
                                                 type="file"
                                                 accept="image/*"
@@ -396,22 +435,13 @@ const LatexRecognition = () => {
                                                 htmlFor="image-upload"
                                                 className="flex flex-col items-center cursor-pointer"
                                             >
-                                                <Upload className="h-12 w-12 text-gray-400" />
-                                                <span className="mt-2 text-sm text-gray-500">
+                                                <Upload className="h-16 w-16 text-gray-400" />
+                                                <span className="mt-4 text-sm text-gray-500">
                                                     点击上传或拖拽图片到此处
                                                 </span>
                                             </label>
                                         </div>
-                                        {previewImage && (
-                                            <div>
-                                                <div className="text-sm text-muted-foreground mb-2">图片：</div>
-                                                <img
-                                                    src={previewImage}
-                                                    alt="预览"
-                                                    className="max-w-full h-auto border rounded-lg"
-                                                />
-                                            </div>
-                                        )}
+
                                         {uploadError && (
                                             <Alert variant="destructive">
                                                 <AlertDescription>{uploadError}</AlertDescription>
@@ -422,27 +452,28 @@ const LatexRecognition = () => {
                                     {recognizedFormula && (
                                         <div className="space-y-4">
                                             <div className="bg-white rounded-lg border">
-                                                <div ref={previewRef} className="flex items-center justify-center min-h-[50px] p-2">
+                                                <div ref={previewRef} className="flex items-center justify-center min-h-[120px] p-4">
                                                     <InlineMath math={recognizedFormula} />
                                                 </div>
                                             </div>
 
-                                            <div className="space-y-1">
-                                                <div className="text-sm text-muted-foreground">识别置信度</div>
-                                                <ProgressWithColor
-                                                    value={confidence}
-                                                    indicatorColor={getConfidenceColor(confidence)}
-                                                    className="w-full"
-                                                />
-                                                <div className="text-sm text-right text-muted-foreground">{confidence.toFixed(1)}%</div>
+                                            <div className="space-y-0.5">
+                                                <div className="flex items-center gap-2">
+                                                    <ProgressWithColor
+                                                        value={confidence}
+                                                        indicatorColor={getConfidenceColor(confidence)}
+                                                        className="flex-1"
+                                                    />
+                                                    <div className="text-sm text-muted-foreground w-12 text-right">{confidence.toFixed(1)}%</div>
+                                                </div>
                                             </div>
 
                                             <div className="space-y-2">
-                                                <div className="text-sm text-muted-foreground">LaTeX 公式：</div>
+                                                {/* <div className="text-sm text-muted-foreground">识别结果：</div> */}
                                                 <Textarea
                                                     value={recognizedFormula}
                                                     onChange={(e) => setRecognizedFormula(e.target.value)}
-                                                    className="font-mono min-h-[100px]"
+                                                    className="font-mono min-h-[160px]"
                                                 />
                                             </div>
 
@@ -476,20 +507,25 @@ const LatexRecognition = () => {
                                                     </AlertDescription>
                                                 </Alert>
                                                 <div className="flex justify-center">
-                                                    <div className="w-[600px]">
-                                                        <canvas
-                                                            ref={(canvas) => {
-                                                                canvasRef.current = canvas;
-                                                                initCanvas(canvas);
-                                                            }}
-                                                            width={600}
-                                                            height={300}
-                                                            className="border border-gray-300 rounded-lg bg-white touch-none"
-                                                            onMouseDown={startDrawing}
-                                                            onMouseMove={draw}
-                                                            onMouseUp={stopDrawing}
-                                                            onMouseOut={stopDrawing}
-                                                        />
+                                                    <div className="w-[800px]">
+                                                        <div className="border rounded-lg overflow-hidden" ref={containerRef}>
+                                                            <canvas
+                                                                ref={(canvas) => {
+                                                                    canvasRef.current = canvas;
+                                                                    initCanvas(canvas);
+                                                                }}
+                                                                width={800}
+                                                                height={300}
+                                                                className="w-full touch-none cursor-crosshair bg-white"
+                                                                onMouseDown={startDrawing}
+                                                                onMouseMove={draw}
+                                                                onMouseUp={stopDrawing}
+                                                                onMouseOut={stopDrawing}
+                                                                onTouchStart={handleTouchStart}
+                                                                onTouchMove={handleTouchMove}
+                                                                onTouchEnd={stopDrawing}
+                                                            />
+                                                        </div>
                                                         <div className="flex gap-2 mt-4">
                                                             <Button
                                                                 onClick={() => setShowClearDialog(true)}
@@ -528,24 +564,24 @@ const LatexRecognition = () => {
                         </CardContent>
                     </Card>
                 </div>
+
+                <AlertDialog open={showClearDialog} onOpenChange={setShowClearDialog}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>确认清空画板？</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                此操作将清空当前画板的所有内容，且不可恢复。
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>取消</AlertDialogCancel>
+                            <AlertDialogAction onClick={clearCanvas}>确认</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+
+                <Toaster />
             </div>
-
-            <AlertDialog open={showClearDialog} onOpenChange={setShowClearDialog}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>确认清空画板？</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            此操作将清空当前画板的所有内容，且不可恢复。
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>取消</AlertDialogCancel>
-                        <AlertDialogAction onClick={clearCanvas}>确认</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-
-            <Toaster />
         </>
     );
 };
