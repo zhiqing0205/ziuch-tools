@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,7 +27,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} flex min-h-screen flex-col`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -34,7 +35,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          {children}
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
