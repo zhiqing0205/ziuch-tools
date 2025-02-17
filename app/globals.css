@@ -70,3 +70,14 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.masonry-grid {
+  display: flex;
+  width: auto;
+  margin-left: -24px; /* 增加间距 */
+}
+
+.masonry-grid_column {
+  padding-left: 24px; /* 增加间距 */
+  background-clip: padding-box;
+}

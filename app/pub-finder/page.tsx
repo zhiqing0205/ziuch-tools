@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Conference, RankResponse, RankData, FAQ_ITEMS, AcceptanceRate } from "@/lib/pub-finder/types";
 import { Separator } from "@/components/ui/separator"
+import Masonry from "react-masonry-css";
 
 
 // 期刊排名字段映射表
@@ -314,11 +315,115 @@ export default function PubFinderPage() {
     };
 
     return (
-        <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6">
-                {/* 左侧会议信息 - 在移动设备上隐藏 */}
-                {!hasSearched && (
-                    <div className="hidden lg:block space-y-3 self-center">
+        <div className="container max-w-[1600px] px-4 lg:px-8">
+            {hasSearched ? (
+                // 搜索后的布局
+                <div className="flex flex-col lg:flex-row gap-8">
+                    <div className="flex-1">
+                        {/* 搜索结果内容 */}
+                        <div className={cn(
+                            "max-w-4xl mx-auto w-full transition-all duration-500",
+                            "pt-6"
+                        )}>
+                            {/* 搜索框 */}
+                            <div className="flex gap-2">
+                                <Input
+                                    type="text"
+                                    placeholder="请输入期刊或会议名称..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onKeyPress={handleKeyPress}
+                                    className="flex-1"
+                                />
+                                <Button onClick={() => handleSearch()} disabled={loading}>
+                                    <Search className="mr-2 h-4 w-4" />
+                                    查询
+                                </Button>
+                            </div>
+
+                            {/* 搜索结果 */}
+                            {loading ? (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+                                    {Array(6).fill(0).map((_, i) => (
+                                        <Skeleton key={i} className="h-[100px]" />
+                                    ))}
+                                </div>
+                            ) : (
+                                <>
+                                    {/* 期刊/会议等级部分 */}
+                                    <div className="mt-8">
+                                        <h3 className="text-lg font-semibold mb-4">期刊/会议等级</h3>
+                                        <Separator />
+                                        {rankData && Object.keys(rankData).length > 0 ? (
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+                                                {Object.entries(rankData).map(([key, value]) => (
+                                                    <RankCard
+                                                        key={key}
+                                                        title={RANK_FIELD_MAP[key] || key}
+                                                        value={value}
+                                                    />
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="mt-8 text-center text-muted-foreground">
+                                                未找到相关期刊/会议的等级信息
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* 会议截止时间部分 */}
+                                    <div className="mt-8">
+                                        <h3 className="text-lg font-semibold mb-4">相关会议截止时间</h3>
+                                        <Separator />
+                                        {searchDeadlines.length > 0 ? (
+                                            <Masonry
+                                                breakpointCols={{
+                                                    default: 3,
+                                                    1600: 3,
+                                                    1200: 2,
+                                                    700: 1
+                                                }}
+                                                className="flex -ml-6 w-auto mt-8"
+                                                columnClassName="pl-6 bg-transparent"
+                                            >
+                                                {searchDeadlines.map((deadline) => (
+                                                    <div key={deadline.title + deadline.deadline.toString()} className="mb-6">
+                                                        <DetailedDeadlineCard
+                                                            deadline={deadline}
+                                                            acceptanceRate={findRecentAcceptanceRate(conferenceData.acceptances, deadline)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </Masonry>
+                                        ) : (
+                                            <div className="mt-8 text-center text-muted-foreground">
+                                                未找到相关会议的截止时间信息
+                                            </div>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* 右侧常见问题 */}
+                    <div className="hidden lg:block mt-8 min-w-[300px] max-w-[400px]">
+                        <h3 className="text-lg font-semibold mb-4">常见问题</h3>
+                        <Accordion type="single" collapsible className="w-full">
+                            {FAQ_ITEMS.map((item, index) => (
+                                <AccordionItem key={index} value={`item-${index}`}>
+                                    <AccordionTrigger>{item.question}</AccordionTrigger>
+                                    <AccordionContent>{item.answer}</AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                    </div>
+                </div>
+            ) : (
+                // 未搜索时的三列布局
+                <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-8">
+                    {/* 左侧会议信息 */}
+                    <div className="hidden lg:block space-y-3">
                         {loadingDeadlines ? (
                             Array(3).fill(0).map((_, i) => (
                                 <Skeleton key={i} className="h-[120px]" />
@@ -330,14 +435,12 @@ export default function PubFinderPage() {
                             />
                         ))}
                     </div>
-                )}
 
-                {/* 中间搜索区域 */}
-                <div className={cn(
-                    "max-w-2xl mx-auto w-full transition-all duration-500",
-                    hasSearched ? "pt-6 lg:col-span-2" : "pt-[5vh]"
-                )}>
-                    {!hasSearched && (
+                    {/* 中间搜索区域 */}
+                    <div className={cn(
+                        "max-w-4xl mx-auto w-full transition-all duration-500",
+                        "pt-[5vh]"
+                    )}>
                         <div className="flex justify-center mb-8">
                             <Image
                                 src="https://img.ziuch.top/i/2025/02/14/vmhgnu.png"
@@ -348,89 +451,29 @@ export default function PubFinderPage() {
                                 loader={() => "https://img.ziuch.top/i/2025/02/14/vmhgnu.png"}
                             />
                         </div>
-                    )}
 
-                    <div className="flex gap-2">
-                        <Input
-                            type="text"
-                            placeholder="请输入期刊或会议名称..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            onKeyPress={handleKeyPress}
-                            className="flex-1"
-                        />
-                        <Button onClick={() => handleSearch()} disabled={loading}>
-                            {loading ? (
-                                "查询中..."
-                            ) : (
-                                <>
-                                    <Search className="mr-2 h-4 w-4" />
-                                    查询
-                                </>
-                            )}
-                        </Button>
-                    </div>
-
-                    <SearchHistory
-                        onSelect={handleSearch}
-                        visible={!hasSearched && !loading}
-                        history={searchHistory}
-                    />
-
-                    {loading ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-                            {Array(6).fill(0).map((_, i) => (
-                                <Skeleton key={i} className="h-[100px]" />
-                            ))}
+                        <div className="flex gap-2">
+                            <Input
+                                type="text"
+                                placeholder="请输入期刊或会议名称..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                className="flex-1"
+                            />
+                            <Button onClick={() => handleSearch()} disabled={loading}>
+                                <Search className="mr-2 h-4 w-4" />
+                                查询
+                            </Button>
                         </div>
-                    ) : hasSearched ? (
-                        <>
-                            {/* 期刊/会议等级部分 */}
-                            <div className="mt-8">
-                                <h3 className="text-lg font-semibold mb-4">期刊/会议等级</h3>
-                                <Separator />
-                                {rankData && Object.keys(rankData).length > 0 ? (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-                                        {Object.entries(rankData).map(([key, value]) => (
-                                            <RankCard
-                                                key={key}
-                                                title={RANK_FIELD_MAP[key] || key}
-                                                value={value}
-                                            />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="mt-8 text-center text-muted-foreground">
-                                        未找到相关期刊/会议的等级信息
-                                    </div>
-                                )}
-                            </div>
 
-                            {/* 会议截止时间部分 */}
-                            <div className="mt-8">
-                                <h3 className="text-lg font-semibold mb-4">相关会议截止时间</h3>
-                                <Separator />
-                                {searchDeadlines.length > 0 ? (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                                        {searchDeadlines.map((deadline) => (
-                                            <DetailedDeadlineCard
-                                                key={deadline.title + deadline.deadline.toString()}
-                                                deadline={deadline}
-                                                acceptanceRate={findRecentAcceptanceRate(conferenceData.acceptances, deadline)}
-                                            />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="mt-8 text-center text-muted-foreground">
-                                        未找到相关会议的截止时间信息
-                                    </div>
-                                )}
-                            </div>
-                        </>
-                    ) : null}
+                        <SearchHistory
+                            onSelect={handleSearch}
+                            visible={!hasSearched && !loading}
+                            history={searchHistory}
+                        />
 
-                    {/* 移动设备上的会议信息 */}
-                    {!hasSearched && (
+                        {/* 移动设备上的会议信息 */}
                         <div className="lg:hidden mt-8 mb-4">
                             <div className="text-sm font-medium mb-2">即将截止会议</div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -446,27 +489,10 @@ export default function PubFinderPage() {
                                 ))}
                             </div>
                         </div>
-                    )}
-                </div>
-
-                {/* 右侧常见问题 */}
-                {hasSearched && (
-                    <div className="hidden lg:block mt-8">
-                        <h3 className="text-lg font-semibold mb-4">常见问题</h3>
-                        <Accordion type="single" collapsible className="w-full">
-                            {FAQ_ITEMS.map((item, index) => (
-                                <AccordionItem key={index} value={`item-${index}`}>
-                                    <AccordionTrigger>{item.question}</AccordionTrigger>
-                                    <AccordionContent>{item.answer}</AccordionContent>
-                                </AccordionItem>
-                            ))}
-                        </Accordion>
                     </div>
-                )}
 
-                {/* 右侧会议信息 - 在移动设备上隐藏 */}
-                {!hasSearched && (
-                    <div className="hidden lg:block space-y-3 self-center">
+                    {/* 右侧会议信息 */}
+                    <div className="hidden lg:block space-y-3">
                         {loadingDeadlines ? (
                             Array(3).fill(0).map((_, i) => (
                                 <Skeleton key={i} className="h-[120px]" />
@@ -478,8 +504,8 @@ export default function PubFinderPage() {
                             />
                         ))}
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 }
