@@ -64,8 +64,9 @@ export interface DeadlineInfo {
     sub?: string;
     deadline: Date;
     link: string;
-    comment: string;
+    comment?: string;
     diff: number;
+    timezone?: string;
 }
 
 export interface RankInfo {

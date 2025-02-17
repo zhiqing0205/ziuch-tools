@@ -109,10 +109,15 @@ function getChineseTime() {
 /**
  * 将指定时区的时间转换为东八区(UTC+8)时间
  * @param {string} dateStr - 时间字符串，格式："YYYY-MM-DD HH:mm:ss"
- * @param {string} timezone - 时区，格式："UTC±n"
+ * @param {string} timezone - 时区，格式："UTC±n" 或 "AoE"
  * @returns {Date} 转换后的东八区 Date 对象
  */
-function convertToEast8(dateStr, timezone) {
+function convertToEast8(dateStr: string, timezone: string): Date {
+    // 如果是 AoE，直接使用原始时间，不进行时区转换
+    if (timezone.toUpperCase() === 'AOE') {
+        return new Date(dateStr);
+    }
+    
     // 解析时区偏移量
     const timezoneOffset = parseInt(timezone.replace('UTC', ''));
     
@@ -133,7 +138,7 @@ function convertToEast8(dateStr, timezone) {
  * 获取当前东八区时间
  * @returns {Date} 当前的东八区 Date 对象
  */
-function getCurrentEast8Time() {
+function getCurrentEast8Time(): Date {
     const now = new Date();
     const targetTimezone = 8;
     // 计算当前时区与UTC的偏移小时数
@@ -142,7 +147,7 @@ function getCurrentEast8Time() {
     return new Date(now.getTime() + ((targetTimezone - currentOffset) * 60 * 60 * 1000));
 }
 
-export function formatTimeLeft(deadline: Date) {
+export function formatTimeLeft(deadline: Date): string {
     const now = getCurrentEast8Time();
     const diff = deadline.getTime() - now.getTime();
     
@@ -153,8 +158,7 @@ export function formatTimeLeft(deadline: Date) {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
     
-    let result = `${padZero(days)}天${padZero(hours)}小时${padZero(minutes)}分${padZero(seconds)}秒`;
-    return result;
+    return `${padZero(days)}天${padZero(hours)}小时${padZero(minutes)}分${padZero(seconds)}秒`;
 }
 
 export function getUpcomingDeadlines(conferences: Conference[]): DeadlineInfo[] {
@@ -166,18 +170,13 @@ export function getUpcomingDeadlines(conferences: Conference[]): DeadlineInfo[] 
         conf.confs.forEach(instance => {
             instance.timeline.forEach(time => {
                 if (!time.deadline) return;
-                // if(conf.title === "Internetware") {
-                //     console.log("Internetware instance", instance)
-                // }
+                
+                // 处理时区转换
                 const deadline = instance.timezone ? 
                     convertToEast8(time.deadline, instance.timezone) : 
                     new Date(time.deadline);
-                const currentTime = getCurrentEast8Time();
-
-                if (deadline.getTime() > currentTime.getTime()) {
-                    // if(conf.title === "Internetware") {
-                    //     console.log("Internetware deadline", deadline)
-                    // }
+                
+                if (deadline.getTime() > now.getTime()) {
                     deadlines.push({
                         title: conf.title,
                         description: conf.description,
@@ -187,7 +186,8 @@ export function getUpcomingDeadlines(conferences: Conference[]): DeadlineInfo[] 
                         deadline,
                         link: instance.link,
                         comment: time.comment,
-                        diff: deadline.getTime() - currentTime.getTime()
+                        diff: deadline.getTime() - now.getTime(),
+                        timezone: instance.timezone // 可选：添加时区信息到 DeadlineInfo 接口
                     });
                 }
             });
