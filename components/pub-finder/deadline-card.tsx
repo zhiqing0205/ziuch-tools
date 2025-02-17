@@ -11,6 +11,10 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { AlertCircle } from "lucide-react";
+import { Alert } from "@/components/ui/alert";
+import { format } from "date-fns";
+import { zhCN } from "date-fns/locale";
 
 interface DeadlineCardProps {
     deadline: DeadlineInfo;
@@ -45,6 +49,7 @@ function parseTimeLeft(timeLeft: string) {
 export function DeadlineCard({ deadline }: DeadlineCardProps) {
     const [timeLeft, setTimeLeft] = useState(formatTimeLeft(deadline.deadline));
     const { days, hours, minutes, seconds } = parseTimeLeft(timeLeft);
+    const isExpired = timeLeft.includes('已截止');
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -79,32 +84,44 @@ export function DeadlineCard({ deadline }: DeadlineCardProps) {
                                             </Badge>
                                         )}
                                     </div>
-                                    <div className="flex justify-center items-center gap-1 pt-1">
-                                        <div className="flex items-center">
-                                            <div className="bg-primary/10 rounded px-2 py-1 text-lg font-mono tabular-nums">
-                                                {days.padStart(2, '0')}
+                                    {isExpired ? (
+                                        <Alert variant="destructive" className="mt-2">
+                                            <AlertCircle className="h-4 w-4" />
+                                            <div className="flex flex-col gap-1">
+                                                <div className="font-medium">已截止</div>
+                                                <div className="text-xs">
+                                                    截止时间：{format(new Date(deadline.deadline), 'yyyy年MM月dd日 HH:mm', { locale: zhCN })}
+                                                </div>
                                             </div>
-                                            <span className="text-base mx-1">天</span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <div className="bg-primary/10 rounded px-2 py-1 text-lg font-mono tabular-nums">
-                                                {hours.padStart(2, '0')}
+                                        </Alert>
+                                    ) : (
+                                        <div className="flex justify-center items-center gap-1 pt-1">
+                                            <div className="flex items-center">
+                                                <div className="bg-primary/10 rounded px-2 py-1 text-lg font-mono tabular-nums">
+                                                    {days.padStart(2, '0')}
+                                                </div>
+                                                <span className="text-base mx-1">天</span>
                                             </div>
-                                            <span className="text-base mx-1">时</span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <div className="bg-primary/10 rounded px-2 py-1 text-lg font-mono tabular-nums">
-                                                {minutes.padStart(2, '0')}
+                                            <div className="flex items-center">
+                                                <div className="bg-primary/10 rounded px-2 py-1 text-lg font-mono tabular-nums">
+                                                    {hours.padStart(2, '0')}
+                                                </div>
+                                                <span className="text-base mx-1">时</span>
                                             </div>
-                                            <span className="text-base mx-1">分</span>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <div className="bg-primary/10 rounded px-2 py-1 text-lg font-mono tabular-nums">
-                                                {seconds.padStart(2, '0')}
+                                            <div className="flex items-center">
+                                                <div className="bg-primary/10 rounded px-2 py-1 text-lg font-mono tabular-nums">
+                                                    {minutes.padStart(2, '0')}
+                                                </div>
+                                                <span className="text-base mx-1">分</span>
                                             </div>
-                                            <span className="text-base mx-1">秒</span>
+                                            <div className="flex items-center">
+                                                <div className="bg-primary/10 rounded px-2 py-1 text-lg font-mono tabular-nums">
+                                                    {seconds.padStart(2, '0')}
+                                                </div>
+                                                <span className="text-base mx-1">秒</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             </CardContent>
                         </a>
