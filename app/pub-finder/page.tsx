@@ -18,6 +18,8 @@ import { DeadlineInfo } from "@/lib/pub-finder/types";
 import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Conference, RankResponse, RankData, FAQ_ITEMS, AcceptanceRate } from "@/lib/pub-finder/types";
+import { Separator } from "@/components/ui/separator"
+
 
 // 期刊排名字段映射表
 const RANK_FIELD_MAP: Record<string, string> = {
@@ -383,6 +385,8 @@ export default function PubFinderPage() {
                         </div>
                     ) : rankData && Object.keys(rankData).length > 0 ? (
                         <>
+                            <h3 className="text-lg font-semibold mb-4 mt-8">期刊/会议等级</h3>
+                            <Separator />
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
                                 {Object.entries(rankData).map(([key, value]) => (
                                     <RankCard
@@ -395,7 +399,8 @@ export default function PubFinderPage() {
                             {searchDeadlines.length > 0 && (
                                 <div className="mt-8">
                                     <h3 className="text-lg font-semibold mb-4">相关会议截止时间</h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <Separator />
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
                                         {searchDeadlines.map((deadline) => (
                                             <DetailedDeadlineCard
                                                 key={deadline.title + deadline.deadline.toString()}
