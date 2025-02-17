@@ -383,7 +383,7 @@ export default function PubFinderPage() {
                                 <Skeleton key={i} className="h-[100px]" />
                             ))}
                         </div>
-                    ) : (
+                    ) : hasSearched ? (
                         <>
                             {/* 期刊/会议等级部分 */}
                             <div className="mt-8">
@@ -427,7 +427,7 @@ export default function PubFinderPage() {
                                 )}
                             </div>
                         </>
-                    )}
+                    ) : null}
 
                     {/* 移动设备上的会议信息 */}
                     {!hasSearched && (
