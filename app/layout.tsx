@@ -37,7 +37,7 @@ export default function RootLayout({
                     disableTransitionOnChange
                 >
                     <Navbar />
-                    <main className="flex-1">
+                    <main className="flex-1 flex items-center justify-center">
                         <Suspense fallback={<div>加载中...</div>}>
                             {children}
                         </Suspense>
