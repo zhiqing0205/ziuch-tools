@@ -95,23 +95,26 @@ export default function PubFinderPage() {
     const [searchHistory, setSearchHistory] = useState<string[]>([]);
     // const location = useLocation();
 
-    // 加载会议数据
-    useEffect(() => {
-        async function loadConferences() {
-            try {
-                const data = await fetchConferenceData();
-                setConferenceData(data);
-                const upcomingDeadlines = getUpcomingDeadlines(data.conferences);
-                setDeadlines(upcomingDeadlines.slice(0, 10));
-            } catch (error) {
-                console.error('Failed to load conference data:', error);
-            } finally {
-                setLoadingDeadlines(false);
-            }
+    // 将 loadConferences 函数提到外面
+    const loadConferences = async () => {
+        try {
+            const data = await fetchConferenceData();
+            setConferenceData(data);
+            const upcomingDeadlines = getUpcomingDeadlines(data.conferences);
+            setDeadlines(upcomingDeadlines.slice(0, 10));
+        } catch (error) {
+            console.error('Failed to load conference data:', error);
+        } finally {
+            setLoadingDeadlines(false);
         }
+    };
+
+    // 初始加载会议数据
+    useEffect(() => {
         loadConferences();
     }, []);
 
+    // 定时更新会议数据
     useEffect(() => {
         const timer = setInterval(() => {
             loadConferences();
@@ -397,7 +400,7 @@ export default function PubFinderPage() {
                                             <DetailedDeadlineCard
                                                 key={deadline.title + deadline.deadline.toString()}
                                                 deadline={deadline}
-                                                acceptanceRate={findRecentAcceptanceRate(conferenceData.acceptances, deadline.title)}
+                                                acceptanceRate={findRecentAcceptanceRate(conferenceData.acceptances, deadline)}
                                             />
                                         ))}
                                     </div>
