@@ -5,6 +5,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster"
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,7 +38,9 @@ export default function RootLayout({
                 >
                     <Navbar />
                     <main className="flex-1">
-                        {children}
+                        <Suspense fallback={<div>加载中...</div>}>
+                            {children}
+                        </Suspense>
                     </main>
                     <Toaster />
                     <Footer />

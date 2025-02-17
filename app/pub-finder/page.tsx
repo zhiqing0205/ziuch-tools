@@ -18,7 +18,6 @@ import { DeadlineInfo } from "@/lib/pub-finder/types";
 import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Conference, RankResponse, RankData, FAQ_ITEMS, AcceptanceRate } from "@/lib/pub-finder/types";
-import { Suspense } from "react"
 
 // 期刊排名字段映射表
 const RANK_FIELD_MAP: Record<string, string> = {
@@ -255,156 +254,154 @@ export default function PubFinderPage() {
     };
 
     return (
-        <Suspense>
-            <div className="container mx-auto px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6">
-                    {/* 左侧会议信息 - 在移动设备上隐藏 */}
+        <div className="container mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6">
+                {/* 左侧会议信息 - 在移动设备上隐藏 */}
+                {!hasSearched && (
+                    <div className="hidden lg:block space-y-3 self-center">
+                        {loadingDeadlines ? (
+                            Array(3).fill(0).map((_, i) => (
+                                <Skeleton key={i} className="h-[120px]" />
+                            ))
+                        ) : deadlines.slice(0, 3).map((deadline) => (
+                            <DeadlineCard
+                                key={deadline.title + deadline.deadline.toString()}
+                                deadline={deadline}
+                            />
+                        ))}
+                    </div>
+                )}
+
+                {/* 中间搜索区域 */}
+                <div className={cn(
+                    "max-w-2xl mx-auto w-full transition-all duration-500",
+                    hasSearched ? "pt-6 lg:col-span-2" : "pt-[5vh]"
+                )}>
                     {!hasSearched && (
-                        <div className="hidden lg:block space-y-3 self-center">
-                            {loadingDeadlines ? (
-                                Array(3).fill(0).map((_, i) => (
-                                    <Skeleton key={i} className="h-[120px]" />
-                                ))
-                            ) : deadlines.slice(0, 3).map((deadline) => (
-                                <DeadlineCard
-                                    key={deadline.title + deadline.deadline.toString()}
-                                    deadline={deadline}
-                                />
-                            ))}
+                        <div className="flex justify-center mb-8">
+                            <Image
+                                src="https://img.ziuch.top/i/2025/02/14/vmhgnu.png"
+                                alt="Logo"
+                                width={180}
+                                height={180}
+                                priority
+                                loader={() => "https://img.ziuch.top/i/2025/02/14/vmhgnu.png"}
+                            />
                         </div>
                     )}
 
-                    {/* 中间搜索区域 */}
-                    <div className={cn(
-                        "max-w-2xl mx-auto w-full transition-all duration-500",
-                        hasSearched ? "pt-6 lg:col-span-2" : "pt-[5vh]"
-                    )}>
-                        {!hasSearched && (
-                            <div className="flex justify-center mb-8">
-                                <Image
-                                    src="https://img.ziuch.top/i/2025/02/14/vmhgnu.png"
-                                    alt="Logo"
-                                    width={180}
-                                    height={180}
-                                    priority
-                                    loader={() => "https://img.ziuch.top/i/2025/02/14/vmhgnu.png"}
-                                />
-                            </div>
-                        )}
-
-                        <div className="flex gap-2">
-                            <Input
-                                type="text"
-                                placeholder="请输入期刊或会议名称..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                className="flex-1"
-                            />
-                            <Button onClick={() => handleSearch()} disabled={loading}>
-                                {loading ? (
-                                    "查询中..."
-                                ) : (
-                                    <>
-                                        <Search className="mr-2 h-4 w-4" />
-                                        查询
-                                    </>
-                                )}
-                            </Button>
-                        </div>
-
-                        <SearchHistory
-                            onSelect={handleSearch}
-                            visible={!hasSearched && !loading}
-                            history={searchHistory}
+                    <div className="flex gap-2">
+                        <Input
+                            type="text"
+                            placeholder="请输入期刊或会议名称..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            className="flex-1"
                         />
-
-                        {loading ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-                                {Array(6).fill(0).map((_, i) => (
-                                    <Skeleton key={i} className="h-[100px]" />
-                                ))}
-                            </div>
-                        ) : rankData && Object.keys(rankData).length > 0 ? (
-                            <>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-                                    {Object.entries(rankData).map(([key, value]) => (
-                                        <RankCard
-                                            key={key}
-                                            title={RANK_FIELD_MAP[key] || key}
-                                            value={value}
-                                        />
-                                    ))}
-                                </div>
-                                {searchDeadlines.length > 0 && (
-                                    <div className="mt-8">
-                                        <h3 className="text-lg font-semibold mb-4">相关会议截止时间</h3>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            {searchDeadlines.map((deadline) => (
-                                                <DetailedDeadlineCard
-                                                    key={deadline.title + deadline.deadline.toString()}
-                                                    deadline={deadline}
-                                                    acceptanceRate={findRecentAcceptanceRate(conferenceData.acceptances, deadline.title)}
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </>
-                        ) : null}
-
-                        {/* 移动设备上的会议信息 */}
-                        {!hasSearched && (
-                            <div className="lg:hidden mt-8 mb-4">
-                                <div className="text-sm font-medium mb-2">即将截止会议</div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {loadingDeadlines ? (
-                                        Array(6).fill(0).map((_, i) => (
-                                            <Skeleton key={i} className="h-[120px]" />
-                                        ))
-                                    ) : deadlines.map((deadline) => (
-                                        <DeadlineCard
-                                            key={deadline.title + deadline.deadline.toString()}
-                                            deadline={deadline}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                        <Button onClick={() => handleSearch()} disabled={loading}>
+                            {loading ? (
+                                "查询中..."
+                            ) : (
+                                <>
+                                    <Search className="mr-2 h-4 w-4" />
+                                    查询
+                                </>
+                            )}
+                        </Button>
                     </div>
 
-                    {/* 右侧常见问题 */}
-                    {hasSearched && (
-                        <div className="hidden lg:block mt-8">
-                            <h3 className="text-lg font-semibold mb-4">常见问题</h3>
-                            <Accordion type="single" collapsible className="w-full">
-                                {FAQ_ITEMS.map((item, index) => (
-                                    <AccordionItem key={index} value={`item-${index}`}>
-                                        <AccordionTrigger>{item.question}</AccordionTrigger>
-                                        <AccordionContent>{item.answer}</AccordionContent>
-                                    </AccordionItem>
-                                ))}
-                            </Accordion>
-                        </div>
-                    )}
+                    <SearchHistory
+                        onSelect={handleSearch}
+                        visible={!hasSearched && !loading}
+                        history={searchHistory}
+                    />
 
-                    {/* 右侧会议信息 - 在移动设备上隐藏 */}
-                    {!hasSearched && (
-                        <div className="hidden lg:block space-y-3 self-center">
-                            {loadingDeadlines ? (
-                                Array(3).fill(0).map((_, i) => (
-                                    <Skeleton key={i} className="h-[120px]" />
-                                ))
-                            ) : deadlines.slice(3, 6).map((deadline) => (
-                                <DeadlineCard
-                                    key={deadline.title + deadline.deadline.toString()}
-                                    deadline={deadline}
-                                />
+                    {loading ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+                            {Array(6).fill(0).map((_, i) => (
+                                <Skeleton key={i} className="h-[100px]" />
                             ))}
+                        </div>
+                    ) : rankData && Object.keys(rankData).length > 0 ? (
+                        <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+                                {Object.entries(rankData).map(([key, value]) => (
+                                    <RankCard
+                                        key={key}
+                                        title={RANK_FIELD_MAP[key] || key}
+                                        value={value}
+                                    />
+                                ))}
+                            </div>
+                            {searchDeadlines.length > 0 && (
+                                <div className="mt-8">
+                                    <h3 className="text-lg font-semibold mb-4">相关会议截止时间</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {searchDeadlines.map((deadline) => (
+                                            <DetailedDeadlineCard
+                                                key={deadline.title + deadline.deadline.toString()}
+                                                deadline={deadline}
+                                                acceptanceRate={findRecentAcceptanceRate(conferenceData.acceptances, deadline.title)}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    ) : null}
+
+                    {/* 移动设备上的会议信息 */}
+                    {!hasSearched && (
+                        <div className="lg:hidden mt-8 mb-4">
+                            <div className="text-sm font-medium mb-2">即将截止会议</div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {loadingDeadlines ? (
+                                    Array(6).fill(0).map((_, i) => (
+                                        <Skeleton key={i} className="h-[120px]" />
+                                    ))
+                                ) : deadlines.map((deadline) => (
+                                    <DeadlineCard
+                                        key={deadline.title + deadline.deadline.toString()}
+                                        deadline={deadline}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>
+
+                {/* 右侧常见问题 */}
+                {hasSearched && (
+                    <div className="hidden lg:block mt-8">
+                        <h3 className="text-lg font-semibold mb-4">常见问题</h3>
+                        <Accordion type="single" collapsible className="w-full">
+                            {FAQ_ITEMS.map((item, index) => (
+                                <AccordionItem key={index} value={`item-${index}`}>
+                                    <AccordionTrigger>{item.question}</AccordionTrigger>
+                                    <AccordionContent>{item.answer}</AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                    </div>
+                )}
+
+                {/* 右侧会议信息 - 在移动设备上隐藏 */}
+                {!hasSearched && (
+                    <div className="hidden lg:block space-y-3 self-center">
+                        {loadingDeadlines ? (
+                            Array(3).fill(0).map((_, i) => (
+                                <Skeleton key={i} className="h-[120px]" />
+                            ))
+                        ) : deadlines.slice(3, 6).map((deadline) => (
+                            <DeadlineCard
+                                key={deadline.title + deadline.deadline.toString()}
+                                deadline={deadline}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
-        </Suspense>
+        </div>
     );
 }
