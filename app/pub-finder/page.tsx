@@ -383,23 +383,34 @@ export default function PubFinderPage() {
                                 <Skeleton key={i} className="h-[100px]" />
                             ))}
                         </div>
-                    ) : rankData && Object.keys(rankData).length > 0 ? (
+                    ) : (
                         <>
-                            <h3 className="text-lg font-semibold mb-4 mt-8">期刊/会议等级</h3>
-                            <Separator />
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-                                {Object.entries(rankData).map(([key, value]) => (
-                                    <RankCard
-                                        key={key}
-                                        title={RANK_FIELD_MAP[key] || key}
-                                        value={value}
-                                    />
-                                ))}
+                            {/* 期刊/会议等级部分 */}
+                            <div className="mt-8">
+                                <h3 className="text-lg font-semibold mb-4">期刊/会议等级</h3>
+                                <Separator />
+                                {rankData && Object.keys(rankData).length > 0 ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+                                        {Object.entries(rankData).map(([key, value]) => (
+                                            <RankCard
+                                                key={key}
+                                                title={RANK_FIELD_MAP[key] || key}
+                                                value={value}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="mt-8 text-center text-muted-foreground">
+                                        未找到相关期刊/会议的等级信息
+                                    </div>
+                                )}
                             </div>
-                            {searchDeadlines.length > 0 && (
-                                <div className="mt-8">
-                                    <h3 className="text-lg font-semibold mb-4">相关会议截止时间</h3>
-                                    <Separator />
+
+                            {/* 会议截止时间部分 */}
+                            <div className="mt-8">
+                                <h3 className="text-lg font-semibold mb-4">相关会议截止时间</h3>
+                                <Separator />
+                                {searchDeadlines.length > 0 ? (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
                                         {searchDeadlines.map((deadline) => (
                                             <DetailedDeadlineCard
@@ -409,10 +420,14 @@ export default function PubFinderPage() {
                                             />
                                         ))}
                                     </div>
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="mt-8 text-center text-muted-foreground">
+                                        未找到相关会议的截止时间信息
+                                    </div>
+                                )}
+                            </div>
                         </>
-                    ) : null}
+                    )}
 
                     {/* 移动设备上的会议信息 */}
                     {!hasSearched && (
