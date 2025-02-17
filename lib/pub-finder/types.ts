@@ -25,6 +25,11 @@ export interface ConferenceInstance {
 }
 
 export interface AcceptanceRate {
+    title: string;
+    accept_rates: AcceptanceRateItem[];
+}
+
+export interface AcceptanceRateItem {
     year: number;
     submitted: number;
     accepted: number;

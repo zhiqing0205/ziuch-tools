@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DeadlineInfo, CONFERENCE_CATEGORIES, AcceptanceRate } from "@/lib/pub-finder/types";
+import { DeadlineInfo, CONFERENCE_CATEGORIES, AcceptanceRate, AcceptanceRateItem } from "@/lib/pub-finder/types";
 import { formatTimeLeft } from "@/lib/pub-finder/conference";
 import {
     Tooltip,
@@ -18,7 +18,7 @@ import { zhCN } from "date-fns/locale";
 
 interface DetailedDeadlineCardProps {
     deadline: DeadlineInfo;
-    acceptanceRate?: AcceptanceRate | null;
+    acceptanceRate?: AcceptanceRateItem | null;
 }
 
 function getRankVariant(rank?: string) {
@@ -52,6 +52,8 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
     const { days, hours, minutes, seconds } = parseTimeLeft(timeLeft);
     const isExpired = timeLeft.includes('已截止');
 
+    // console.log("Acceptance rate", acceptanceRate);
+
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft(formatTimeLeft(deadline.deadline));
@@ -59,6 +61,84 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
 
         return () => clearInterval(timer);
     }, [deadline]);
+
+    const formatAcceptanceRate = (rate: AcceptanceRateItem) => {
+        const items = [
+            {
+                label: "投稿数",
+                value: rate.submitted,
+                className: "text-blue-500 dark:text-blue-400"
+            },
+            {
+                label: "接收数",
+                value: rate.accepted,
+                className: "text-green-500 dark:text-green-400"
+            },
+            {
+                label: "接收率",
+                value: `${(rate.rate * 100).toFixed(1)}%`,
+                className: "text-orange-500 dark:text-orange-400"
+            }
+        ];
+
+        return (
+            <div className="mt-3 p-3 bg-muted/50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                    <div className="font-medium text-sm">
+                        投稿数据
+                    </div>
+                    {rate.source && (
+                        <a
+                            href={rate.source}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <span>查看来源</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                className="w-3 h-3"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z"
+                                    clipRule="evenodd"
+                                />
+                                <path
+                                    fillRule="evenodd"
+                                    d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z"
+                                    clipRule="evenodd"
+                                />
+                            </svg>
+                        </a>
+                    )}
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                    {items.map((item, index) => (
+                        <div
+                            key={index}
+                            className="bg-background rounded-md p-2 text-center"
+                        >
+                            <div className={`text-base font-bold ${item.className}`}>
+                                {item.value}
+                            </div>
+                            <div className="text-xs text-muted-foreground mt-1">
+                                {item.label}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                {/* {rate.str && (
+                    <div className="text-xs text-muted-foreground mt-2 border-t border-border/50 pt-2">
+                        {rate.str}
+                    </div>
+                )} */}
+            </div>
+        );
+    };
 
     return (
         <TooltipProvider>
@@ -130,19 +210,9 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
                                         </div>
                                     )}
 
-                                    {acceptanceRate && (
-                                        <div className="text-sm">
-                                            <div className="font-medium">最近接受率数据（{acceptanceRate.year}）：</div>
-                                            <div className="grid grid-cols-2 gap-2 mt-1 text-xs text-muted-foreground">
-                                                <div>投稿数：{acceptanceRate.submit}</div>
-                                                <div>接受数：{acceptanceRate.accept}</div>
-                                                <div>接受率：{((acceptanceRate.accept / acceptanceRate.submit) * 100).toFixed(1)}%</div>
-                                                {acceptanceRate.note && (
-                                                    <div>备注：{acceptanceRate.note}</div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
+                                    {/* <div>1234567489{acceptanceRate?.str}</div> */}
+
+                                    {acceptanceRate && formatAcceptanceRate(acceptanceRate)}
                                 </div>
                             </CardContent>
                         </a>

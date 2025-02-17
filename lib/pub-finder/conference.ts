@@ -1,5 +1,5 @@
 import { parse } from 'yaml';
-import { Conference, ConferenceAcceptance, DeadlineInfo, AcceptanceRate } from './types';
+import { Conference, ConferenceAcceptance, DeadlineInfo, AcceptanceRate, AcceptanceRateItem } from './types';
 
 const CONF_CACHE_KEY = 'conference-data';
 const ACC_CACHE_KEY = 'conference-acceptance-data';
@@ -233,10 +233,18 @@ export function searchConferenceDeadlines(conferences: Conference[], searchTerm:
     return deadlines.sort((a, b) => Math.abs(a.diff) - Math.abs(b.diff));
 }
 
-export function findRecentAcceptanceRate(acceptances: AcceptanceRate[], confTitle: string) {
-    const matchingRates = acceptances
-        .filter(acc => acc.title.toLowerCase() === confTitle.toLowerCase())
-        .sort((a, b) => b.year - a.year);
-    
-    return matchingRates[0] || null;
+export function findRecentAcceptanceRate(acceptances: AcceptanceRate[], conf: DeadlineInfo): AcceptanceRateItem | null {
+    for (const acc of acceptances) {
+        if (acc.title.toLowerCase() === conf.title.toLowerCase()) {
+            // 使用 find 替代 forEach
+            const rate = acc.accept_rates.find(rate => rate.year === conf.year);
+            if (rate) {
+                console.log("Found acceptance rate", rate);
+                return rate;
+            }
+        }
+    }
+
+    console.log("No acceptance rate found for", conf.title, conf.year);
+    return null;
 }
