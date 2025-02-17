@@ -35,19 +35,6 @@ export function Navbar() {
                 <NavigationMenu>
                     <NavigationMenuList className="gap-6">
                         <NavigationMenuItem>
-                            <Link href="/latex-ocr" legacyBehavior passHref>
-                                <NavigationMenuLink 
-                                    className={cn(
-                                        navigationMenuTriggerStyle(),
-                                        "text-base font-medium",
-                                        isActive('/latex-ocr') ? "text-primary" : "text-muted-foreground"
-                                    )}
-                                >
-                                    公式识别
-                                </NavigationMenuLink>
-                            </Link>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
                             <Link href="/pub-finder" legacyBehavior passHref>
                                 <NavigationMenuLink 
                                     className={cn(
@@ -57,6 +44,19 @@ export function Navbar() {
                                     )}
                                 >
                                     文献查询
+                                </NavigationMenuLink>
+                            </Link>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <Link href="/latex-ocr" legacyBehavior passHref>
+                                <NavigationMenuLink 
+                                    className={cn(
+                                        navigationMenuTriggerStyle(),
+                                        "text-base font-medium",
+                                        isActive('/latex-ocr') ? "text-primary" : "text-muted-foreground"
+                                    )}
+                                >
+                                    公式识别
                                 </NavigationMenuLink>
                             </Link>
                         </NavigationMenuItem>

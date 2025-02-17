@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function HomePage() {
-    redirect('/latex-ocr');
+export default function Home() {
+    redirect('/pub-finder');
 }

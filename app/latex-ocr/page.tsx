@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Upload, Undo, Info } from 'lucide-react';
 import { ProgressWithColor } from "@/components/ui/progress-with-color";
-import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast"
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
@@ -585,8 +584,6 @@ const LatexRecognition = () => {
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
-
-                <Toaster />
             </div>
         </>
     );
