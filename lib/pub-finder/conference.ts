@@ -112,7 +112,7 @@ function getChineseTime() {
  * @param {string} timezone - 时区，格式："UTC±n" 或 "AoE"
  * @returns {Date} 转换后的东八区 Date 对象
  */
-function convertToEast8(dateStr: string, timezone: string): Date {
+export function convertToEast8(dateStr: string, timezone: string): Date {
     // 如果是 AoE，直接使用原始时间，不进行时区转换
     if (timezone.toUpperCase() === 'AOE') {
         return new Date(dateStr);
@@ -224,7 +224,8 @@ export function searchConferenceDeadlines(conferences: Conference[], searchTerm:
                     deadline,
                     link: instance.link,
                     comment: time.comment,
-                    diff: deadline.getTime() - now.getTime()
+                    diff: deadline.getTime() - now.getTime(),
+                    timezone: instance.timezone
                 });
             });
         });

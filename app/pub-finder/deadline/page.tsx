@@ -185,7 +185,7 @@ export default function DeadlinePage() {
                         <div key={deadline.title + deadline.deadline.toString()} className="mb-6">
                             <DetailedDeadlineCard
                                 deadline={deadline}
-                                acceptanceRate={findRecentAcceptanceRate(conferenceData.acceptances, deadline)}
+                                acceptanceRate={null}
                             />
                         </div>
                     ))}

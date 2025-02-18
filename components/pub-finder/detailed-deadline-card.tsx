@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DeadlineInfo, CONFERENCE_CATEGORIES, AcceptanceRate, AcceptanceRateItem } from "@/lib/pub-finder/types";
-import { formatTimeLeft } from "@/lib/pub-finder/conference";
+import { formatTimeLeft, convertToEast8 } from "@/lib/pub-finder/conference";
 import {
     Tooltip,
     TooltipContent,
@@ -15,6 +15,7 @@ import { AlertCircle, Timer } from "lucide-react";
 import { Alert } from "@/components/ui/alert";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 interface DetailedDeadlineCardProps {
     deadline: DeadlineInfo;
@@ -181,13 +182,18 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
                                             <div className="font-medium">
                                                 {isExpired ? "已截止" : "进行中"}
                                             </div>
-                                            <div className="text-xs">
-                                                截止时间：{format(new Date(deadline.deadline), 'yyyy年MM月dd日 HH:mm', { locale: zhCN })}
-                                                {deadline.timezone && (
-                                                    <span className="ml-1 text-muted-foreground">
-                                                        ({deadline.timezone})
-                                                    </span>
-                                                )}
+                                            <div className="text-xs space-y-1">
+                                                <div>
+                                                    截止时间：{format(new Date(deadline.deadline), 'yyyy年MM月dd日 HH:mm', { locale: zhCN })}
+                                                    {deadline.timezone && (
+                                                        <span className="ml-1">
+                                                            ({deadline.timezone})
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    中国时间：{format(new Date(convertToEast8(deadline.deadline, deadline.timezone)), 'yyyy年MM月dd日 HH:mm', { locale: zhCN })}
+                                                </div>
                                             </div>
                                         </div>
                                     </Alert>
