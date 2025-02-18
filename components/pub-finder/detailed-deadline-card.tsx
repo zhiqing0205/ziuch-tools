@@ -11,7 +11,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Timer } from "lucide-react";
 import { Alert } from "@/components/ui/alert";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
@@ -171,17 +171,28 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
                                         )}
                                     </div>
 
-                                    {isExpired ? (
-                                        <Alert variant="destructive">
+                                    <Alert variant={isExpired ? "destructive" : "default"}>
+                                        {isExpired ? (
                                             <AlertCircle className="h-4 w-4" />
-                                            <div className="flex flex-col gap-1">
-                                                <div className="font-medium">已截止</div>
-                                                <div className="text-xs">
-                                                    截止时间：{format(new Date(deadline.deadline), 'yyyy年MM月dd日 HH:mm', { locale: zhCN })}
-                                                </div>
+                                        ) : (
+                                            <Timer className="h-4 w-4" />
+                                        )}
+                                        <div className="flex flex-col gap-1">
+                                            <div className="font-medium">
+                                                {isExpired ? "已截止" : "进行中"}
                                             </div>
-                                        </Alert>
-                                    ) : (
+                                            <div className="text-xs">
+                                                截止时间：{format(new Date(deadline.deadline), 'yyyy年MM月dd日 HH:mm', { locale: zhCN })}
+                                                {deadline.timezone && (
+                                                    <span className="ml-1 text-muted-foreground">
+                                                        ({deadline.timezone})
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </Alert>
+
+                                    {!isExpired && (
                                         <div className="flex justify-center items-center gap-1">
                                             <div className="flex items-center">
                                                 <div className="bg-primary/10 rounded px-2 py-1 text-lg font-mono tabular-nums">
@@ -209,8 +220,6 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
                                             </div>
                                         </div>
                                     )}
-
-                                    {/* <div>1234567489{acceptanceRate?.str}</div> */}
 
                                     {acceptanceRate && formatAcceptanceRate(acceptanceRate)}
                                 </div>
