@@ -5,7 +5,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Search, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RankCard } from "@/components/pub-finder/rank-card";
@@ -81,6 +81,12 @@ const RANK_VALUE_MAP: Record<string, Record<string, string>> = {
         'Q4': '4区'
     }
 };
+
+// 修改按钮基础样式
+const buttonClassName = "group bg-primary text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-colors";
+
+// 添加一个专门的查看全部按钮样式
+const viewAllButtonClassName = "w-full " + buttonClassName;
 
 export default function PubFinderPage() {
     const router = useRouter();
@@ -335,7 +341,11 @@ export default function PubFinderPage() {
                                     onKeyPress={handleKeyPress}
                                     className="flex-1"
                                 />
-                                <Button onClick={() => handleSearch()} disabled={loading}>
+                                <Button 
+                                    onClick={() => handleSearch()} 
+                                    disabled={loading}
+                                    className={buttonClassName + " px-6"}
+                                >
                                     <Search className="mr-2 h-4 w-4" />
                                     查询
                                 </Button>
@@ -463,7 +473,11 @@ export default function PubFinderPage() {
                                 onKeyPress={handleKeyPress}
                                 className="flex-1"
                             />
-                            <Button onClick={() => handleSearch()} disabled={loading}>
+                            <Button 
+                                onClick={() => handleSearch()} 
+                                disabled={loading}
+                                className={buttonClassName + " px-6"}
+                            >
                                 <Search className="mr-2 h-4 w-4" />
                                 查询
                             </Button>
@@ -494,17 +508,30 @@ export default function PubFinderPage() {
                     </div>
 
                     {/* 右侧会议信息 */}
-                    <div className="hidden lg:block space-y-3">
-                        {loadingDeadlines ? (
-                            Array(3).fill(0).map((_, i) => (
-                                <Skeleton key={i} className="h-[120px]" />
-                            ))
-                        ) : deadlines.slice(3, 6).map((deadline) => (
-                            <DeadlineCard
-                                key={deadline.title + deadline.deadline.toString()}
-                                deadline={deadline}
-                            />
-                        ))}
+                    <div className="hidden lg:block">
+                        <div className="space-y-3 mb-4">
+                            {loadingDeadlines ? (
+                                Array(3).fill(0).map((_, i) => (
+                                    <Skeleton key={i} className="h-[120px]" />
+                                ))
+                            ) : deadlines.slice(3, 6).map((deadline) => (
+                                <DeadlineCard
+                                    key={deadline.title + deadline.deadline.toString()}
+                                    deadline={deadline}
+                                />
+                            ))}
+                        </div>
+                        
+                        {/* 查看全部按钮 */}
+                        <div className="sticky bottom-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pt-4">
+                            <Button 
+                                className={viewAllButtonClassName}
+                                onClick={() => router.push('/pub-finder/deadline')}
+                            >
+                                查看全部会议
+                                <ChevronRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+                        </div>
                     </div>
                 </div>
             )}
