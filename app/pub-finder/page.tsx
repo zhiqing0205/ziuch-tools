@@ -117,13 +117,13 @@ export default function PubFinderPage() {
         loadConferences();
     }, []);
 
-    // 定时更新会议数据
-    useEffect(() => {
-        const timer = setInterval(() => {
-            loadConferences();
-        }, 60000); // 每分钟更新一次
-        return () => clearInterval(timer);
-    }, []);
+    // // 定时更新会议数据
+    // useEffect(() => {
+    //     const timer = setInterval(() => {
+    //         loadConferences();
+    //     }, 60000); // 每分钟更新一次
+    //     return () => clearInterval(timer);
+    // }, []);
 
     // 监听路径变化，重置搜索状态
     useEffect(() => {
@@ -319,10 +319,10 @@ export default function PubFinderPage() {
             {hasSearched ? (
                 // 搜索后的布局
                 <div className="flex flex-col lg:flex-row gap-8">
-                    <div className="flex-1">
-                        {/* 搜索结果内容 */}
+                    {/* 左侧内容区域 - 添加 flex-1 min-w-0 来防止内容溢出 */}
+                    <div className="flex-1 min-w-0 lg:max-w-[calc(100%-400px)]">
                         <div className={cn(
-                            "max-w-4xl mx-auto w-full transition-all duration-500",
+                            "w-full transition-all duration-500",
                             "pt-6"
                         )}>
                             {/* 搜索框 */}
@@ -406,17 +406,19 @@ export default function PubFinderPage() {
                         </div>
                     </div>
 
-                    {/* 右侧常见问题 */}
-                    <div className="hidden lg:block mt-8 min-w-[300px] max-w-[400px]">
-                        <h3 className="text-lg font-semibold mb-4">常见问题</h3>
-                        <Accordion type="single" collapsible className="w-full">
-                            {FAQ_ITEMS.map((item, index) => (
-                                <AccordionItem key={index} value={`item-${index}`}>
-                                    <AccordionTrigger>{item.question}</AccordionTrigger>
-                                    <AccordionContent>{item.answer}</AccordionContent>
-                                </AccordionItem>
-                            ))}
-                        </Accordion>
+                    {/* 右侧常见问题 - 固定宽度 */}
+                    <div className="hidden lg:block w-[350px] flex-shrink-0">
+                        <div className="sticky top-4">
+                            <h3 className="text-lg font-semibold mb-4">常见问题</h3>
+                            <Accordion type="single" collapsible className="w-full">
+                                {FAQ_ITEMS.map((item, index) => (
+                                    <AccordionItem key={index} value={`item-${index}`}>
+                                        <AccordionTrigger>{item.question}</AccordionTrigger>
+                                        <AccordionContent>{item.answer}</AccordionContent>
+                                    </AccordionItem>
+                                ))}
+                            </Accordion>
+                        </div>
                     </div>
                 </div>
             ) : (
