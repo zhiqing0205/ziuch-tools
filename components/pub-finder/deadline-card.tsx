@@ -68,7 +68,7 @@ export function DeadlineCard({ deadline }: DeadlineCardProps) {
                             <CardContent className="p-4 flex flex-col justify-center min-h-[120px]">
                                 <div className="space-y-2">
                                     <div className="flex justify-between items-start gap-2">
-                                        <div>
+                                        <div className="w-[75%]">
                                             <div className="font-semibold text-base">
                                                 {deadline.title} {deadline.year}
                                             </div>
