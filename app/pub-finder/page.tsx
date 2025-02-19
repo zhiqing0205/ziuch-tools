@@ -141,70 +141,97 @@ export default function PubFinderPage() {
         }
     }, [pathname, searchParams]);
 
+    // 抽取搜索逻辑为独立函数
+    const performSearch = async (searchQuery: string) => {
+        try {
+            addSearchHistory(searchQuery);
+            const data = await getPublicationRank(searchQuery);
+
+            if (data.code === 200 && data.data) {
+                let dataValue = data.data.officialRank.all;
+                if (dataValue != undefined) {
+                    dataValue = Object.fromEntries(
+                        Object.entries(dataValue).filter(([key]) => RANK_FIELD_MAP[key])
+                    );
+                }
+
+                const customRanks = processCustomRank(data.data.customRank);
+                const combinedRanks = { ...dataValue, ...customRanks };
+
+                const formattedRanks = Object.entries(combinedRanks).reduce((acc, [key, value]) => {
+                    acc[key] = formatRankValue(key, value);
+                    return acc;
+                }, {} as Record<string, string>);
+
+                if (Object.keys(formattedRanks).length === 0) {
+                    toast({
+                        title: "未找到等级信息",
+                        description: "该期刊/会议暂无等级信息",
+                    });
+                }
+
+                setRankData(formattedRanks);
+
+                // 搜索会议信息
+                if (conferenceData.conferences.length > 0) {
+                    const matchedDeadlines = searchConferenceDeadlines(conferenceData.conferences, searchQuery);
+                    setSearchDeadlines(matchedDeadlines);
+                    console.log("matchedDeadlines", matchedDeadlines);
+                }
+            } else {
+                toast({
+                    title: "查询失败",
+                    description: data.msg || "未找到相关数据",
+                    variant: "destructive",
+                });
+                setRankData(null);
+            }
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: "查询失败",
+                description: "网络请求错误",
+                variant: "destructive",
+            });
+            setRankData(null);
+        }
+    };
+
+    // 处理搜索按钮点击
+    const handleSearch = async (term: string = searchTerm) => {
+        if (!term.trim()) {
+            toast({
+                title: "请输入期刊或会议名称",
+                description: "搜索内容不能为空",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        // 更新 URL
+        router.push(`${pathname}?query=${encodeURIComponent(term)}`);
+
+        setLoading(true);
+        setHasSearched(true);
+
+        try {
+            await performSearch(term);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // 检查 URL 参数并执行搜索
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const searchQuery = params.get('query');
         if (searchQuery) {
             setSearchTerm(searchQuery);
-            // 直接调用完整的搜索逻辑
-            (async () => {
-                setLoading(true);
-                setHasSearched(true);
-                try {
-                    addSearchHistory(searchQuery);
-                    const data = await getPublicationRank(searchQuery);
-
-                    if (data.code === 200 && data.data) {
-                        let dataValue = data.data.officialRank.all;
-                        if (dataValue != undefined) {
-                            dataValue = Object.fromEntries(
-                                Object.entries(dataValue).filter(([key]) => RANK_FIELD_MAP[key])
-                            );
-                        }
-
-                        const customRanks = processCustomRank(data.data.customRank);
-                        const combinedRanks = { ...dataValue, ...customRanks };
-
-                        const formattedRanks = Object.entries(combinedRanks).reduce((acc, [key, value]) => {
-                            acc[key] = formatRankValue(key, value);
-                            return acc;
-                        }, {} as Record<string, string>);
-
-                        if (Object.keys(formattedRanks).length === 0) {
-                            toast({
-                                title: "未找到等级信息",
-                                description: "该期刊/会议暂无等级信息",
-                            });
-                        }
-
-                        setRankData(formattedRanks);
-
-                        // 搜索会议信息
-                        if (conferenceData.conferences.length > 0) {
-                            const matchedDeadlines = searchConferenceDeadlines(conferenceData.conferences, searchQuery);
-                            setSearchDeadlines(matchedDeadlines);
-                        }
-                    } else {
-                        toast({
-                            title: "查询失败",
-                            description: data.msg || "未找到相关数据",
-                            variant: "destructive",
-                        });
-                        setRankData(null);
-                    }
-                } catch (error) {
-                    console.error(error);
-                    toast({
-                        title: "查询失败",
-                        description: "网络请求错误",
-                        variant: "destructive",
-                    });
-                    setRankData(null);
-                } finally {
-                    setLoading(false);
-                }
-            })();
+            setLoading(true);
+            setHasSearched(true);
+            
+            performSearch(searchQuery)
+                .finally(() => setLoading(false));
         } else {
             setHasSearched(false);
         }
@@ -214,7 +241,7 @@ export default function PubFinderPage() {
         if (history) {
             setSearchHistory(JSON.parse(history));
         }
-    }, [conferenceData.conferences, toast]);
+    }, [conferenceData.conferences]);
 
     const processCustomRank = (customRank: any) => {
         const result: Record<string, string> = {};
@@ -238,80 +265,6 @@ export default function PubFinderPage() {
     const formatRankValue = (key: string, value: string) => {
         const rankMap = RANK_VALUE_MAP[key.toLowerCase()];
         return rankMap ? rankMap[value] || value : value;
-    };
-
-    const handleSearch = async (term: string = searchTerm) => {
-        if (!term.trim()) {
-            toast({
-                title: "请输入期刊或会议名称",
-                description: "搜索内容不能为空",
-                variant: "destructive",
-            });
-            return;
-        }
-
-        // 更新 URL
-        router.push(`${pathname}?query=${encodeURIComponent(term)}`);
-
-        setLoading(true);
-        setHasSearched(true);
-
-        try {
-            addSearchHistory(term);
-            const data = await getPublicationRank(term);
-
-            if (data.code === 200 && data.data) {
-                let dataValue = data.data.officialRank.all;
-                if (dataValue != undefined) {
-                    // 只显示在RANK_FIELD_MAP内的数据
-                    dataValue = Object.fromEntries(
-                        Object.entries(dataValue).filter(([key]) => RANK_FIELD_MAP[key])
-                    );
-                }
-
-                const customRanks = processCustomRank(data.data.customRank);
-                const combinedRanks = { ...dataValue, ...customRanks };
-
-                // 格式化分区显示
-                const formattedRanks = Object.entries(combinedRanks).reduce((acc, [key, value]) => {
-                    acc[key] = formatRankValue(key, value);
-                    return acc;
-                }, {} as Record<string, string>);
-
-                if (Object.keys(formattedRanks).length === 0) {
-                    toast({
-                        title: "未找到等级信息",
-                        description: "该期刊/会议暂无等级信息",
-                    });
-                }
-
-                setRankData(formattedRanks);
-
-                console.log("conferenceData", conferenceData);
-                // 搜索会议信息
-                if (conferenceData.conferences.length > 0) {
-                    const matchedDeadlines = searchConferenceDeadlines(conferenceData.conferences, term);
-                    setSearchDeadlines(matchedDeadlines);
-                }
-            } else {
-                toast({
-                    title: "查询失败",
-                    description: data.msg || "未找到相关数据",
-                    variant: "destructive",
-                });
-                setRankData(null);
-            }
-        } catch (error) {
-            console.error(error);
-            toast({
-                title: "查询失败",
-                description: "网络请求错误",
-                variant: "destructive",
-            });
-            setRankData(null);
-        } finally {
-            setLoading(false);
-        }
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
