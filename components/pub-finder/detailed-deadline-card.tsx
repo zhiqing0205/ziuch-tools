@@ -179,7 +179,7 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
                                             <Timer className="h-4 w-4" />
                                         )}
                                         <div className="flex flex-col gap-1">
-                                            <div className="font-medium">
+                                            <div className="font-bold">
                                                 {isExpired ? "已截止" : "进行中"}
                                             </div>
                                             <div className="text-xs space-y-1">
