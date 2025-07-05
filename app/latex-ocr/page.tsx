@@ -73,6 +73,11 @@ const LatexRecognition = () => {
     const [eraserMode, setEraserMode] = useState<EraserMode>('stroke');
     const [eraserSize, setEraserSize] = useState(20);
     const [penSize, setPenSize] = useState(2);
+    
+    // 光标相关状态
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [showCursor, setShowCursor] = useState(false);
+    const cursorRef = useRef<HTMLDivElement>(null);
 
     // 初始化画布
     const initCanvas = (canvas: HTMLCanvasElement) => {
@@ -335,6 +340,36 @@ const LatexRecognition = () => {
             setCurrentStroke(null);
         }
         setIsDrawing(false);
+    };
+
+    // 鼠标移动处理
+    const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        setMousePosition({ x, y });
+        
+        // 如果正在绘制，执行绘制逻辑
+        if (isDrawing) {
+            draw(e);
+        }
+    };
+
+    // 鼠标进入画布
+    const handleMouseEnter = () => {
+        setShowCursor(true);
+    };
+
+    // 鼠标离开画布
+    const handleMouseLeave = () => {
+        setShowCursor(false);
+        if (isDrawing) {
+            stopDrawing();
+        }
     };
 
     const clearCanvas = () => {
@@ -796,8 +831,8 @@ const LatexRecognition = () => {
                                                             )}
                                                         </div>
 
-                                                        {/* 画布 */}
-                                                        <div className="border border-t-0 rounded-b-lg overflow-hidden" ref={containerRef}>
+                                                        {/* 画布容器 */}
+                                                        <div className="border border-t-0 rounded-b-lg overflow-hidden relative" ref={containerRef}>
                                                             <canvas
                                                                 ref={(canvas) => {
                                                                     canvasRef.current = canvas;
@@ -805,17 +840,47 @@ const LatexRecognition = () => {
                                                                 }}
                                                                 width={800}
                                                                 height={300}
-                                                                className={`w-full touch-none bg-white ${
-                                                                    currentTool === 'pen' ? 'cursor-crosshair' : 'cursor-pointer'
-                                                                }`}
+                                                                className="w-full touch-none bg-white cursor-none"
                                                                 onMouseDown={startDrawing}
-                                                                onMouseMove={draw}
+                                                                onMouseMove={handleMouseMove}
                                                                 onMouseUp={stopDrawing}
-                                                                onMouseOut={stopDrawing}
+                                                                onMouseEnter={handleMouseEnter}
+                                                                onMouseLeave={handleMouseLeave}
                                                                 onTouchStart={handleTouchStart}
                                                                 onTouchMove={handleTouchMove}
                                                                 onTouchEnd={stopDrawing}
                                                             />
+                                                            
+                                                            {/* 自定义光标 */}
+                                                            {showCursor && (
+                                                                <div
+                                                                    ref={cursorRef}
+                                                                    className="absolute pointer-events-none z-10"
+                                                                    style={{
+                                                                        left: mousePosition.x,
+                                                                        top: mousePosition.y,
+                                                                        transform: 'translate(-50%, -50%)',
+                                                                    }}
+                                                                >
+                                                                    {currentTool === 'eraser' ? (
+                                                                        <div
+                                                                            className="border-2 border-red-400 bg-white bg-opacity-50 rounded-full"
+                                                                            style={{
+                                                                                width: eraserSize,
+                                                                                height: eraserSize,
+                                                                            }}
+                                                                        />
+                                                                    ) : (
+                                                                        <div
+                                                                            className="border-2 border-gray-600 bg-black bg-opacity-30 rounded-full"
+                                                                            style={{
+                                                                                width: penSize * 2 + 4,
+                                                                                height: penSize * 2 + 4,
+                                                                            }}
+                                                                        />
+                                                                    )}
+                                                                </div>
+                                                            )}
                                                         </div>
 
                                                         {/* 操作按钮 */}
