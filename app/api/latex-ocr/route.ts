@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const API_TOKEN = process.env.LATEX_OCR_API_TOKEN;
+    const API_TOKEN = process.env.NEXT_PUBLIC_LATEX_OCR_API_TOKEN;
 
     const response = await fetch('https://server.simpletex.cn/api/latex_ocr', {
       method: 'POST',
