@@ -4,8 +4,11 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Upload, Undo, Info } from 'lucide-react';
+import { Upload, Undo, Redo, Info, Eraser, PenTool, Trash2 } from 'lucide-react';
 import { ProgressWithColor } from "@/components/ui/progress-with-color";
 import { useToast } from "@/hooks/use-toast"
 import 'katex/dist/katex.min.css';
@@ -28,6 +31,21 @@ import { saveFormulaRecord } from '@/lib/latex-ocr/store';
 import Link from 'next/link';
 import { recognizeLatex } from '@/app/api/latex-ocr';
 
+// 定义笔迹数据结构
+interface Stroke {
+    id: string;
+    points: Array<{ x: number; y: number }>;
+    color: string;
+    lineWidth: number;
+    timestamp: number;
+}
+
+// 工具类型
+type ToolType = 'pen' | 'eraser';
+
+// 橡皮擦模式
+type EraserMode = 'stroke' | 'pixel';
+
 const LatexRecognition = () => {
     const { toast } = useToast();
     const [recognizedFormula, setRecognizedFormula] = useState('');
@@ -40,26 +58,200 @@ const LatexRecognition = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const previewRef = useRef<HTMLDivElement>(null);
     const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-    const [strokes, setStrokes] = useState<Array<ImageData>>([]);
+    
+    // 新的状态管理
+    const [strokes, setStrokes] = useState<Stroke[]>([]);
+    const [currentStroke, setCurrentStroke] = useState<Stroke | null>(null);
+    const [history, setHistory] = useState<Stroke[][]>([]);
+    const [historyIndex, setHistoryIndex] = useState(-1);
     const [isDrawing, setIsDrawing] = useState(false);
     const [showClearDialog, setShowClearDialog] = useState(false);
     const [accordionKey, setAccordionKey] = useState(uuidv4());
+    
+    // 工具相关状态
+    const [currentTool, setCurrentTool] = useState<ToolType>('pen');
+    const [eraserMode, setEraserMode] = useState<EraserMode>('stroke');
+    const [eraserSize, setEraserSize] = useState(20);
+    const [penSize, setPenSize] = useState(2);
 
     // 初始化画布
-    const initCanvas = (canvas) => {
+    const initCanvas = (canvas: HTMLCanvasElement) => {
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx) {
                 ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = penSize;
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
                 setContext(ctx);
+                redrawCanvas(ctx);
             }
         }
     };
 
-    // 处理窗口大小变化
+    // 重绘整个画布
+    const redrawCanvas = (ctx?: CanvasRenderingContext2D) => {
+        const canvas = canvasRef.current;
+        const drawContext = ctx || context;
+        if (!canvas || !drawContext) return;
+
+        drawContext.clearRect(0, 0, canvas.width, canvas.height);
+        
+        strokes.forEach(stroke => {
+            if (stroke.points.length < 2) return;
+            
+            drawContext.beginPath();
+            drawContext.strokeStyle = stroke.color;
+            drawContext.lineWidth = stroke.lineWidth;
+            drawContext.moveTo(stroke.points[0].x, stroke.points[0].y);
+            
+            for (let i = 1; i < stroke.points.length; i++) {
+                drawContext.lineTo(stroke.points[i].x, stroke.points[i].y);
+            }
+            drawContext.stroke();
+        });
+    };
+
+    // 保存历史状态
+    const saveToHistory = () => {
+        const newHistory = history.slice(0, historyIndex + 1);
+        newHistory.push([...strokes]);
+        setHistory(newHistory);
+        setHistoryIndex(newHistory.length - 1);
+    };
+
+    // 撤销操作
+    const undo = () => {
+        if (historyIndex > 0) {
+            setHistoryIndex(historyIndex - 1);
+            setStrokes([...history[historyIndex - 1]]);
+        } else if (historyIndex === 0) {
+            setHistoryIndex(-1);
+            setStrokes([]);
+        }
+    };
+
+    // 重做操作
+    const redo = () => {
+        if (historyIndex < history.length - 1) {
+            setHistoryIndex(historyIndex + 1);
+            setStrokes([...history[historyIndex + 1]]);
+        }
+    };
+
+    // 检测点是否在笔迹附近
+    const isPointNearStroke = (x: number, y: number, stroke: Stroke, threshold: number): boolean => {
+        for (let i = 0; i < stroke.points.length - 1; i++) {
+            const p1 = stroke.points[i];
+            const p2 = stroke.points[i + 1];
+            
+            // 计算点到线段的距离
+            const A = x - p1.x;
+            const B = y - p1.y;
+            const C = p2.x - p1.x;
+            const D = p2.y - p1.y;
+            
+            const dot = A * C + B * D;
+            const lenSq = C * C + D * D;
+            
+            if (lenSq === 0) {
+                // 线段长度为0，计算到点的距离
+                const distance = Math.sqrt(A * A + B * B);
+                if (distance <= threshold) return true;
+                continue;
+            }
+            
+            const param = dot / lenSq;
+            let xx, yy;
+            
+            if (param < 0) {
+                xx = p1.x;
+                yy = p1.y;
+            } else if (param > 1) {
+                xx = p2.x;
+                yy = p2.y;
+            } else {
+                xx = p1.x + param * C;
+                yy = p1.y + param * D;
+            }
+            
+            const dx = x - xx;
+            const dy = y - yy;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance <= threshold) return true;
+        }
+        return false;
+    };
+
+    // 按笔迹擦除
+    const eraseByStroke = (x: number, y: number) => {
+        const strokesToRemove: string[] = [];
+        
+        strokes.forEach(stroke => {
+            if (isPointNearStroke(x, y, stroke, eraserSize / 2)) {
+                strokesToRemove.push(stroke.id);
+            }
+        });
+        
+        if (strokesToRemove.length > 0) {
+            const newStrokes = strokes.filter(stroke => !strokesToRemove.includes(stroke.id));
+            setStrokes(newStrokes);
+            return true;
+        }
+        return false;
+    };
+
+    // 按像素擦除
+    const eraseByPixel = (x: number, y: number) => {
+        const newStrokes: Stroke[] = [];
+        let hasChanges = false;
+        
+        strokes.forEach(stroke => {
+            const newPoints: Array<{ x: number; y: number }> = [];
+            let currentSegment: Array<{ x: number; y: number }> = [];
+            
+            stroke.points.forEach(point => {
+                const distance = Math.sqrt((point.x - x) ** 2 + (point.y - y) ** 2);
+                
+                if (distance > eraserSize / 2) {
+                    currentSegment.push(point);
+                } else {
+                    hasChanges = true;
+                    if (currentSegment.length > 1) {
+                        // 创建新的笔迹段
+                        newStrokes.push({
+                            id: uuidv4(),
+                            points: [...currentSegment],
+                            color: stroke.color,
+                            lineWidth: stroke.lineWidth,
+                            timestamp: Date.now()
+                        });
+                    }
+                    currentSegment = [];
+                }
+            });
+            
+            // 处理剩余的点
+            if (currentSegment.length > 1) {
+                newStrokes.push({
+                    id: uuidv4(),
+                    points: [...currentSegment],
+                    color: stroke.color,
+                    lineWidth: stroke.lineWidth,
+                    timestamp: Date.now()
+                });
+            }
+        });
+        
+        if (hasChanges) {
+            setStrokes(newStrokes);
+            return true;
+        }
+        return false;
+    };
+
+    // 处理窗口大小变化和重绘
     useEffect(() => {
         const canvas = canvasRef.current;
         if (canvas) {
@@ -69,59 +261,89 @@ const LatexRecognition = () => {
         }
     }, []);
 
-    // 保存当前画布状态
-    const saveCanvasState = () => {
-        if (context && canvasRef.current) {
-            const imageData = context.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
-            setStrokes(prev => [...prev, imageData]);
-        }
-    };
-
-    // 撤销上一步
-    const undoLastStroke = () => {
-        if (strokes.length === 0 || !context || !canvasRef.current) return;
-
-        const newStrokes = strokes.slice(0, -1);
-        setStrokes(newStrokes);
-
-        context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        if (newStrokes.length > 0) {
-            context.putImageData(newStrokes[newStrokes.length - 1], 0, 0);
-        }
-    };
-
-    // 画板相关函数
-    const startDrawing = (e) => {
-        setIsDrawing(true);
-        const { offsetX, offsetY } = e.nativeEvent;
+    // 重绘画布当strokes变化时
+    useEffect(() => {
         if (context) {
-            context.beginPath();
-            context.moveTo(offsetX, offsetY);
+            redrawCanvas();
+        }
+    }, [strokes, context]);
+
+    // 更新的绘画逻辑
+    const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        const { offsetX, offsetY } = e.nativeEvent;
+        
+        if (currentTool === 'pen') {
+            const newStroke: Stroke = {
+                id: uuidv4(),
+                points: [{ x: offsetX, y: offsetY }],
+                color: '#000000',
+                lineWidth: penSize,
+                timestamp: Date.now()
+            };
+            setCurrentStroke(newStroke);
+            setIsDrawing(true);
+        } else if (currentTool === 'eraser') {
+            setIsDrawing(true);
+            const hasErased = eraserMode === 'stroke' 
+                ? eraseByStroke(offsetX, offsetY)
+                : eraseByPixel(offsetX, offsetY);
+            
+            if (hasErased) {
+                saveToHistory();
+            }
         }
     };
 
-    const draw = (e) => {
-        if (!isDrawing || !context) return;
+    const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        if (!isDrawing) return;
         const { offsetX, offsetY } = e.nativeEvent;
-        context.lineTo(offsetX, offsetY);
-        context.stroke();
+        
+        if (currentTool === 'pen' && currentStroke) {
+            const updatedStroke = {
+                ...currentStroke,
+                points: [...currentStroke.points, { x: offsetX, y: offsetY }]
+            };
+            setCurrentStroke(updatedStroke);
+            
+            // 实时绘制当前笔迹
+            if (context) {
+                context.strokeStyle = updatedStroke.color;
+                context.lineWidth = updatedStroke.lineWidth;
+                const points = updatedStroke.points;
+                if (points.length >= 2) {
+                    const lastPoint = points[points.length - 2];
+                    const currentPoint = points[points.length - 1];
+                    context.beginPath();
+                    context.moveTo(lastPoint.x, lastPoint.y);
+                    context.lineTo(currentPoint.x, currentPoint.y);
+                    context.stroke();
+                }
+            }
+        } else if (currentTool === 'eraser') {
+            const hasErased = eraserMode === 'stroke' 
+                ? eraseByStroke(offsetX, offsetY)
+                : eraseByPixel(offsetX, offsetY);
+        }
     };
 
     const stopDrawing = () => {
-        if (isDrawing) {
-            saveCanvasState();
+        if (isDrawing && currentTool === 'pen' && currentStroke) {
+            if (currentStroke.points.length > 1) {
+                setStrokes(prev => [...prev, currentStroke]);
+                saveToHistory();
+            }
+            setCurrentStroke(null);
         }
         setIsDrawing(false);
-        if (context) {
-            context.closePath();
-        }
     };
 
     const clearCanvas = () => {
-        if (canvasRef.current && context) {
+        setStrokes([]);
+        setHistory([]);
+        setHistoryIndex(-1);
+        setShowClearDialog(false);
+        if (context && canvasRef.current) {
             context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-            setStrokes([]);
-            setShowClearDialog(false);
         }
     };
 
@@ -491,15 +713,101 @@ const LatexRecognition = () => {
                                                 </Alert>
                                                 <div className="flex justify-center">
                                                     <div className="w-[800px]">
-                                                        <div className="border rounded-lg overflow-hidden" ref={containerRef}>
+                                                        {/* 工具栏 */}
+                                                        <div className="bg-gray-50 border rounded-t-lg p-4 space-y-4">
+                                                            {/* 工具选择 */}
+                                                            <div className="flex items-center gap-4">
+                                                                <Label className="text-sm font-medium">工具:</Label>
+                                                                <div className="flex gap-2">
+                                                                    <Button
+                                                                        variant={currentTool === 'pen' ? 'default' : 'outline'}
+                                                                        size="sm"
+                                                                        onClick={() => setCurrentTool('pen')}
+                                                                        className="flex items-center gap-2"
+                                                                    >
+                                                                        <PenTool className="h-4 w-4" />
+                                                                        画笔
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant={currentTool === 'eraser' ? 'default' : 'outline'}
+                                                                        size="sm"
+                                                                        onClick={() => setCurrentTool('eraser')}
+                                                                        className="flex items-center gap-2"
+                                                                    >
+                                                                        <Eraser className="h-4 w-4" />
+                                                                        橡皮擦
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* 画笔大小 */}
+                                                            {currentTool === 'pen' && (
+                                                                <div className="flex items-center gap-4">
+                                                                    <Label className="text-sm font-medium">画笔大小:</Label>
+                                                                    <div className="flex items-center gap-2 flex-1 max-w-xs">
+                                                                        <Slider
+                                                                            value={[penSize]}
+                                                                            onValueChange={(value) => setPenSize(value[0])}
+                                                                            max={10}
+                                                                            min={1}
+                                                                            step={1}
+                                                                            className="flex-1"
+                                                                        />
+                                                                        <span className="text-sm w-8">{penSize}px</span>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {/* 橡皮擦设置 */}
+                                                            {currentTool === 'eraser' && (
+                                                                <div className="space-y-3">
+                                                                    <div className="flex items-center gap-4">
+                                                                        <Label className="text-sm font-medium">擦除模式:</Label>
+                                                                        <RadioGroup
+                                                                            value={eraserMode}
+                                                                            onValueChange={(value: EraserMode) => setEraserMode(value)}
+                                                                            className="flex gap-4"
+                                                                        >
+                                                                            <div className="flex items-center space-x-2">
+                                                                                <RadioGroupItem value="stroke" id="stroke" />
+                                                                                <Label htmlFor="stroke" className="text-sm">按笔迹</Label>
+                                                                            </div>
+                                                                            <div className="flex items-center space-x-2">
+                                                                                <RadioGroupItem value="pixel" id="pixel" />
+                                                                                <Label htmlFor="pixel" className="text-sm">按像素</Label>
+                                                                            </div>
+                                                                        </RadioGroup>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-4">
+                                                                        <Label className="text-sm font-medium">擦除大小:</Label>
+                                                                        <div className="flex items-center gap-2 flex-1 max-w-xs">
+                                                                            <Slider
+                                                                                value={[eraserSize]}
+                                                                                onValueChange={(value) => setEraserSize(value[0])}
+                                                                                max={50}
+                                                                                min={5}
+                                                                                step={5}
+                                                                                className="flex-1"
+                                                                            />
+                                                                            <span className="text-sm w-8">{eraserSize}px</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* 画布 */}
+                                                        <div className="border border-t-0 rounded-b-lg overflow-hidden" ref={containerRef}>
                                                             <canvas
                                                                 ref={(canvas) => {
                                                                     canvasRef.current = canvas;
-                                                                    initCanvas(canvas);
+                                                                    if (canvas) initCanvas(canvas);
                                                                 }}
                                                                 width={800}
                                                                 height={300}
-                                                                className="w-full touch-none cursor-crosshair bg-white"
+                                                                className={`w-full touch-none bg-white ${
+                                                                    currentTool === 'pen' ? 'cursor-crosshair' : 'cursor-pointer'
+                                                                }`}
                                                                 onMouseDown={startDrawing}
                                                                 onMouseMove={draw}
                                                                 onMouseUp={stopDrawing}
@@ -509,27 +817,42 @@ const LatexRecognition = () => {
                                                                 onTouchEnd={stopDrawing}
                                                             />
                                                         </div>
+
+                                                        {/* 操作按钮 */}
                                                         <div className="flex gap-2 mt-4">
+                                                            <Button
+                                                                onClick={undo}
+                                                                variant="outline"
+                                                                disabled={historyIndex < 0}
+                                                                className="flex items-center gap-2"
+                                                            >
+                                                                <Undo className="h-4 w-4" />
+                                                                撤销
+                                                            </Button>
+                                                            <Button
+                                                                onClick={redo}
+                                                                variant="outline"
+                                                                disabled={historyIndex >= history.length - 1}
+                                                                className="flex items-center gap-2"
+                                                            >
+                                                                <Redo className="h-4 w-4" />
+                                                                重做
+                                                            </Button>
                                                             <Button
                                                                 onClick={() => setShowClearDialog(true)}
                                                                 variant="destructive"
-                                                                className="flex-1"
+                                                                className="flex items-center gap-2"
                                                             >
+                                                                <Trash2 className="h-4 w-4" />
                                                                 清空
-                                                            </Button>
-                                                            <Button
-                                                                onClick={undoLastStroke}
-                                                                variant="outline"
-                                                                className="flex-1"
-                                                            >
-                                                                <Undo className="h-4 w-4 mr-2" />
-                                                                撤销
                                                             </Button>
                                                             <Button
                                                                 onClick={submitDrawing}
                                                                 className="flex-1"
+                                                                disabled={loading || strokes.length === 0}
                                                             >
-                                                                识别
+                                                                {loading ? <Loading className="mr-2" /> : null}
+                                                                识别公式
                                                             </Button>
                                                         </div>
                                                         {drawError && (
