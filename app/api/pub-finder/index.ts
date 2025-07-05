@@ -1,5 +1,5 @@
 const API_BASE_URL = 'https://www.easyscholar.cc/open';
-const API_KEY = '72697e3c8f624e788aba5296b23cf4c8';
+const API_KEY = process.env.PUB_FINDER_API_KEY;
 
 export interface PublicationRankResponse {
     code: number;
