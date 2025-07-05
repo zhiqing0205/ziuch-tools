@@ -72,10 +72,10 @@ bun install
 2. 添加以下环境变量：
    ```env
    # LaTeX OCR API 配置
-   NEXT_PUBLIC_LATEX_OCR_API_TOKEN=your_latex_ocr_api_token
+   LATEX_OCR_API_TOKEN=your_latex_ocr_api_token
    
    # Publication Finder API 配置
-   NEXT_PUBLIC_PUB_FINDER_API_KEY=your_pub_finder_api_key
+   PUB_FINDER_API_KEY=your_pub_finder_api_key
    ```
 
 ### 运行开发服务器

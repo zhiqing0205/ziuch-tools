@@ -26,6 +26,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { saveFormulaRecord } from '@/lib/latex-ocr/store';
 import Link from 'next/link';
+import { recognizeLatex } from '@/app/api/latex-ocr';
 
 const LatexRecognition = () => {
     const { toast } = useToast();
@@ -239,20 +240,9 @@ const LatexRecognition = () => {
     const sendImageToAPI = async (file) => {
         setLoading(true);
         setUploadError('');
-        const formData = new FormData();
-        formData.append('file', file);
 
         try {
-            const response = await fetch('/api/latex-ocr', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error('API请求失败');
-            }
-
-            const data = await response.json();
+            const data = await recognizeLatex(file);
             if (data.status && data.res) {
                 const latex = data.res.latex;
                 const confidence = data.res.conf * 100;
@@ -301,19 +291,7 @@ const LatexRecognition = () => {
             const base64Image = await blobToBase64(blob);
             setPreviewImage(base64Image);
 
-            const formData = new FormData();
-            formData.append('file', blob, 'formula.png');
-
-            const response = await fetch('/api/latex-ocr', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error('识别失败');
-            }
-
-            const data = await response.json();
+            const data = await recognizeLatex(blob);
             if (data.status && data.res) {
                 const latex = data.res.latex;
                 const confidence = data.res.conf * 100;
