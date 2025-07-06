@@ -104,7 +104,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     }, [autoCopyEnabled, formula, handleCopyFormula]);
 
-    // 生成公式图片 - 改进的html2canvas方法
+    // 生成公式图片 - 修复高度问题
     const generateFormulaImage = async (download = false) => {
         if (!formulaRef.current || !formula.trim()) return;
 
@@ -120,29 +120,49 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                 throw new Error('未找到KaTeX元素');
             }
 
+            // 获取元素的实际尺寸
+            const rect = katexElement.getBoundingClientRect();
+            console.log('KaTeX元素尺寸:', rect);
+
             const canvas = await html2canvas(katexElement, {
-                backgroundColor: imageWithBackground ? '#ffffff' : null,
-                scale: 3, // 更高分辨率
+                backgroundColor: null, // 先不设置背景，后面手动添加
+                scale: 3,
                 useCORS: true,
                 allowTaint: false,
-                logging: false,
-                onclone: (clonedDoc) => {
+                logging: true, // 开启日志查看详细信息
+                width: Math.max(rect.width, katexElement.scrollWidth),
+                height: Math.max(rect.height, katexElement.scrollHeight, katexElement.offsetHeight),
+                onclone: (clonedDoc, element) => {
                     // 在克隆的文档中添加KaTeX样式
                     const katexCSS = `
                         .katex {
                             font-family: KaTeX_Main, "Times New Roman", serif !important;
                             font-size: 1.21em !important;
-                            line-height: 1.2 !important;
+                            line-height: 1.5 !important;
                             color: #000000 !important;
+                            display: inline-block !important;
+                            vertical-align: baseline !important;
                         }
                         .katex .base {
                             display: inline-block !important;
+                            vertical-align: baseline !important;
                         }
                         .katex .strut {
                             display: inline-block !important;
+                            min-height: 1em !important;
                         }
                         .katex .mord, .katex .mop, .katex .mrel, .katex .mbin, .katex .mopen, .katex .mclose, .katex .mpunct {
                             color: #000000 !important;
+                        }
+                        .katex .vlist-t {
+                            display: inline-table !important;
+                        }
+                        .katex .vlist-r {
+                            display: table-row !important;
+                        }
+                        .katex .vlist {
+                            display: table-cell !important;
+                            vertical-align: bottom !important;
                         }
                     `;
                     
@@ -150,19 +170,33 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                     style.textContent = katexCSS;
                     clonedDoc.head.appendChild(style);
                     
-                    // 确保所有元素都可见
+                    // 确保所有元素都可见且有正确的尺寸
                     const allElements = clonedDoc.querySelectorAll('*');
                     allElements.forEach(el => {
                         el.style.visibility = 'visible';
                         el.style.opacity = '1';
+                        // 确保没有高度限制
+                        if (el.style.maxHeight) el.style.maxHeight = 'none';
+                        if (el.style.overflow) el.style.overflow = 'visible';
                     });
+                    
+                    // 特别处理katex元素
+                    const clonedKatex = element.querySelector('.katex');
+                    if (clonedKatex) {
+                        clonedKatex.style.height = 'auto';
+                        clonedKatex.style.minHeight = '2em';
+                        clonedKatex.style.display = 'inline-block';
+                        clonedKatex.style.verticalAlign = 'baseline';
+                    }
                 }
             });
+
+            console.log('生成的canvas尺寸:', canvas.width, canvas.height);
 
             // 为图片添加边距
             const finalCanvas = document.createElement('canvas');
             const finalCtx = finalCanvas.getContext('2d');
-            const padding = 60; // 增加边距
+            const padding = 60;
             
             finalCanvas.width = canvas.width + padding;
             finalCanvas.height = canvas.height + padding;
