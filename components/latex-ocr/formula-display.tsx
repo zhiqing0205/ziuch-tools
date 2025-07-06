@@ -9,7 +9,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import html2canvas from 'html2canvas';
 
 interface FormulaDisplayProps {
@@ -31,7 +32,9 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
     const [selectedPrefixSuffix, setSelectedPrefixSuffix] = useState('none');
     const [autoCopyEnabled, setAutoCopyEnabled] = useState(false);
     const [imageWithBackground, setImageWithBackground] = useState(true);
+    const [isGeneratingImage, setIsGeneratingImage] = useState(false);
     const formulaRef = useRef<HTMLDivElement>(null);
+    const { toast } = useToast();
 
     // 从localStorage加载设置
     useEffect(() => {
@@ -78,11 +81,21 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         const formattedFormula = `${option.prefix}${formula}${option.suffix}`;
         
         navigator.clipboard.writeText(formattedFormula).then(() => {
-            // 可以添加toast提示
+            toast({
+                title: "复制成功",
+                description: "公式已复制到剪贴板",
+                duration: 2000,
+            });
         }).catch(err => {
             console.error('复制失败:', err);
+            toast({
+                title: "复制失败",
+                description: "请手动复制公式",
+                variant: "destructive",
+                duration: 3000,
+            });
         });
-    }, [formula, getCurrentOption]);
+    }, [formula, getCurrentOption, toast]);
 
     // 自动复制功能
     useEffect(() => {
@@ -91,118 +104,47 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     }, [autoCopyEnabled, formula, handleCopyFormula]);
 
-    // 生成公式图片（备用方法：使用SVG）
-    const generateFormulaImageSVG = async (download = false) => {
-        if (!formulaRef.current || !formula.trim()) return;
-
-        try {
-            // 获取公式元素的尺寸和内容
-            const rect = formulaRef.current.getBoundingClientRect();
-            const formulaElement = formulaRef.current.querySelector('.katex');
-            
-            if (!formulaElement) {
-                console.error('未找到KaTeX元素');
-                return;
-            }
-
-            // 创建SVG
-            const svgData = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="${rect.width}" height="${rect.height}">
-                    <foreignObject width="100%" height="100%">
-                        <div xmlns="http://www.w3.org/1999/xhtml" style="
-                            font-family: 'KaTeX_Main', 'Times New Roman', serif;
-                            font-size: 18px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            width: ${rect.width}px;
-                            height: ${rect.height}px;
-                            background-color: ${imageWithBackground ? '#ffffff' : 'transparent'};
-                            padding: 20px;
-                        ">
-                            ${formulaElement.outerHTML}
-                        </div>
-                    </foreignObject>
-                </svg>
-            `;
-
-            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
-
-            // 创建图片
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                
-                canvas.width = rect.width * 2; // 高分辨率
-                canvas.height = rect.height * 2;
-                
-                ctx.scale(2, 2);
-                ctx.drawImage(img, 0, 0);
-                
-                URL.revokeObjectURL(url);
-
-                if (download) {
-                    const link = document.createElement('a');
-                    link.download = `formula_${Date.now()}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                } else {
-                    canvas.toBlob((blob) => {
-                        if (blob) {
-                            navigator.clipboard.write([
-                                new ClipboardItem({ 'image/png': blob })
-                            ]);
-                        }
-                    }, 'image/png');
-                }
-            };
-            
-            img.src = url;
-        } catch (error) {
-            console.error('SVG方法生成图片失败:', error);
-            // 回退到html2canvas方法
-            return generateFormulaImage(download);
-        }
-    };
-
     // 生成公式图片
     const generateFormulaImage = async (download = false) => {
         if (!formulaRef.current || !formula.trim()) return;
 
+        setIsGeneratingImage(true);
+        
         try {
-            // 等待一小段时间确保KaTeX完全渲染
-            await new Promise(resolve => setTimeout(resolve, 100));
+            // 等待KaTeX完全渲染
+            await new Promise(resolve => setTimeout(resolve, 200));
             
             const canvas = await html2canvas(formulaRef.current, {
                 backgroundColor: imageWithBackground ? '#ffffff' : null,
-                scale: 2, // 提高分辨率
+                scale: 2,
                 useCORS: true,
-                allowTaint: true,
-                removeContainer: false, // 改为false
-                logging: true, // 启用日志查看问题
-                width: formulaRef.current.scrollWidth,
-                height: formulaRef.current.scrollHeight,
-                foreignObjectRendering: true, // 启用外部对象渲染
+                allowTaint: false,
+                removeContainer: false,
+                logging: false,
+                width: formulaRef.current.offsetWidth,
+                height: formulaRef.current.offsetHeight,
                 onclone: (clonedDoc, element) => {
-                    // 确保字体和样式被正确复制
-                    const katexElements = element.querySelectorAll('.katex');
-                    katexElements.forEach(katex => {
-                        katex.style.fontSize = '18px';
-                        katex.style.display = 'inline-block';
-                    });
+                    // 确保所有样式都正确应用
+                    const style = clonedDoc.createElement('style');
+                    style.textContent = `
+                        .katex { font-size: 18px !important; }
+                        .katex-display { margin: 0 !important; }
+                        * { color: #000000 !important; }
+                    `;
+                    clonedDoc.head.appendChild(style);
                 }
             });
 
-            // 检查canvas是否为空
+            // 检查canvas内容
             const ctx = canvas.getContext('2d');
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const isEmpty = imageData.data.every(pixel => pixel === 0);
-            
-            if (isEmpty) {
-                console.warn('html2canvas生成的图片为空，尝试SVG方法');
-                return generateFormulaImageSVG(download);
+            const hasContent = imageData.data.some((pixel, index) => {
+                // 检查非透明像素
+                return index % 4 === 3 && pixel > 0;
+            });
+
+            if (!hasContent) {
+                throw new Error('生成的图片为空');
             }
 
             if (download) {
@@ -211,6 +153,12 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                 link.download = `formula_${Date.now()}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
+                
+                toast({
+                    title: "下载成功",
+                    description: "公式图片已下载",
+                    duration: 2000,
+                });
             } else {
                 // 复制到剪贴板
                 canvas.toBlob((blob) => {
@@ -218,17 +166,33 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                         navigator.clipboard.write([
                             new ClipboardItem({ 'image/png': blob })
                         ]).then(() => {
-                            // 可以添加toast提示
+                            toast({
+                                title: "复制成功",
+                                description: "公式图片已复制到剪贴板",
+                                duration: 2000,
+                            });
                         }).catch(err => {
                             console.error('复制图片失败:', err);
+                            toast({
+                                title: "复制失败",
+                                description: "无法复制图片到剪贴板",
+                                variant: "destructive",
+                                duration: 3000,
+                            });
                         });
                     }
                 }, 'image/png');
             }
         } catch (error) {
             console.error('生成图片失败:', error);
-            // 如果html2canvas失败，尝试SVG方法
-            return generateFormulaImageSVG(download);
+            toast({
+                title: "生成失败",
+                description: "无法生成公式图片，请重试",
+                variant: "destructive",
+                duration: 3000,
+            });
+        } finally {
+            setIsGeneratingImage(false);
         }
     };
 
@@ -358,19 +322,35 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                     onClick={() => generateFormulaImage(false)} 
                     className="w-full" 
                     variant="secondary"
-                    disabled={!formula.trim()}
+                    disabled={!formula.trim() || isGeneratingImage}
                 >
-                    复制图片
+                    {isGeneratingImage ? (
+                        <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            复制中...
+                        </>
+                    ) : (
+                        '复制图片'
+                    )}
                 </Button>
                 
                 <Button 
                     onClick={() => generateFormulaImage(true)} 
                     className="w-full" 
                     variant="outline"
-                    disabled={!formula.trim()}
+                    disabled={!formula.trim() || isGeneratingImage}
                 >
-                    <Download className="h-4 w-4 mr-2" />
-                    下载PNG
+                    {isGeneratingImage ? (
+                        <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            下载中...
+                        </>
+                    ) : (
+                        <>
+                            <Download className="h-4 w-4 mr-2" />
+                            下载PNG
+                        </>
+                    )}
                 </Button>
             </div>
         </div>
