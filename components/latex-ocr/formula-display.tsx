@@ -104,7 +104,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     }, [autoCopyEnabled, formula, handleCopyFormula]);
 
-    // 生成公式图片 - 简化版本，直接使用KaTeX渲染的SVG
+    // 生成公式图片 - 根据内容自动调整尺寸
     const generateFormulaImage = async (download = false) => {
         if (!formulaRef.current || !formula.trim()) return;
 
@@ -123,7 +123,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
             
             // 如果没有SVG，使用html2canvas捕获整个容器
             const canvas = await html2canvas(formulaRef.current, {
-                backgroundColor: imageWithBackground ? '#ffffff' : null,
+                backgroundColor: null, // 始终设为null，稍后手动处理背景
                 scale: 2,
                 useCORS: true,
                 allowTaint: false,
@@ -144,20 +144,32 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                 }
             });
 
-            // 添加边距并处理背景
+            // 检测实际内容边界
+            const contentBounds = detectContentBounds(canvas);
+            if (!contentBounds) {
+                throw new Error('未检测到公式内容');
+            }
+
+            // 根据内容创建合适尺寸的最终canvas
+            const padding = 20; // 统一20px边距
             const finalCanvas = document.createElement('canvas');
             const finalCtx = finalCanvas.getContext('2d');
-            const padding = 40;
             
-            finalCanvas.width = canvas.width + padding;
-            finalCanvas.height = canvas.height + padding;
+            finalCanvas.width = contentBounds.width + padding * 2;
+            finalCanvas.height = contentBounds.height + padding * 2;
             
+            // 处理背景
             if (imageWithBackground) {
                 finalCtx.fillStyle = '#ffffff';
                 finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
             }
             
-            finalCtx.drawImage(canvas, padding / 2, padding / 2);
+            // 将内容绘制到最终canvas的中心
+            finalCtx.drawImage(
+                canvas,
+                contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height,
+                padding, padding, contentBounds.width, contentBounds.height
+            );
 
             if (download) {
                 downloadCanvas(finalCanvas);
@@ -178,29 +190,86 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     };
 
+    // 检测canvas中实际内容的边界
+    const detectContentBounds = (canvas: HTMLCanvasElement) => {
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = imageData.data;
+        
+        let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
+        let hasContent = false;
+        
+        for (let y = 0; y < canvas.height; y++) {
+            for (let x = 0; x < canvas.width; x++) {
+                const idx = (y * canvas.width + x) * 4;
+                const alpha = pixels[idx + 3];
+                if (alpha > 0) {
+                    hasContent = true;
+                    minX = Math.min(minX, x);
+                    minY = Math.min(minY, y);
+                    maxX = Math.max(maxX, x);
+                    maxY = Math.max(maxY, y);
+                }
+            }
+        }
+        
+        if (!hasContent) return null;
+        
+        return {
+            x: minX,
+            y: minY,
+            width: maxX - minX + 1,
+            height: maxY - minY + 1
+        };
+    };
+
     // 从SVG生成图片
     const generateImageFromSVG = async (svgElement: SVGElement, download: boolean) => {
         try {
+            // 获取SVG的viewBox或实际尺寸
+            const viewBox = svgElement.getAttribute('viewBox');
+            let svgWidth, svgHeight;
+            
+            if (viewBox) {
+                const [, , width, height] = viewBox.split(' ').map(Number);
+                svgWidth = width;
+                svgHeight = height;
+            } else {
+                // 如果没有viewBox，使用getBBox获取实际内容尺寸
+                const bbox = svgElement.getBBox();
+                svgWidth = bbox.width;
+                svgHeight = bbox.height;
+            }
+            
             const svgData = new XMLSerializer().serializeToString(svgElement);
-            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            
+            // 创建一个干净的SVG，确保透明背景
+            const cleanSvgData = svgData.replace(/fill="white"/g, 'fill="none"')
+                                        .replace(/background-color:\s*white/g, 'background-color: transparent');
+            
+            const svgBlob = new Blob([cleanSvgData], { type: 'image/svg+xml;charset=utf-8' });
             const url = URL.createObjectURL(svgBlob);
             
             return new Promise<void>((resolve, reject) => {
                 const img = new Image();
                 img.onload = () => {
+                    const padding = 20; // 统一20px边距
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    const padding = 40;
-                    canvas.width = img.width + padding;
-                    canvas.height = img.height + padding;
+                    // 根据SVG内容尺寸设置canvas尺寸
+                    canvas.width = svgWidth + padding * 2;
+                    canvas.height = svgHeight + padding * 2;
                     
+                    // 只有在需要白色背景时才填充背景
                     if (imageWithBackground) {
                         ctx.fillStyle = '#ffffff';
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
                     }
                     
-                    ctx.drawImage(img, padding / 2, padding / 2);
+                    // 将SVG内容绘制到canvas中心
+                    ctx.drawImage(img, padding, padding, svgWidth, svgHeight);
+                    
                     URL.revokeObjectURL(url);
                     
                     if (download) {
