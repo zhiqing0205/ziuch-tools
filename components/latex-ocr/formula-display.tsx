@@ -104,7 +104,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     }, [autoCopyEnabled, formula, handleCopyFormula]);
 
-    // 生成公式图片
+    // 生成公式图片 - 改进的html2canvas方法
     const generateFormulaImage = async (download = false) => {
         if (!formulaRef.current || !formula.trim()) return;
 
@@ -112,46 +112,79 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         
         try {
             // 等待KaTeX完全渲染
-            await new Promise(resolve => setTimeout(resolve, 200));
+            await new Promise(resolve => setTimeout(resolve, 500));
             
-            const canvas = await html2canvas(formulaRef.current, {
+            // 首先尝试直接获取KaTeX渲染的元素
+            const katexElement = formulaRef.current.querySelector('.katex');
+            if (!katexElement) {
+                throw new Error('未找到KaTeX元素');
+            }
+
+            const canvas = await html2canvas(katexElement, {
                 backgroundColor: imageWithBackground ? '#ffffff' : null,
-                scale: 2,
+                scale: 3, // 更高分辨率
                 useCORS: true,
                 allowTaint: false,
-                removeContainer: false,
                 logging: false,
-                width: formulaRef.current.offsetWidth,
-                height: formulaRef.current.offsetHeight,
-                onclone: (clonedDoc, element) => {
-                    // 确保所有样式都正确应用
-                    const style = clonedDoc.createElement('style');
-                    style.textContent = `
-                        .katex { font-size: 18px !important; }
-                        .katex-display { margin: 0 !important; }
-                        * { color: #000000 !important; }
+                onclone: (clonedDoc) => {
+                    // 在克隆的文档中添加KaTeX样式
+                    const katexCSS = `
+                        .katex {
+                            font-family: KaTeX_Main, "Times New Roman", serif !important;
+                            font-size: 1.21em !important;
+                            line-height: 1.2 !important;
+                            color: #000000 !important;
+                        }
+                        .katex .base {
+                            display: inline-block !important;
+                        }
+                        .katex .strut {
+                            display: inline-block !important;
+                        }
+                        .katex .mord, .katex .mop, .katex .mrel, .katex .mbin, .katex .mopen, .katex .mclose, .katex .mpunct {
+                            color: #000000 !important;
+                        }
                     `;
+                    
+                    const style = clonedDoc.createElement('style');
+                    style.textContent = katexCSS;
                     clonedDoc.head.appendChild(style);
+                    
+                    // 确保所有元素都可见
+                    const allElements = clonedDoc.querySelectorAll('*');
+                    allElements.forEach(el => {
+                        el.style.visibility = 'visible';
+                        el.style.opacity = '1';
+                    });
                 }
             });
 
-            // 检查canvas内容
-            const ctx = canvas.getContext('2d');
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const hasContent = imageData.data.some((pixel, index) => {
-                // 检查非透明像素
-                return index % 4 === 3 && pixel > 0;
-            });
-
-            if (!hasContent) {
-                throw new Error('生成的图片为空');
+            // 为图片添加边距
+            const finalCanvas = document.createElement('canvas');
+            const finalCtx = finalCanvas.getContext('2d');
+            const padding = 60; // 增加边距
+            
+            finalCanvas.width = canvas.width + padding;
+            finalCanvas.height = canvas.height + padding;
+            
+            // 设置背景
+            if (imageWithBackground) {
+                finalCtx.fillStyle = '#ffffff';
+                finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
             }
+            
+            // 将原canvas内容绘制到最终canvas的中心
+            finalCtx.drawImage(
+                canvas, 
+                padding / 2, 
+                padding / 2
+            );
 
             if (download) {
                 // 下载图片
                 const link = document.createElement('a');
                 link.download = `formula_${Date.now()}.png`;
-                link.href = canvas.toDataURL('image/png');
+                link.href = finalCanvas.toDataURL('image/png');
                 link.click();
                 
                 toast({
@@ -161,7 +194,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                 });
             } else {
                 // 复制到剪贴板
-                canvas.toBlob((blob) => {
+                finalCanvas.toBlob((blob) => {
                     if (blob) {
                         navigator.clipboard.write([
                             new ClipboardItem({ 'image/png': blob })
