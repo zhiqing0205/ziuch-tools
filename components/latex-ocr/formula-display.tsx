@@ -25,8 +25,6 @@ const PREFIX_SUFFIX_OPTIONS = [
     { id: 'dollar', label: '$$公式$$', prefix: '$$', suffix: '$$' },
     { id: 'math', label: '\\[公式\\]', prefix: '\\[', suffix: '\\]' },
     { id: 'inline', label: '$公式$', prefix: '$', suffix: '$' },
-    { id: 'equation', label: '\\begin{equation}', prefix: '\\begin{equation}\n', suffix: '\n\\end{equation}' },
-    { id: 'align', label: '\\begin{align}', prefix: '\\begin{align}\n', suffix: '\n\\end{align}' },
 ];
 
 export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }: FormulaDisplayProps) {
@@ -136,14 +134,16 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
 
     return (
         <div className="space-y-4">
-            <div className="bg-white rounded-lg border">
+            <div className="bg-white rounded-lg border p-8">
                 <div 
                     ref={formulaRef}
-                    className="flex items-center justify-center min-h-[50px] p-4"
+                    className="flex items-center justify-center min-h-[80px]"
                     style={{ 
-                        display: 'inline-block', 
-                        minWidth: 'fit-content',
-                        width: 'auto' 
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minHeight: '80px',
+                        padding: '20px'
                     }}
                 >
                     <InlineMath math={formula} />
@@ -238,7 +238,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
             </Card>
 
             {/* 操作按钮 */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
                 <Button 
                     onClick={handleCopyFormula} 
                     className="w-full" 
@@ -265,15 +265,6 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                 >
                     <Download className="h-4 w-4 mr-2" />
                     下载PNG
-                </Button>
-                
-                <Button 
-                    onClick={() => onCopy('image')} 
-                    className="w-full" 
-                    variant="outline"
-                    disabled={!formula.trim()}
-                >
-                    原始复制
                 </Button>
             </div>
         </div>
