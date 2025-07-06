@@ -674,12 +674,14 @@ const LatexRecognition = () => {
                                     </div>
 
                                     {recognizedFormula && (
-                                        <FormulaDisplay
-                                            formula={recognizedFormula}
-                                            confidence={confidence}
-                                            onFormulaChange={setRecognizedFormula}
-                                            onCopy={copyFormula}
-                                        />
+                                        <div className="space-y-4">
+                                            <FormulaDisplay
+                                                formula={recognizedFormula}
+                                                confidence={confidence}
+                                                onFormulaChange={setRecognizedFormula}
+                                                onCopy={copyFormula}
+                                            />
+                                        </div>
                                     )}
                                 </div>
 

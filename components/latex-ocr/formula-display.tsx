@@ -31,21 +31,21 @@ const PREFIX_SUFFIX_OPTIONS = [
 
 export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }: FormulaDisplayProps) {
     const [selectedPrefixSuffix, setSelectedPrefixSuffix] = useState('none');
-    const [autoLopyEnabled, setAutoLopyEnabled] = useState(false);
+    const [autoCopyEnabled, setAutoCopyEnabled] = useState(false);
     const [imageWithBackground, setImageWithBackground] = useState(true);
     const formulaRef = useRef<HTMLDivElement>(null);
 
     // 从localStorage加载设置
     useEffect(() => {
         const savedPrefixSuffix = localStorage.getItem('latex-ocr-prefix-suffix');
-        const savedAutoLopy = localStorage.getItem('latex-ocr-auto-copy');
+        const savedAutoCopy = localStorage.getItem('latex-ocr-auto-copy');
         const savedImageBackground = localStorage.getItem('latex-ocr-image-background');
         
         if (savedPrefixSuffix) {
             setSelectedPrefixSuffix(savedPrefixSuffix);
         }
-        if (savedAutoLopy) {
-            setAutoLopyEnabled(JSON.parse(savedAutoLopy));
+        if (savedAutoCopy) {
+            setAutoCopyEnabled(JSON.parse(savedAutoCopy));
         }
         if (savedImageBackground) {
             setImageWithBackground(JSON.parse(savedImageBackground));
@@ -58,8 +58,8 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
     }, [selectedPrefixSuffix]);
 
     useEffect(() => {
-        localStorage.setItem('latex-ocr-auto-copy', JSON.stringify(autoLopyEnabled));
-    }, [autoLopyEnabled]);
+        localStorage.setItem('latex-ocr-auto-copy', JSON.stringify(autoCopyEnabled));
+    }, [autoCopyEnabled]);
 
     useEffect(() => {
         localStorage.setItem('latex-ocr-image-background', JSON.stringify(imageWithBackground));
@@ -67,10 +67,10 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
 
     // 自动复制功能
     useEffect(() => {
-        if (autoLopyEnabled && formula.trim()) {
+        if (autoCopyEnabled && formula.trim()) {
             handleCopyFormula();
         }
-    }, [autoLopyEnabled, formula, handleCopyFormula]);
+    }, [autoCopyEnabled, formula, handleCopyFormula]);
 
     const getConfidenceColor = (value: number) => {
         if (value >= 80) return "bg-green-500";
@@ -214,8 +214,8 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                         <div className="flex items-center space-x-2">
                             <Checkbox
                                 id="auto-copy"
-                                checked={autoLopyEnabled}
-                                onCheckedChange={setAutoLopyEnabled}
+                                checked={autoCopyEnabled}
+                                onCheckedChange={setAutoCopyEnabled}
                             />
                             <Label htmlFor="auto-copy" className="text-sm cursor-pointer">
                                 识别完成后自动复制到剪贴板
