@@ -104,7 +104,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     }, [autoCopyEnabled, formula, handleCopyFormula]);
 
-    // 生成公式图片 - 捕获父容器并给足够空间
+    // 生成公式图片 - 简化版本，直接使用KaTeX渲染的SVG
     const generateFormulaImage = async (download = false) => {
         if (!formulaRef.current || !formula.trim()) return;
 
@@ -112,237 +112,59 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         
         try {
             // 等待KaTeX完全渲染
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 300));
             
-            // 捕获整个父容器而不是单独的KaTeX元素
-            const containerElement = formulaRef.current;
-            const katexElement = containerElement.querySelector('.katex');
-            
-            if (!katexElement) {
-                throw new Error('未找到KaTeX元素');
+            // 尝试找到KaTeX生成的SVG元素
+            const svgElement = formulaRef.current.querySelector('svg');
+            if (svgElement) {
+                // 如果有SVG，直接使用SVG生成图片
+                return generateImageFromSVG(svgElement, download);
             }
-
-            // 获取KaTeX元素的边界框，包括可能的溢出部分
-            const katexRect = katexElement.getBoundingClientRect();
-            const containerRect = containerElement.getBoundingClientRect();
             
-            console.log('KaTeX元素尺寸:', katexRect);
-            console.log('容器元素尺寸:', containerRect);
-
-            // 计算更大的捕获区域，确保包含所有可能的上标、下标
-            const extraHeight = 40; // 额外的高度空间
-            const extraWidth = 20;  // 额外的宽度空间
-
-            const canvas = await html2canvas(containerElement, {
-                backgroundColor: null,
-                scale: 3,
+            // 如果没有SVG，使用html2canvas捕获整个容器
+            const canvas = await html2canvas(formulaRef.current, {
+                backgroundColor: imageWithBackground ? '#ffffff' : null,
+                scale: 2,
                 useCORS: true,
                 allowTaint: false,
-                logging: true,
-                width: containerRect.width + extraWidth,
-                height: containerRect.height + extraHeight,
-                // 调整捕获区域，给更多垂直空间
-                x: 0,
-                y: 0,
-                scrollX: 0,
-                scrollY: 0,
-                windowWidth: window.innerWidth,
-                windowHeight: window.innerHeight,
-                onclone: (clonedDoc, element) => {
-                    // 完整的KaTeX样式
-                    const katexCSS = `
-                        * {
-                            box-sizing: border-box !important;
+                logging: false,
+                onclone: (clonedDoc) => {
+                    // 简化的样式处理
+                    const style = clonedDoc.createElement('style');
+                    style.textContent = `
+                        .katex { 
+                            color: #000000 !important; 
+                            font-size: 18px !important;
                         }
-                        .katex {
-                            font-family: KaTeX_Main, "Times New Roman", serif !important;
-                            font-size: 1.21em !important;
-                            line-height: 1.8 !important;
-                            color: #000000 !important;
-                            display: inline-block !important;
-                            vertical-align: baseline !important;
-                            position: relative !important;
-                            margin: 10px 0 !important;
-                            padding: 10px 0 !important;
-                        }
-                        .katex .base {
-                            display: inline-block !important;
-                            vertical-align: baseline !important;
-                            position: relative !important;
-                        }
-                        .katex .strut {
-                            display: inline-block !important;
-                            min-height: 2em !important;
-                        }
-                        .katex .mord, .katex .mop, .katex .mrel, .katex .mbin, 
-                        .katex .mopen, .katex .mclose, .katex .mpunct {
-                            color: #000000 !important;
-                            position: relative !important;
-                        }
-                        .katex .vlist-t {
-                            display: inline-table !important;
-                            position: relative !important;
-                        }
-                        .katex .vlist-r {
-                            display: table-row !important;
-                        }
-                        .katex .vlist {
-                            display: table-cell !important;
-                            vertical-align: bottom !important;
-                            position: relative !important;
-                        }
-                        .katex .vlist > span {
-                            position: relative !important;
-                        }
-                        .katex .msupsub {
-                            position: relative !important;
-                        }
-                        .katex .mfrac {
-                            position: relative !important;
-                            vertical-align: middle !important;
-                        }
-                        .katex .frac-line {
-                            position: relative !important;
-                        }
-                        /* 确保上标下标可见 */
-                        .katex .msupsub > .vlist-t > .vlist-r > .vlist > span {
-                            position: relative !important;
+                        .katex * { 
+                            color: #000000 !important; 
                         }
                     `;
-                    
-                    const style = clonedDoc.createElement('style');
-                    style.textContent = katexCSS;
                     clonedDoc.head.appendChild(style);
-                    
-                    // 确保容器有足够的空间
-                    const clonedContainer = element;
-                    clonedContainer.style.minHeight = `${containerRect.height + extraHeight}px`;
-                    clonedContainer.style.minWidth = `${containerRect.width + extraWidth}px`;
-                    clonedContainer.style.padding = '20px';
-                    clonedContainer.style.overflow = 'visible';
-                    
-                    // 确保所有元素都可见
-                    const allElements = clonedDoc.querySelectorAll('*');
-                    allElements.forEach(el => {
-                        el.style.visibility = 'visible';
-                        el.style.opacity = '1';
-                        el.style.overflow = 'visible';
-                        if (el.style.maxHeight) el.style.maxHeight = 'none';
-                        if (el.style.maxWidth) el.style.maxWidth = 'none';
-                    });
-                    
-                    // 特别处理KaTeX元素
-                    const clonedKatex = element.querySelector('.katex');
-                    if (clonedKatex) {
-                        clonedKatex.style.position = 'relative';
-                        clonedKatex.style.margin = '20px';
-                        clonedKatex.style.padding = '10px';
-                        clonedKatex.style.minHeight = '60px';
-                        clonedKatex.style.display = 'inline-block';
-                        clonedKatex.style.verticalAlign = 'baseline';
-                        clonedKatex.style.overflow = 'visible';
-                    }
                 }
             });
 
-            console.log('生成的canvas尺寸:', canvas.width, canvas.height);
-
-            // 裁剪canvas，移除多余的空白，但保留公式内容
-            const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-            tempCtx.drawImage(canvas, 0, 0);
-            
-            // 检测实际内容边界
-            const imageData = tempCtx.getImageData(0, 0, canvas.width, canvas.height);
-            const pixels = imageData.data;
-            
-            let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
-            let hasContent = false;
-            
-            for (let y = 0; y < canvas.height; y++) {
-                for (let x = 0; x < canvas.width; x++) {
-                    const idx = (y * canvas.width + x) * 4;
-                    const alpha = pixels[idx + 3];
-                    if (alpha > 0) {
-                        hasContent = true;
-                        minX = Math.min(minX, x);
-                        minY = Math.min(minY, y);
-                        maxX = Math.max(maxX, x);
-                        maxY = Math.max(maxY, y);
-                    }
-                }
-            }
-            
-            if (!hasContent) {
-                throw new Error('生成的图片为空');
-            }
-            
-            // 添加一些边距到实际内容
-            const contentPadding = 30;
-            const contentWidth = maxX - minX + contentPadding * 2;
-            const contentHeight = maxY - minY + contentPadding * 2;
-            
-            console.log('内容边界:', { minX, minY, maxX, maxY, contentWidth, contentHeight });
-
-            // 创建最终的canvas
+            // 添加边距并处理背景
             const finalCanvas = document.createElement('canvas');
             const finalCtx = finalCanvas.getContext('2d');
-            const padding = 60;
+            const padding = 40;
             
-            finalCanvas.width = contentWidth + padding;
-            finalCanvas.height = contentHeight + padding;
+            finalCanvas.width = canvas.width + padding;
+            finalCanvas.height = canvas.height + padding;
             
-            // 设置背景
             if (imageWithBackground) {
                 finalCtx.fillStyle = '#ffffff';
                 finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
             }
             
-            // 绘制裁剪后的内容到最终canvas的中心
-            finalCtx.drawImage(
-                canvas,
-                minX - contentPadding, minY - contentPadding, contentWidth, contentHeight,
-                padding / 2, padding / 2, contentWidth, contentHeight
-            );
+            finalCtx.drawImage(canvas, padding / 2, padding / 2);
 
             if (download) {
-                // 下载图片
-                const link = document.createElement('a');
-                link.download = `formula_${Date.now()}.png`;
-                link.href = finalCanvas.toDataURL('image/png');
-                link.click();
-                
-                toast({
-                    title: "下载成功",
-                    description: "公式图片已下载",
-                    duration: 2000,
-                });
+                downloadCanvas(finalCanvas);
             } else {
-                // 复制到剪贴板
-                finalCanvas.toBlob((blob) => {
-                    if (blob) {
-                        navigator.clipboard.write([
-                            new ClipboardItem({ 'image/png': blob })
-                        ]).then(() => {
-                            toast({
-                                title: "复制成功",
-                                description: "公式图片已复制到剪贴板",
-                                duration: 2000,
-                            });
-                        }).catch(err => {
-                            console.error('复制图片失败:', err);
-                            toast({
-                                title: "复制失败",
-                                description: "无法复制图片到剪贴板",
-                                variant: "destructive",
-                                duration: 3000,
-                            });
-                        });
-                    }
-                }, 'image/png');
+                copyCanvasToClipboard(finalCanvas);
             }
+
         } catch (error) {
             console.error('生成图片失败:', error);
             toast({
@@ -354,6 +176,86 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         } finally {
             setIsGeneratingImage(false);
         }
+    };
+
+    // 从SVG生成图片
+    const generateImageFromSVG = async (svgElement: SVGElement, download: boolean) => {
+        try {
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+            
+            return new Promise<void>((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    const padding = 40;
+                    canvas.width = img.width + padding;
+                    canvas.height = img.height + padding;
+                    
+                    if (imageWithBackground) {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    }
+                    
+                    ctx.drawImage(img, padding / 2, padding / 2);
+                    URL.revokeObjectURL(url);
+                    
+                    if (download) {
+                        downloadCanvas(canvas);
+                    } else {
+                        copyCanvasToClipboard(canvas);
+                    }
+                    resolve();
+                };
+                img.onerror = reject;
+                img.src = url;
+            });
+        } catch (error) {
+            console.error('SVG处理失败:', error);
+            throw error;
+        }
+    };
+
+    // 下载canvas
+    const downloadCanvas = (canvas: HTMLCanvasElement) => {
+        const link = document.createElement('a');
+        link.download = `formula_${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        toast({
+            title: "下载成功",
+            description: "公式图片已下载",
+            duration: 2000,
+        });
+    };
+
+    // 复制canvas到剪贴板
+    const copyCanvasToClipboard = (canvas: HTMLCanvasElement) => {
+        canvas.toBlob((blob) => {
+            if (blob) {
+                navigator.clipboard.write([
+                    new ClipboardItem({ 'image/png': blob })
+                ]).then(() => {
+                    toast({
+                        title: "复制成功",
+                        description: "公式图片已复制到剪贴板",
+                        duration: 2000,
+                    });
+                }).catch(err => {
+                    console.error('复制图片失败:', err);
+                    toast({
+                        title: "复制失败",
+                        description: "无法复制图片到剪贴板",
+                        variant: "destructive",
+                        duration: 3000,
+                    });
+                });
+            }
+        }, 'image/png');
     };
 
     return (
