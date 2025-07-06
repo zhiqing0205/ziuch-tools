@@ -104,7 +104,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     }, [autoCopyEnabled, formula, handleCopyFormula]);
 
-    // 生成公式图片 - 修复高度问题
+    // 生成公式图片 - 捕获父容器并给足够空间
     const generateFormulaImage = async (download = false) => {
         if (!formulaRef.current || !formula.trim()) return;
 
@@ -114,48 +114,74 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
             // 等待KaTeX完全渲染
             await new Promise(resolve => setTimeout(resolve, 500));
             
-            // 首先尝试直接获取KaTeX渲染的元素
-            const katexElement = formulaRef.current.querySelector('.katex');
+            // 捕获整个父容器而不是单独的KaTeX元素
+            const containerElement = formulaRef.current;
+            const katexElement = containerElement.querySelector('.katex');
+            
             if (!katexElement) {
                 throw new Error('未找到KaTeX元素');
             }
 
-            // 获取元素的实际尺寸
-            const rect = katexElement.getBoundingClientRect();
-            console.log('KaTeX元素尺寸:', rect);
+            // 获取KaTeX元素的边界框，包括可能的溢出部分
+            const katexRect = katexElement.getBoundingClientRect();
+            const containerRect = containerElement.getBoundingClientRect();
+            
+            console.log('KaTeX元素尺寸:', katexRect);
+            console.log('容器元素尺寸:', containerRect);
 
-            const canvas = await html2canvas(katexElement, {
-                backgroundColor: null, // 先不设置背景，后面手动添加
+            // 计算更大的捕获区域，确保包含所有可能的上标、下标
+            const extraHeight = 40; // 额外的高度空间
+            const extraWidth = 20;  // 额外的宽度空间
+
+            const canvas = await html2canvas(containerElement, {
+                backgroundColor: null,
                 scale: 3,
                 useCORS: true,
                 allowTaint: false,
-                logging: true, // 开启日志查看详细信息
-                width: Math.max(rect.width, katexElement.scrollWidth),
-                height: Math.max(rect.height, katexElement.scrollHeight, katexElement.offsetHeight),
+                logging: true,
+                width: containerRect.width + extraWidth,
+                height: containerRect.height + extraHeight,
+                // 调整捕获区域，给更多垂直空间
+                x: 0,
+                y: 0,
+                scrollX: 0,
+                scrollY: 0,
+                windowWidth: window.innerWidth,
+                windowHeight: window.innerHeight,
                 onclone: (clonedDoc, element) => {
-                    // 在克隆的文档中添加KaTeX样式
+                    // 完整的KaTeX样式
                     const katexCSS = `
+                        * {
+                            box-sizing: border-box !important;
+                        }
                         .katex {
                             font-family: KaTeX_Main, "Times New Roman", serif !important;
                             font-size: 1.21em !important;
-                            line-height: 1.5 !important;
+                            line-height: 1.8 !important;
                             color: #000000 !important;
                             display: inline-block !important;
                             vertical-align: baseline !important;
+                            position: relative !important;
+                            margin: 10px 0 !important;
+                            padding: 10px 0 !important;
                         }
                         .katex .base {
                             display: inline-block !important;
                             vertical-align: baseline !important;
+                            position: relative !important;
                         }
                         .katex .strut {
                             display: inline-block !important;
-                            min-height: 1em !important;
+                            min-height: 2em !important;
                         }
-                        .katex .mord, .katex .mop, .katex .mrel, .katex .mbin, .katex .mopen, .katex .mclose, .katex .mpunct {
+                        .katex .mord, .katex .mop, .katex .mrel, .katex .mbin, 
+                        .katex .mopen, .katex .mclose, .katex .mpunct {
                             color: #000000 !important;
+                            position: relative !important;
                         }
                         .katex .vlist-t {
                             display: inline-table !important;
+                            position: relative !important;
                         }
                         .katex .vlist-r {
                             display: table-row !important;
@@ -163,6 +189,24 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                         .katex .vlist {
                             display: table-cell !important;
                             vertical-align: bottom !important;
+                            position: relative !important;
+                        }
+                        .katex .vlist > span {
+                            position: relative !important;
+                        }
+                        .katex .msupsub {
+                            position: relative !important;
+                        }
+                        .katex .mfrac {
+                            position: relative !important;
+                            vertical-align: middle !important;
+                        }
+                        .katex .frac-line {
+                            position: relative !important;
+                        }
+                        /* 确保上标下标可见 */
+                        .katex .msupsub > .vlist-t > .vlist-r > .vlist > span {
+                            position: relative !important;
                         }
                     `;
                     
@@ -170,36 +214,85 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                     style.textContent = katexCSS;
                     clonedDoc.head.appendChild(style);
                     
-                    // 确保所有元素都可见且有正确的尺寸
+                    // 确保容器有足够的空间
+                    const clonedContainer = element;
+                    clonedContainer.style.minHeight = `${containerRect.height + extraHeight}px`;
+                    clonedContainer.style.minWidth = `${containerRect.width + extraWidth}px`;
+                    clonedContainer.style.padding = '20px';
+                    clonedContainer.style.overflow = 'visible';
+                    
+                    // 确保所有元素都可见
                     const allElements = clonedDoc.querySelectorAll('*');
                     allElements.forEach(el => {
                         el.style.visibility = 'visible';
                         el.style.opacity = '1';
-                        // 确保没有高度限制
+                        el.style.overflow = 'visible';
                         if (el.style.maxHeight) el.style.maxHeight = 'none';
-                        if (el.style.overflow) el.style.overflow = 'visible';
+                        if (el.style.maxWidth) el.style.maxWidth = 'none';
                     });
                     
-                    // 特别处理katex元素
+                    // 特别处理KaTeX元素
                     const clonedKatex = element.querySelector('.katex');
                     if (clonedKatex) {
-                        clonedKatex.style.height = 'auto';
-                        clonedKatex.style.minHeight = '2em';
+                        clonedKatex.style.position = 'relative';
+                        clonedKatex.style.margin = '20px';
+                        clonedKatex.style.padding = '10px';
+                        clonedKatex.style.minHeight = '60px';
                         clonedKatex.style.display = 'inline-block';
                         clonedKatex.style.verticalAlign = 'baseline';
+                        clonedKatex.style.overflow = 'visible';
                     }
                 }
             });
 
             console.log('生成的canvas尺寸:', canvas.width, canvas.height);
 
-            // 为图片添加边距
+            // 裁剪canvas，移除多余的空白，但保留公式内容
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            tempCtx.drawImage(canvas, 0, 0);
+            
+            // 检测实际内容边界
+            const imageData = tempCtx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+            
+            let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
+            let hasContent = false;
+            
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const idx = (y * canvas.width + x) * 4;
+                    const alpha = pixels[idx + 3];
+                    if (alpha > 0) {
+                        hasContent = true;
+                        minX = Math.min(minX, x);
+                        minY = Math.min(minY, y);
+                        maxX = Math.max(maxX, x);
+                        maxY = Math.max(maxY, y);
+                    }
+                }
+            }
+            
+            if (!hasContent) {
+                throw new Error('生成的图片为空');
+            }
+            
+            // 添加一些边距到实际内容
+            const contentPadding = 30;
+            const contentWidth = maxX - minX + contentPadding * 2;
+            const contentHeight = maxY - minY + contentPadding * 2;
+            
+            console.log('内容边界:', { minX, minY, maxX, maxY, contentWidth, contentHeight });
+
+            // 创建最终的canvas
             const finalCanvas = document.createElement('canvas');
             const finalCtx = finalCanvas.getContext('2d');
             const padding = 60;
             
-            finalCanvas.width = canvas.width + padding;
-            finalCanvas.height = canvas.height + padding;
+            finalCanvas.width = contentWidth + padding;
+            finalCanvas.height = contentHeight + padding;
             
             // 设置背景
             if (imageWithBackground) {
@@ -207,11 +300,11 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                 finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
             }
             
-            // 将原canvas内容绘制到最终canvas的中心
+            // 绘制裁剪后的内容到最终canvas的中心
             finalCtx.drawImage(
-                canvas, 
-                padding / 2, 
-                padding / 2
+                canvas,
+                minX - contentPadding, minY - contentPadding, contentWidth, contentHeight,
+                padding / 2, padding / 2, contentWidth, contentHeight
             );
 
             if (download) {
