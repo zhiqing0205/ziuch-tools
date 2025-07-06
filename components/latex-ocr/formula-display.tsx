@@ -91,21 +91,119 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     }, [autoCopyEnabled, formula, handleCopyFormula]);
 
+    // 生成公式图片（备用方法：使用SVG）
+    const generateFormulaImageSVG = async (download = false) => {
+        if (!formulaRef.current || !formula.trim()) return;
+
+        try {
+            // 获取公式元素的尺寸和内容
+            const rect = formulaRef.current.getBoundingClientRect();
+            const formulaElement = formulaRef.current.querySelector('.katex');
+            
+            if (!formulaElement) {
+                console.error('未找到KaTeX元素');
+                return;
+            }
+
+            // 创建SVG
+            const svgData = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="${rect.width}" height="${rect.height}">
+                    <foreignObject width="100%" height="100%">
+                        <div xmlns="http://www.w3.org/1999/xhtml" style="
+                            font-family: 'KaTeX_Main', 'Times New Roman', serif;
+                            font-size: 18px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: ${rect.width}px;
+                            height: ${rect.height}px;
+                            background-color: ${imageWithBackground ? '#ffffff' : 'transparent'};
+                            padding: 20px;
+                        ">
+                            ${formulaElement.outerHTML}
+                        </div>
+                    </foreignObject>
+                </svg>
+            `;
+
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            // 创建图片
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = rect.width * 2; // 高分辨率
+                canvas.height = rect.height * 2;
+                
+                ctx.scale(2, 2);
+                ctx.drawImage(img, 0, 0);
+                
+                URL.revokeObjectURL(url);
+
+                if (download) {
+                    const link = document.createElement('a');
+                    link.download = `formula_${Date.now()}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                } else {
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            navigator.clipboard.write([
+                                new ClipboardItem({ 'image/png': blob })
+                            ]);
+                        }
+                    }, 'image/png');
+                }
+            };
+            
+            img.src = url;
+        } catch (error) {
+            console.error('SVG方法生成图片失败:', error);
+            // 回退到html2canvas方法
+            return generateFormulaImage(download);
+        }
+    };
+
     // 生成公式图片
     const generateFormulaImage = async (download = false) => {
         if (!formulaRef.current || !formula.trim()) return;
 
         try {
+            // 等待一小段时间确保KaTeX完全渲染
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
             const canvas = await html2canvas(formulaRef.current, {
                 backgroundColor: imageWithBackground ? '#ffffff' : null,
                 scale: 2, // 提高分辨率
                 useCORS: true,
                 allowTaint: true,
-                removeContainer: true,
-                logging: false,
+                removeContainer: false, // 改为false
+                logging: true, // 启用日志查看问题
                 width: formulaRef.current.scrollWidth,
                 height: formulaRef.current.scrollHeight,
+                foreignObjectRendering: true, // 启用外部对象渲染
+                onclone: (clonedDoc, element) => {
+                    // 确保字体和样式被正确复制
+                    const katexElements = element.querySelectorAll('.katex');
+                    katexElements.forEach(katex => {
+                        katex.style.fontSize = '18px';
+                        katex.style.display = 'inline-block';
+                    });
+                }
             });
+
+            // 检查canvas是否为空
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const isEmpty = imageData.data.every(pixel => pixel === 0);
+            
+            if (isEmpty) {
+                console.warn('html2canvas生成的图片为空，尝试SVG方法');
+                return generateFormulaImageSVG(download);
+            }
 
             if (download) {
                 // 下载图片
@@ -129,6 +227,8 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
             }
         } catch (error) {
             console.error('生成图片失败:', error);
+            // 如果html2canvas失败，尝试SVG方法
+            return generateFormulaImageSVG(download);
         }
     };
 
@@ -143,10 +243,16 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                         alignItems: 'center',
                         justifyContent: 'center',
                         minHeight: '80px',
-                        padding: '20px'
+                        padding: '20px',
+                        fontSize: '18px',
+                        lineHeight: '1.5',
+                        color: '#000000',
+                        backgroundColor: '#ffffff'
                     }}
                 >
-                    <InlineMath math={formula} />
+                    <div style={{ display: 'inline-block' }}>
+                        <InlineMath math={formula} />
+                    </div>
                 </div>
             </div>
 
