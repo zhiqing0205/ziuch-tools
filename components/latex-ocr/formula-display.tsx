@@ -65,13 +65,6 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         localStorage.setItem('latex-ocr-image-background', JSON.stringify(imageWithBackground));
     }, [imageWithBackground]);
 
-    // 自动复制功能
-    useEffect(() => {
-        if (autoCopyEnabled && formula.trim()) {
-            handleCopyFormula();
-        }
-    }, [autoCopyEnabled, formula, handleCopyFormula]);
-
     const getConfidenceColor = (value: number) => {
         if (value >= 80) return "bg-green-500";
         if (value >= 50) return "bg-yellow-500";
@@ -92,6 +85,13 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
             console.error('复制失败:', err);
         });
     }, [formula, getCurrentOption]);
+
+    // 自动复制功能
+    useEffect(() => {
+        if (autoCopyEnabled && formula.trim()) {
+            handleCopyFormula();
+        }
+    }, [autoCopyEnabled, formula, handleCopyFormula]);
 
     // 生成公式图片
     const generateFormulaImage = async (download = false) => {
