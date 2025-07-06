@@ -8,14 +8,10 @@ import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Upload, Undo, Redo, Info, Eraser, PenTool, Trash2 } from 'lucide-react';
-import { ProgressWithColor } from "@/components/ui/progress-with-color";
+import { Upload, Undo, Redo, Eraser, PenTool, Trash2 } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 import 'katex/dist/katex.min.css';
-import { InlineMath } from 'react-katex';
 import { Loading } from "@/components/ui/loading";
-import { Textarea } from "@/components/ui/textarea";
-import html2canvas from 'html2canvas';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,6 +26,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { saveFormulaRecord } from '@/lib/latex-ocr/store';
 import Link from 'next/link';
 import { recognizeLatex } from '@/app/api/latex-ocr';
+import { FormulaDisplay } from '@/components/latex-ocr/formula-display';
 
 // 定义笔迹数据结构
 interface Stroke {
@@ -56,7 +53,6 @@ const LatexRecognition = () => {
     const [drawError, setDrawError] = useState('');
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const previewRef = useRef<HTMLDivElement>(null);
     const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
     
     // 新的状态管理
@@ -66,7 +62,6 @@ const LatexRecognition = () => {
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [isDrawing, setIsDrawing] = useState(false);
     const [showClearDialog, setShowClearDialog] = useState(false);
-    const [accordionKey, setAccordionKey] = useState(uuidv4());
     
     // 工具相关状态
     const [currentTool, setCurrentTool] = useState<ToolType>('pen');
@@ -80,7 +75,7 @@ const LatexRecognition = () => {
     const cursorRef = useRef<HTMLDivElement>(null);
 
     // 初始化画布
-    const initCanvas = (canvas: HTMLCanvasElement) => {
+    const initCanvas = useCallback((canvas: HTMLCanvasElement) => {
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx) {
@@ -89,13 +84,12 @@ const LatexRecognition = () => {
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
                 setContext(ctx);
-                redrawCanvas(ctx);
             }
         }
-    };
+    }, [penSize]);
 
     // 重绘整个画布
-    const redrawCanvas = (ctx?: CanvasRenderingContext2D) => {
+    const redrawCanvas = useCallback((ctx?: CanvasRenderingContext2D) => {
         const canvas = canvasRef.current;
         const drawContext = ctx || context;
         if (!canvas || !drawContext) return;
@@ -115,7 +109,7 @@ const LatexRecognition = () => {
             }
             drawContext.stroke();
         });
-    };
+    }, [strokes, context]);
 
     // 保存历史状态
     const saveToHistory = () => {
@@ -213,7 +207,6 @@ const LatexRecognition = () => {
         let hasChanges = false;
         
         strokes.forEach(stroke => {
-            const newPoints: Array<{ x: number; y: number }> = [];
             let currentSegment: Array<{ x: number; y: number }> = [];
             
             stroke.points.forEach(point => {
@@ -268,10 +261,8 @@ const LatexRecognition = () => {
 
     // 重绘画布当strokes变化时
     useEffect(() => {
-        if (context) {
-            redrawCanvas();
-        }
-    }, [strokes, context]);
+        redrawCanvas();
+    }, [redrawCanvas]);
 
     // 更新的绘画逻辑
     const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -328,6 +319,10 @@ const LatexRecognition = () => {
             const hasErased = eraserMode === 'stroke' 
                 ? eraseByStroke(offsetX, offsetY)
                 : eraseByPixel(offsetX, offsetY);
+            // Use the result to prevent unused expression warning
+            if (hasErased) {
+                // Erasing was successful
+            }
         }
     };
 
@@ -454,7 +449,7 @@ const LatexRecognition = () => {
                 if (result) {
                     saveRecord(base64Image, result.latex, result.confidence);
                 }
-            } catch (err) {
+            } catch {
                 setUploadError('处理图片时出错');
                 setLoading(false);
             }
@@ -479,7 +474,7 @@ const LatexRecognition = () => {
                             if (result) {
                                 saveRecord(base64Image, result.latex, result.confidence);
                             }
-                        } catch (err) {
+                        } catch {
                             setUploadError('处理图片时出错');
                             setLoading(false);
                         }
@@ -579,13 +574,10 @@ const LatexRecognition = () => {
         saveFormulaRecord(record);
     };
 
-    const getConfidenceColor = (value: number) => {
-        if (value >= 80) return "bg-green-500";
-        if (value >= 50) return "bg-yellow-500";
-        return "bg-red-500";
-    };
 
     const copyFormula = async (type: 'plain' | 'math' | 'image') => {
+        // 这个函数现在主要用于处理原始的图片复制
+        // 新的FormulaDisplay组件会处理大部分复制逻辑
         try {
             let content = '';
             switch (type) {
@@ -596,19 +588,11 @@ const LatexRecognition = () => {
                     content = `$$${recognizedFormula}$$`;
                     break;
                 case 'image':
-                    if (!previewRef.current) return;
-                    const canvas = await html2canvas(previewRef.current);
-                    canvas.toBlob(async (blob) => {
-                        if (blob) {
-                            await navigator.clipboard.write([
-                                new ClipboardItem({ 'image/png': blob })
-                            ]);
-                            toast({
-                                title: "复制成功",
-                                description: "公式图片已复制到剪贴板",
-                                duration: 2000,
-                            });
-                        }
+                    // 这是原始的图片复制，保留作为兼容
+                    toast({
+                        title: "提示",
+                        description: "请使用新的图片复制功能",
+                        duration: 2000,
                     });
                     return;
             }
@@ -618,7 +602,7 @@ const LatexRecognition = () => {
                 description: "公式已复制到剪贴板",
                 duration: 2000,
             });
-        } catch (err) {
+        } catch {
             toast({
                 title: "复制失败",
                 description: "请手动复制公式",
@@ -690,52 +674,18 @@ const LatexRecognition = () => {
                                     </div>
 
                                     {recognizedFormula && (
-                                        <div className="space-y-4">
-                                            <div className="bg-white rounded-lg border">
-                                                <div ref={previewRef} className="flex items-center justify-center min-h-[120px] p-4">
-                                                    <InlineMath math={recognizedFormula} />
-                                                </div>
-                                            </div>
-
-                                            <div className="space-y-0.5">
-                                                <div className="flex items-center gap-2">
-                                                    <ProgressWithColor
-                                                        value={confidence}
-                                                        indicatorColor={getConfidenceColor(confidence)}
-                                                        className="flex-1"
-                                                    />
-                                                    <div className="text-sm text-muted-foreground w-12 text-right">{confidence.toFixed(1)}%</div>
-                                                </div>
-                                            </div>
-
-                                            <div className="space-y-2">
-                                                {/* <div className="text-sm text-muted-foreground">识别结果：</div> */}
-                                                <Textarea
-                                                    value={recognizedFormula}
-                                                    onChange={(e) => setRecognizedFormula(e.target.value)}
-                                                    className="font-mono min-h-[160px]"
-                                                />
-                                            </div>
-
-                                            <div className="flex gap-2">
-                                                <Button onClick={() => copyFormula('plain')} className="flex-1" variant="secondary">
-                                                    复制公式
-                                                </Button>
-                                                <Button onClick={() => copyFormula('math')} className="flex-1" variant="secondary">
-                                                    复制公式(前后带$$)
-                                                </Button>
-                                                <Button onClick={() => copyFormula('image')} className="flex-1" variant="secondary">
-                                                    复制图片
-                                                </Button>
-                                            </div>
-                                        </div>
+                                        <FormulaDisplay
+                                            formula={recognizedFormula}
+                                            confidence={confidence}
+                                            onFormulaChange={setRecognizedFormula}
+                                            onCopy={copyFormula}
+                                        />
                                     )}
                                 </div>
 
                                 <Accordion
                                     type="single"
                                     collapsible
-                                    key={accordionKey}
                                 >
                                     <AccordionItem value="draw">
                                         <AccordionTrigger>手写公式</AccordionTrigger>

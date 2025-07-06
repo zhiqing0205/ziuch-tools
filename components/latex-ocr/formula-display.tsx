@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { InlineMath } from 'react-katex';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -70,7 +70,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         if (autoLopyEnabled && formula.trim()) {
             handleCopyFormula();
         }
-    }, [formula, selectedPrefixSuffix, autoLopyEnabled]);
+    }, [autoLopyEnabled, formula, handleCopyFormula]);
 
     const getConfidenceColor = (value: number) => {
         if (value >= 80) return "bg-green-500";
@@ -78,11 +78,11 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         return "bg-red-500";
     };
 
-    const getCurrentOption = () => {
+    const getCurrentOption = useCallback(() => {
         return PREFIX_SUFFIX_OPTIONS.find(opt => opt.id === selectedPrefixSuffix) || PREFIX_SUFFIX_OPTIONS[0];
-    };
+    }, [selectedPrefixSuffix]);
 
-    const handleCopyFormula = () => {
+    const handleCopyFormula = useCallback(() => {
         const option = getCurrentOption();
         const formattedFormula = `${option.prefix}${formula}${option.suffix}`;
         
@@ -91,7 +91,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }).catch(err => {
             console.error('复制失败:', err);
         });
-    };
+    }, [formula, getCurrentOption]);
 
     // 生成公式图片
     const generateFormulaImage = async (download = false) => {
