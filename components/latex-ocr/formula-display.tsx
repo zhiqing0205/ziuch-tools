@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { InlineMath } from 'react-katex';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,40 +20,11 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         return "bg-red-500";
     };
 
-    // 添加KaTeX暗黑模式样式
-    useEffect(() => {
-        const style = document.createElement('style');
-        style.textContent = `
-            .katex, .katex-display {
-                color: hsl(var(--foreground)) !important;
-            }
-            .katex .base {
-                color: hsl(var(--foreground)) !important;
-            }
-            .katex .mord, .katex .mop, .katex .mopen, .katex .mclose, .katex .mrel, .katex .mbin, .katex .mpunct {
-                color: hsl(var(--foreground)) !important;
-            }
-        `;
-        document.head.appendChild(style);
-        
-        return () => {
-            document.head.removeChild(style);
-        };
-    }, []);
-
     return (
         <div className="space-y-4">
             <div className="bg-card border rounded-lg">
-                <div 
-                    className="flex items-center justify-center min-h-[50px] p-2"
-                    style={{
-                        color: 'hsl(var(--foreground))',
-                        backgroundColor: 'hsl(var(--card))'
-                    }}
-                >
-                    <div style={{ color: 'hsl(var(--foreground))' }}>
-                        <InlineMath math={formula} />
-                    </div>
+                <div className="flex items-center justify-center min-h-[50px] p-2">
+                    <InlineMath math={formula} />
                 </div>
             </div>
 

@@ -71,6 +71,41 @@ body {
   }
 }
 
+/* KaTeX 暗黑模式修复 */
+@layer components {
+  .dark .katex,
+  .dark .katex-display,
+  .dark .katex .base,
+  .dark .katex .mord,
+  .dark .katex .mop,
+  .dark .katex .mopen,
+  .dark .katex .mclose,
+  .dark .katex .mrel,
+  .dark .katex .mbin,
+  .dark .katex .mpunct,
+  .dark .katex .minner,
+  .dark .katex .mspace,
+  .dark .katex .mtight,
+  .dark .katex .sizing,
+  .dark .katex .mathord,
+  .dark .katex .mathop,
+  .dark .katex .mathrel,
+  .dark .katex .mathbin,
+  .dark .katex .mathpunct,
+  .dark .katex .mathinner {
+    color: hsl(var(--foreground)) !important;
+  }
+  
+  /* 画布在暗黑模式下的样式 */
+  .canvas-container canvas {
+    background-color: white;
+  }
+  
+  .dark .canvas-container canvas {
+    background-color: #1a1a1a !important;
+  }
+}
+
 .masonry-grid {
   display: flex;
   width: auto;

@@ -79,12 +79,21 @@ const LatexRecognition = () => {
     const [showCursor, setShowCursor] = useState(false);
     const cursorRef = useRef<HTMLDivElement>(null);
 
+    // 获取当前画笔颜色（根据主题自动调整）
+    const getPenColor = () => {
+        if (typeof window !== 'undefined') {
+            const isDark = document.documentElement.classList.contains('dark');
+            return isDark ? '#ffffff' : '#000000';
+        }
+        return '#000000';
+    };
+
     // 初始化画布
     const initCanvas = (canvas: HTMLCanvasElement) => {
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx) {
-                ctx.strokeStyle = '#000000';
+                ctx.strokeStyle = getPenColor();
                 ctx.lineWidth = penSize;
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
@@ -273,6 +282,23 @@ const LatexRecognition = () => {
         }
     }, [strokes, context]);
 
+    // 监听主题变化，重新初始化画布颜色
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            if (context) {
+                context.strokeStyle = getPenColor();
+                redrawCanvas();
+            }
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        return () => observer.disconnect();
+    }, [context]);
+
     // 更新的绘画逻辑
     const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
         const { offsetX, offsetY } = e.nativeEvent;
@@ -281,7 +307,7 @@ const LatexRecognition = () => {
             const newStroke: Stroke = {
                 id: uuidv4(),
                 points: [{ x: offsetX, y: offsetY }],
-                color: '#000000',
+                color: getPenColor(),
                 lineWidth: penSize,
                 timestamp: Date.now()
             };
@@ -832,7 +858,7 @@ const LatexRecognition = () => {
                                                         </div>
 
                                                         {/* 画布容器 */}
-                                                        <div className="border border-t-0 rounded-b-lg overflow-hidden relative" ref={containerRef}>
+                                                        <div className="border border-t-0 rounded-b-lg overflow-hidden relative canvas-container" ref={containerRef}>
                                                             <canvas
                                                                 ref={(canvas) => {
                                                                     canvasRef.current = canvas;
@@ -864,7 +890,7 @@ const LatexRecognition = () => {
                                                                 >
                                                                     {currentTool === 'eraser' ? (
                                                                         <div
-                                                                            className="border-2 border-red-400 bg-white bg-opacity-50 rounded-full"
+                                                                            className="border-2 border-red-400 bg-white dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-50 rounded-full"
                                                                             style={{
                                                                                 width: eraserSize,
                                                                                 height: eraserSize,
@@ -872,7 +898,7 @@ const LatexRecognition = () => {
                                                                         />
                                                                     ) : (
                                                                         <div
-                                                                            className="border-2 border-gray-600 bg-black bg-opacity-30 rounded-full"
+                                                                            className="border-2 border-gray-600 dark:border-gray-300 bg-black dark:bg-white bg-opacity-30 dark:bg-opacity-30 rounded-full"
                                                                             style={{
                                                                                 width: penSize * 2 + 4,
                                                                                 height: penSize * 2 + 4,
