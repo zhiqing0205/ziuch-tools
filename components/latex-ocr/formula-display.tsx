@@ -1,10 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { InlineMath } from 'react-katex';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ProgressWithColor } from "@/components/ui/progress-with-color";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface FormulaDisplayProps {
     formula: string;
@@ -13,11 +17,68 @@ interface FormulaDisplayProps {
     onCopy: (type: 'plain' | 'math' | 'image') => void;
 }
 
+// 预设的前后缀选项
+const PREFIX_SUFFIX_OPTIONS = [
+    { id: 'none', label: '无前后缀', prefix: '', suffix: '' },
+    { id: 'dollar', label: '$$公式$$', prefix: '$$', suffix: '$$' },
+    { id: 'math', label: '\\[公式\\]', prefix: '\\[', suffix: '\\]' },
+    { id: 'inline', label: '$公式$', prefix: '$', suffix: '$' },
+    { id: 'equation', label: '\\begin{equation}', prefix: '\\begin{equation}\n', suffix: '\n\\end{equation}' },
+    { id: 'align', label: '\\begin{align}', prefix: '\\begin{align}\n', suffix: '\n\\end{align}' },
+];
+
 export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }: FormulaDisplayProps) {
+    const [selectedPrefixSuffix, setSelectedPrefixSuffix] = useState('none');
+    const [autoLopyEnabled, setAutoLopyEnabled] = useState(false);
+
+    // 从localStorage加载设置
+    useEffect(() => {
+        const savedPrefixSuffix = localStorage.getItem('latex-ocr-prefix-suffix');
+        const savedAutoLopy = localStorage.getItem('latex-ocr-auto-copy');
+        
+        if (savedPrefixSuffix) {
+            setSelectedPrefixSuffix(savedPrefixSuffix);
+        }
+        if (savedAutoLopy) {
+            setAutoLopyEnabled(JSON.parse(savedAutoLopy));
+        }
+    }, []);
+
+    // 保存设置到localStorage
+    useEffect(() => {
+        localStorage.setItem('latex-ocr-prefix-suffix', selectedPrefixSuffix);
+    }, [selectedPrefixSuffix]);
+
+    useEffect(() => {
+        localStorage.setItem('latex-ocr-auto-copy', JSON.stringify(autoLopyEnabled));
+    }, [autoLopyEnabled]);
+
+    // 自动复制功能
+    useEffect(() => {
+        if (autoLopyEnabled && formula.trim()) {
+            handleCopyFormula();
+        }
+    }, [formula, selectedPrefixSuffix, autoLopyEnabled]);
+
     const getConfidenceColor = (value: number) => {
         if (value >= 80) return "bg-green-500";
         if (value >= 50) return "bg-yellow-500";
         return "bg-red-500";
+    };
+
+    const getCurrentOption = () => {
+        return PREFIX_SUFFIX_OPTIONS.find(opt => opt.id === selectedPrefixSuffix) || PREFIX_SUFFIX_OPTIONS[0];
+    };
+
+    const handleCopyFormula = () => {
+        const option = getCurrentOption();
+        const formattedFormula = `${option.prefix}${formula}${option.suffix}`;
+        
+        navigator.clipboard.writeText(formattedFormula).then(() => {
+            // 可以添加toast提示
+        }).catch(err => {
+            console.error('复制失败:', err);
+        });
     };
 
     return (
@@ -47,14 +108,76 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                 />
             </div>
 
+            {/* 复制设置面板 */}
+            <Card>
+                <CardHeader className="pb-3">
+                    <CardTitle className="text-base">复制设置</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    {/* 前后缀选择 */}
+                    <div className="space-y-3">
+                        <Label className="text-sm font-medium">前后缀格式</Label>
+                        <RadioGroup
+                            value={selectedPrefixSuffix}
+                            onValueChange={setSelectedPrefixSuffix}
+                            className="grid grid-cols-2 gap-2"
+                        >
+                            {PREFIX_SUFFIX_OPTIONS.map((option) => (
+                                <div key={option.id} className="flex items-center space-x-2">
+                                    <RadioGroupItem value={option.id} id={option.id} />
+                                    <Label 
+                                        htmlFor={option.id} 
+                                        className="text-sm cursor-pointer flex-1"
+                                    >
+                                        {option.label}
+                                    </Label>
+                                </div>
+                            ))}
+                        </RadioGroup>
+                    </div>
+
+                    {/* 预览格式化后的公式 */}
+                    {selectedPrefixSuffix !== 'none' && formula && (
+                        <div className="space-y-2">
+                            <Label className="text-sm font-medium">预览格式</Label>
+                            <div className="p-3 bg-gray-50 rounded-md border">
+                                <code className="text-xs break-all">
+                                    {`${getCurrentOption().prefix}${formula}${getCurrentOption().suffix}`}
+                                </code>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 自动复制选项 */}
+                    <div className="flex items-center space-x-2">
+                        <Checkbox
+                            id="auto-copy"
+                            checked={autoLopyEnabled}
+                            onCheckedChange={setAutoLopyEnabled}
+                        />
+                        <Label htmlFor="auto-copy" className="text-sm cursor-pointer">
+                            识别完成后自动复制到剪贴板
+                        </Label>
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* 操作按钮 */}
             <div className="flex gap-2">
-                <Button onClick={() => onCopy('plain')} className="flex-1" variant="secondary">
-                    复制公式
+                <Button 
+                    onClick={handleCopyFormula} 
+                    className="flex-1" 
+                    variant="secondary"
+                    disabled={!formula.trim()}
+                >
+                    复制公式 {selectedPrefixSuffix !== 'none' ? `(${getCurrentOption().label})` : ''}
                 </Button>
-                <Button onClick={() => onCopy('math')} className="flex-1" variant="secondary">
-                    复制公式(前后带$$)
-                </Button>
-                <Button onClick={() => onCopy('image')} className="flex-1" variant="secondary">
+                <Button 
+                    onClick={() => onCopy('image')} 
+                    className="flex-1" 
+                    variant="secondary"
+                    disabled={!formula.trim()}
+                >
                     复制图片
                 </Button>
             </div>
