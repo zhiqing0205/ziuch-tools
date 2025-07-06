@@ -22,9 +22,11 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
 
     return (
         <div className="space-y-4">
-            <div className="bg-white rounded-lg border">
+            <div className="bg-background border rounded-lg">
                 <div className="flex items-center justify-center min-h-[50px] p-2">
-                    <InlineMath math={formula} />
+                    <div className="text-foreground">
+                        <InlineMath math={formula} />
+                    </div>
                 </div>
             </div>
 
