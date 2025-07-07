@@ -1,5 +1,14 @@
 'use client';
 
+// KaTeX全局类型声明
+declare global {
+    interface Window {
+        katex?: {
+            render: (math: string, element: HTMLElement, options?: any) => void;
+        };
+    }
+}
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { InlineMath } from 'react-katex';
 import { Button } from "@/components/ui/button";
@@ -104,37 +113,51 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     }, [autoCopyEnabled, formula, handleCopyFormula]);
 
-    // 生成公式图片 - 根据内容自动调整尺寸
+    // 生成公式图片 - "所见即所得"方案
     const generateFormulaImage = async (download = false) => {
-        if (!formulaRef.current || !formula.trim()) return;
+        if (!formula.trim()) return;
 
         setIsGeneratingImage(true);
         
         try {
-            // 等待KaTeX完全渲染
-            await new Promise(resolve => setTimeout(resolve, 300));
+            // 创建专用的隐藏导出容器
+            const exportContainer = createExportContainer();
             
-            // 尝试找到KaTeX生成的SVG元素
-            const svgElement = formulaRef.current.querySelector('svg');
+            // 等待KaTeX完全渲染
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // 尝试优先使用SVG方案
+            const svgElement = exportContainer.querySelector('svg');
             if (svgElement) {
-                // 如果有SVG，直接使用SVG生成图片
-                return generateImageFromSVG(svgElement, download);
+                const result = await generateImageFromSVG(svgElement, download);
+                document.body.removeChild(exportContainer);
+                return result;
             }
             
-            // 如果没有SVG，使用html2canvas捕获整个容器
-            const canvas = await html2canvas(formulaRef.current, {
-                backgroundColor: null, // 始终设为null，稍后手动处理背景
-                scale: 2,
+            // 备用方案：使用html2canvas
+            const canvas = await html2canvas(exportContainer, {
+                backgroundColor: null,
+                scale: 3, // 更高的缩放比例确保清晰度
                 useCORS: true,
                 allowTaint: false,
                 logging: false,
+                width: exportContainer.offsetWidth,
+                height: exportContainer.offsetHeight,
                 onclone: (clonedDoc) => {
-                    // 简化的样式处理
+                    // 确保样式一致性
                     const style = clonedDoc.createElement('style');
                     style.textContent = `
+                        .formula-export-container { 
+                            padding: 20px !important;
+                            background: ${imageWithBackground ? '#ffffff' : 'transparent'} !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                        }
                         .katex { 
                             color: #000000 !important; 
                             font-size: 18px !important;
+                            line-height: 1.5 !important;
                         }
                         .katex * { 
                             color: #000000 !important; 
@@ -144,37 +167,13 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                 }
             });
 
-            // 检测实际内容边界
-            const contentBounds = detectContentBounds(canvas);
-            if (!contentBounds) {
-                throw new Error('未检测到公式内容');
-            }
-
-            // 根据内容创建合适尺寸的最终canvas
-            const padding = 20; // 统一20px边距
-            const finalCanvas = document.createElement('canvas');
-            const finalCtx = finalCanvas.getContext('2d');
-            
-            finalCanvas.width = contentBounds.width + padding * 2;
-            finalCanvas.height = contentBounds.height + padding * 2;
-            
-            // 处理背景
-            if (imageWithBackground) {
-                finalCtx.fillStyle = '#ffffff';
-                finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-            }
-            
-            // 将内容绘制到最终canvas的中心
-            finalCtx.drawImage(
-                canvas,
-                contentBounds.x, contentBounds.y, contentBounds.width, contentBounds.height,
-                padding, padding, contentBounds.width, contentBounds.height
-            );
+            // 移除临时容器
+            document.body.removeChild(exportContainer);
 
             if (download) {
-                downloadCanvas(finalCanvas);
+                downloadCanvas(canvas);
             } else {
-                copyCanvasToClipboard(finalCanvas);
+                copyCanvasToClipboard(canvas);
             }
 
         } catch (error) {
@@ -190,62 +189,76 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
         }
     };
 
-    // 检测canvas中实际内容的边界
-    const detectContentBounds = (canvas: HTMLCanvasElement) => {
-        const ctx = canvas.getContext('2d');
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const pixels = imageData.data;
+    // 创建专用的导出容器
+    const createExportContainer = () => {
+        const container = document.createElement('div');
+        container.className = 'formula-export-container';
         
-        let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
-        let hasContent = false;
+        // 设置容器样式 - 这就是最终图片的"相框"
+        Object.assign(container.style, {
+            position: 'absolute',
+            left: '-9999px', // 隐藏在视口外
+            top: '-9999px',
+            padding: '20px', // 固定的20px边距
+            background: imageWithBackground ? '#ffffff' : 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '18px',
+            lineHeight: '1.5',
+            color: '#000000',
+            fontFamily: 'KaTeX_Main, "Times New Roman", serif', // 确保字体一致
+            minWidth: 'auto',
+            minHeight: 'auto',
+            width: 'auto',
+            height: 'auto'
+        });
+
+        // 创建公式内容容器
+        const formulaWrapper = document.createElement('div');
+        formulaWrapper.style.display = 'inline-block';
         
-        for (let y = 0; y < canvas.height; y++) {
-            for (let x = 0; x < canvas.width; x++) {
-                const idx = (y * canvas.width + x) * 4;
-                const alpha = pixels[idx + 3];
-                if (alpha > 0) {
-                    hasContent = true;
-                    minX = Math.min(minX, x);
-                    minY = Math.min(minY, y);
-                    maxX = Math.max(maxX, x);
-                    maxY = Math.max(maxY, y);
-                }
+        // 渲染KaTeX公式
+        if (typeof window !== 'undefined' && window.katex) {
+            try {
+                window.katex.render(formula, formulaWrapper, {
+                    displayMode: false,
+                    throwOnError: false,
+                    errorColor: '#cc0000',
+                    strict: false
+                });
+            } catch (error) {
+                // 如果KaTeX渲染失败，使用文本回退
+                formulaWrapper.textContent = formula;
             }
+        } else {
+            // 如果KaTeX不可用，使用文本回退
+            formulaWrapper.textContent = formula;
         }
         
-        if (!hasContent) return null;
+        container.appendChild(formulaWrapper);
+        document.body.appendChild(container);
         
-        return {
-            x: minX,
-            y: minY,
-            width: maxX - minX + 1,
-            height: maxY - minY + 1
-        };
+        return container;
     };
 
-    // 从SVG生成图片
+
+    // 从SVG生成图片 - 优化的动态尺寸方案  
     const generateImageFromSVG = async (svgElement: SVGElement, download: boolean) => {
         try {
-            // 获取SVG的viewBox或实际尺寸
-            const viewBox = svgElement.getAttribute('viewBox');
-            let svgWidth, svgHeight;
+            // 获取SVG的精确尺寸
+            const bbox = (svgElement as SVGSVGElement).getBBox();
+            const svgWidth: number = bbox.width;
+            const svgHeight: number = bbox.height;
             
-            if (viewBox) {
-                const [, , width, height] = viewBox.split(' ').map(Number);
-                svgWidth = width;
-                svgHeight = height;
-            } else {
-                // 如果没有viewBox，使用getBBox获取实际内容尺寸
-                const bbox = svgElement.getBBox();
-                svgWidth = bbox.width;
-                svgHeight = bbox.height;
-            }
-            
+            // 创建优化的SVG内容
             const svgData = new XMLSerializer().serializeToString(svgElement);
             
-            // 创建一个干净的SVG，确保透明背景
-            const cleanSvgData = svgData.replace(/fill="white"/g, 'fill="none"')
-                                        .replace(/background-color:\s*white/g, 'background-color: transparent');
+            // 清理SVG，确保透明背景
+            const cleanSvgData = svgData
+                .replace(/fill="white"/g, 'fill="none"')
+                .replace(/background-color:\s*white/g, 'background-color: transparent')
+                .replace(/fill:\s*white/g, 'fill: none');
             
             const svgBlob = new Blob([cleanSvgData], { type: 'image/svg+xml;charset=utf-8' });
             const url = URL.createObjectURL(svgBlob);
@@ -253,11 +266,11 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
             return new Promise<void>((resolve, reject) => {
                 const img = new Image();
                 img.onload = () => {
-                    const padding = 20; // 统一20px边距
+                    const padding = 20; // 固定20px边距
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    // 根据SVG内容尺寸设置canvas尺寸
+                    // 根据SVG实际内容设置canvas尺寸（包含边距）
                     canvas.width = svgWidth + padding * 2;
                     canvas.height = svgHeight + padding * 2;
                     
@@ -279,7 +292,10 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                     }
                     resolve();
                 };
-                img.onerror = reject;
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(error);
+                };
                 img.src = url;
             });
         } catch (error) {
@@ -416,7 +432,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                             <Checkbox
                                 id="auto-copy"
                                 checked={autoCopyEnabled}
-                                onCheckedChange={setAutoCopyEnabled}
+                                onCheckedChange={(checked) => setAutoCopyEnabled(checked === true)}
                             />
                             <Label htmlFor="auto-copy" className="text-sm cursor-pointer">
                                 识别完成后自动复制到剪贴板
@@ -428,7 +444,7 @@ export function FormulaDisplay({ formula, confidence, onFormulaChange, onCopy }:
                             <Checkbox
                                 id="image-background"
                                 checked={imageWithBackground}
-                                onCheckedChange={setImageWithBackground}
+                                onCheckedChange={(checked) => setImageWithBackground(checked === true)}
                             />
                             <Label htmlFor="image-background" className="text-sm cursor-pointer">
                                 图片包含白色背景
