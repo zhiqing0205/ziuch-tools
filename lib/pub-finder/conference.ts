@@ -1,100 +1,124 @@
-import { parse } from 'yaml';
 import { Conference, ConferenceAcceptance, DeadlineInfo, AcceptanceRate, AcceptanceRateItem } from './types';
 
 const CONF_CACHE_KEY = 'conference-data';
 const ACC_CACHE_KEY = 'conference-acceptance-data';
+const CONF_MD5_KEY = 'ccf-conf-md5';
+const ACC_MD5_KEY = 'ccf-acc-md5';
 const CACHE_TIMESTAMP_KEY = 'conference-data-timestamp';
-const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; // 一周的毫秒数
 
-// export async function fetchConferenceData() {
-//     try {
-//         const [confResponse, accResponse] = await Promise.all([
-//             fetch('https://ccfddl.com/conference/allconf.yml'),
-//             fetch('https://ccfddl.com/conference/allacc.yml')
-//         ]);
+async function shouldUpdateCache(): Promise<boolean> {
+  try {
+    // 获取本地缓存的MD5值
+    const localConfMD5 = localStorage.getItem(CONF_MD5_KEY);
+    const localAccMD5 = localStorage.getItem(ACC_MD5_KEY);
+    
+    if (!localConfMD5 || !localAccMD5) {
+      return true; // 如果没有本地MD5，需要更新
+    }
+    
+    // 从服务端获取最新的MD5值
+    const response = await fetch('/api/ccf/metadata');
+    if (!response.ok) {
+      return false; // 服务端不可用，使用缓存
+    }
+    
+    const { confMD5, accMD5 } = await response.json();
+    
+    // 比较MD5值
+    return localConfMD5 !== confMD5 || localAccMD5 !== accMD5;
+  } catch (error) {
+    console.error('检查MD5失败，使用本地缓存:', error);
+    return false;
+  }
+}
 
-//         const [confYaml, accYaml] = await Promise.all([
-//             confResponse.text(),
-//             accResponse.text()
-//         ]);
+async function fetchDataFromServer(): Promise<{ conferences: Conference[], acceptances: AcceptanceRate[] } | null> {
+  try {
+    const response = await fetch('/api/ccf/data');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const { conferences, acceptances, metadata } = await response.json();
+    
+    // 更新缓存
+    localStorage.setItem(CONF_CACHE_KEY, JSON.stringify(conferences));
+    localStorage.setItem(ACC_CACHE_KEY, JSON.stringify(acceptances));
+    localStorage.setItem(CONF_MD5_KEY, metadata.confMD5);
+    localStorage.setItem(ACC_MD5_KEY, metadata.accMD5);
+    localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+    
+    return { conferences, acceptances };
+  } catch (error) {
+    console.error('从服务端获取数据失败:', error);
+    return null;
+  }
+}
 
-//         const conferences = parse(confYaml) as Conference[];
-//         const acceptances = parse(accYaml) as AcceptanceRate[];
-
-//         // 更新缓存
-//         localStorage.setItem(CONF_CACHE_KEY, JSON.stringify(conferences));
-//         localStorage.setItem(ACC_CACHE_KEY, JSON.stringify(acceptances));
-//         localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
-
-//         return { conferences, acceptances };
-//     } catch (error) {
-//         console.error('Error fetching conference data:', error);
-//         // 如果有缓存数据，在请求失败时返回缓存数据
-//         const cachedConf = localStorage.getItem(CONF_CACHE_KEY);
-//         const cachedAcc = localStorage.getItem(ACC_CACHE_KEY);
-//         if (cachedConf && cachedAcc) {
-//             return {
-//                 conferences: JSON.parse(cachedConf),
-//                 acceptances: JSON.parse(cachedAcc)
-//             };
-//         }
-//         return { conferences: [], acceptances: [] };
-//     }
-// }
-
-export async function fetchConferenceData() {
-    // 首先检查缓存
-    const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+function getCachedData(): { conferences: Conference[], acceptances: AcceptanceRate[] } | null {
+  try {
     const cachedConf = localStorage.getItem(CONF_CACHE_KEY);
     const cachedAcc = localStorage.getItem(ACC_CACHE_KEY);
     
-    // 如果所有缓存都存在，检查是否过期
-    if (cachedTimestamp && cachedConf && cachedAcc) {
-        const timestamp = parseInt(cachedTimestamp);
-        const now = Date.now();
-        
-        // 如果缓存未过期，直接返回缓存数据
-        if (now - timestamp < CACHE_DURATION) {
-            return {
-                conferences: JSON.parse(cachedConf),
-                acceptances: JSON.parse(cachedAcc)
-            };
-        }
+    if (cachedConf && cachedAcc) {
+      return {
+        conferences: JSON.parse(cachedConf),
+        acceptances: JSON.parse(cachedAcc)
+      };
     }
+    return null;
+  } catch (error) {
+    console.error('读取缓存数据失败:', error);
+    return null;
+  }
+}
 
-    // 如果没有缓存或缓存已过期，从远程获取数据
-    try {
-        const [confResponse, accResponse] = await Promise.all([
-            fetch('https://ccfddl.com/conference/allconf.yml'),
-            fetch('https://ccfddl.com/conference/allacc.yml')
-        ]);
-
-        const [confYaml, accYaml] = await Promise.all([
-            confResponse.text(),
-            accResponse.text()
-        ]);
-
-        const conferences = parse(confYaml) as Conference[];
-        const acceptances = parse(accYaml) as AcceptanceRate[];
-
-        // 更新缓存
-        localStorage.setItem(CONF_CACHE_KEY, JSON.stringify(conferences));
-        localStorage.setItem(ACC_CACHE_KEY, JSON.stringify(acceptances));
-        localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
-
-        return { conferences, acceptances };
-    } catch (error) {
-        console.error('Error fetching conference data:', error);
-        
-        // 如果远程获取失败且有缓存数据，返回缓存数据（即使已过期）
-        if (cachedConf && cachedAcc) {
-            return {
-                conferences: JSON.parse(cachedConf),
-                acceptances: JSON.parse(cachedAcc)
-            };
-        }
-        return { conferences: [], acceptances: [] };
+export async function fetchConferenceData(): Promise<{ conferences: Conference[], acceptances: AcceptanceRate[] }> {
+  try {
+    // 检查是否需要更新缓存（通过MD5验证）
+    const needsUpdate = await shouldUpdateCache();
+    
+    if (!needsUpdate) {
+      // MD5一致，使用本地缓存
+      const cachedData = getCachedData();
+      if (cachedData) {
+        console.log('使用本地缓存数据（MD5验证通过）');
+        return cachedData;
+      }
     }
+    
+    // 需要更新或没有缓存，从服务端获取
+    console.log('从服务端获取最新数据...');
+    const serverData = await fetchDataFromServer();
+    
+    if (serverData) {
+      console.log('从服务端获取数据成功');
+      return serverData;
+    }
+    
+    // 服务端获取失败，尝试使用本地缓存
+    const cachedData = getCachedData();
+    if (cachedData) {
+      console.log('服务端不可用，使用本地缓存数据');
+      return cachedData;
+    }
+    
+    // 没有任何数据可用
+    console.error('无可用数据');
+    return { conferences: [], acceptances: [] };
+    
+  } catch (error) {
+    console.error('获取会议数据失败:', error);
+    
+    // 发生错误时尝试使用缓存
+    const cachedData = getCachedData();
+    if (cachedData) {
+      console.log('发生错误，使用本地缓存数据');
+      return cachedData;
+    }
+    
+    return { conferences: [], acceptances: [] };
+  }
 }
 
 function padZero(num: number): string {
