@@ -1,4 +1,5 @@
 import { Conference, ConferenceAcceptance, DeadlineInfo, AcceptanceRate, AcceptanceRateItem } from './types';
+import { getCacheManager } from './cache-manager';
 
 // 使用更unique的键名避免冲突
 const CONF_CACHE_KEY = 'ccf-conference-data-v2';
@@ -65,55 +66,75 @@ function testLocalStorage() {
 export async function fetchConferenceData() {
     console.log('Frontend: 开始获取会议数据...');
     
-    // 首先检查缓存
-    const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
-    const cachedConf = localStorage.getItem(CONF_CACHE_KEY);
-    const cachedAcc = localStorage.getItem(ACC_CACHE_KEY);
+    // 获取缓存管理器
+    const cacheManager = getCacheManager();
     
-    console.log('Frontend: 详细缓存状态检查', {
-        hasTimestamp: !!cachedTimestamp,
-        hasConf: !!cachedConf,
-        hasAcc: !!cachedAcc,
-        timestamp: cachedTimestamp,
-        now: Date.now(),
-        cacheAge: cachedTimestamp ? (Date.now() - parseInt(cachedTimestamp)) / (1000 * 60 * 60) : null, // hours
-        confSize: cachedConf ? cachedConf.length : 0,
-        accSize: cachedAcc ? cachedAcc.length : 0,
-        storageInfo: getLocalStorageInfo(),
-        cacheKeys: [CONF_CACHE_KEY, ACC_CACHE_KEY, CACHE_TIMESTAMP_KEY]
-    });
-    
-    // 如果所有缓存都存在，检查是否过期
-    if (cachedTimestamp && cachedConf && cachedAcc) {
-        const timestamp = parseInt(cachedTimestamp);
-        const now = Date.now();
-        const cacheAge = now - timestamp;
+    if (cacheManager) {
+        console.log('Frontend: 使用IndexedDB缓存系统');
         
-        console.log('Frontend: 缓存年龄检查', {
-            cacheAgeHours: cacheAge / (1000 * 60 * 60),
-            maxAgeHours: CACHE_DURATION / (1000 * 60 * 60),
-            isExpired: cacheAge >= CACHE_DURATION
-        });
-        
-        // 如果缓存未过期，直接返回缓存数据
-        if (cacheAge < CACHE_DURATION) {
-            console.log('Frontend: 使用有效缓存数据');
-            try {
+        try {
+            // 尝试从IndexedDB获取缓存
+            const [cachedConferences, cachedAcceptances] = await Promise.all([
+                cacheManager.getCache('conferences'),
+                cacheManager.getCache('acceptances')
+            ]);
+            
+            // 获取缓存统计信息
+            const cacheStats = await cacheManager.getCacheStats();
+            console.log('Frontend: IndexedDB缓存状态', cacheStats);
+            
+            // 如果两个缓存都存在且有效，直接返回
+            if (cachedConferences && cachedAcceptances) {
+                console.log('Frontend: 使用有效的IndexedDB缓存数据', {
+                    conferencesCount: cachedConferences.length,
+                    acceptancesCount: cachedAcceptances.length
+                });
                 return {
-                    conferences: JSON.parse(cachedConf),
-                    acceptances: JSON.parse(cachedAcc)
+                    conferences: cachedConferences as Conference[],
+                    acceptances: cachedAcceptances as AcceptanceRate[]
                 };
-            } catch (parseError) {
-                console.error('Frontend: 缓存数据解析失败，清除缓存', parseError);
-                localStorage.removeItem(CONF_CACHE_KEY);
-                localStorage.removeItem(ACC_CACHE_KEY);
-                localStorage.removeItem(CACHE_TIMESTAMP_KEY);
             }
-        } else {
-            console.log('Frontend: 缓存已过期，需要获取新数据');
+            
+            console.log('Frontend: IndexedDB缓存过期或不完整，需要获取新数据');
+        } catch (error) {
+            console.error('Frontend: IndexedDB缓存操作失败，降级到localStorage', error);
         }
     } else {
-        console.log('Frontend: 缓存不完整，需要获取新数据');
+        console.log('Frontend: IndexedDB不可用，使用localStorage备用方案');
+        
+        // localStorage备用方案
+        const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+        const cachedConf = localStorage.getItem(CONF_CACHE_KEY);
+        const cachedAcc = localStorage.getItem(ACC_CACHE_KEY);
+        
+        console.log('Frontend: localStorage缓存状态检查', {
+            hasTimestamp: !!cachedTimestamp,
+            hasConf: !!cachedConf,
+            hasAcc: !!cachedAcc,
+            timestamp: cachedTimestamp,
+            now: Date.now(),
+            cacheAge: cachedTimestamp ? (Date.now() - parseInt(cachedTimestamp)) / (1000 * 60 * 60) : null, // hours
+            storageInfo: getLocalStorageInfo()
+        });
+        
+        // 如果localStorage缓存有效
+        if (cachedTimestamp && cachedConf && cachedAcc) {
+            const timestamp = parseInt(cachedTimestamp);
+            const now = Date.now();
+            const cacheAge = now - timestamp;
+            
+            if (cacheAge < CACHE_DURATION) {
+                console.log('Frontend: 使用localStorage缓存数据');
+                try {
+                    return {
+                        conferences: JSON.parse(cachedConf),
+                        acceptances: JSON.parse(cachedAcc)
+                    };
+                } catch (parseError) {
+                    console.error('Frontend: localStorage缓存解析失败', parseError);
+                }
+            }
+        }
     }
 
     // 缓存过期或不存在，通过API获取数据
@@ -163,101 +184,83 @@ export async function fetchConferenceData() {
             throw new Error('Invalid data format from API');
         }
 
-        // 全面的localStorage诊断和存储
-        console.log('Frontend: localStorage环境检查');
-        const storageInfo = getLocalStorageInfo();
-        const storageTest = testLocalStorage();
+        // 存储到缓存系统
+        console.log('Frontend: 开始存储数据到缓存...');
         
-        console.log('Frontend: localStorage状态', {
-            storageInfo,
-            storageTest,
-            isSecureContext: typeof window !== 'undefined' && window.isSecureContext,
-            userAgent: typeof navigator !== 'undefined' ? navigator.userAgent.substring(0, 100) : 'unknown'
-        });
-        
-        // 如果localStorage基本功能都不正常，直接返回数据
-        if (!storageTest.writeSuccess) {
-            console.error('Frontend: localStorage基本功能异常，跳过缓存存储');
-            return { conferences, acceptances };
+        if (cacheManager) {
+            // 优先存储到IndexedDB
+            try {
+                console.log('Frontend: 存储数据到IndexedDB...');
+                const [confResult, accResult] = await Promise.all([
+                    cacheManager.setCache('conferences', conferences),
+                    cacheManager.setCache('acceptances', acceptances)
+                ]);
+                
+                console.log('Frontend: IndexedDB存储结果', {
+                    conferencesStored: confResult,
+                    acceptancesStored: accResult
+                });
+                
+                if (confResult && accResult) {
+                    console.log('Frontend: 数据已成功存储到IndexedDB');
+                    // 获取更新后的缓存统计
+                    const updatedStats = await cacheManager.getCacheStats();
+                    console.log('Frontend: 更新后的IndexedDB状态', updatedStats);
+                } else {
+                    console.warn('Frontend: IndexedDB存储部分失败，降级到localStorage');
+                    throw new Error('IndexedDB存储失败');
+                }
+                
+            } catch (idbError) {
+                console.error('Frontend: IndexedDB存储失败，降级到localStorage', idbError);
+                // 降级到localStorage存储
+                await fallbackToLocalStorage(conferences, acceptances);
+            }
+        } else {
+            // 直接使用localStorage
+            await fallbackToLocalStorage(conferences, acceptances);
         }
         
-        try {
-            console.log('Frontend: 开始更新localStorage缓存...');
+        async function fallbackToLocalStorage(conferences: Conference[], acceptances: AcceptanceRate[]) {
+            console.log('Frontend: 使用localStorage备用存储...');
             
-            const confData = JSON.stringify(conferences);
-            const accData = JSON.stringify(acceptances);
-            const timestampData = Date.now().toString();
+            const storageInfo = getLocalStorageInfo();
+            const storageTest = testLocalStorage();
             
-            console.log('Frontend: 缓存数据准备完成', {
-                confDataSize: confData.length,
-                accDataSize: accData.length,
-                timestamp: timestampData,
-                totalDataSize: (confData.length + accData.length + timestampData.length) * 2 // approximate bytes
+            console.log('Frontend: localStorage环境检查', {
+                storageInfo,
+                storageTest
             });
             
-            // 先清理旧的缓存数据
-            console.log('Frontend: 清理旧缓存数据...');
-            localStorage.removeItem(CONF_CACHE_KEY);
-            localStorage.removeItem(ACC_CACHE_KEY);
-            localStorage.removeItem(CACHE_TIMESTAMP_KEY);
+            if (!storageTest.writeSuccess) {
+                console.error('Frontend: localStorage不可用，跳过缓存');
+                return;
+            }
             
-            // 分步存储并验证每一步
-            console.log('Frontend: 存储会议数据...');
-            localStorage.setItem(CONF_CACHE_KEY, confData);
-            let storedConf = localStorage.getItem(CONF_CACHE_KEY);
-            console.log('Frontend: 会议数据存储验证', {
-                attempted: true,
-                retrieved: !!storedConf,
-                sizeMatch: storedConf ? storedConf.length === confData.length : false
-            });
-            
-            console.log('Frontend: 存储录用率数据...');
-            localStorage.setItem(ACC_CACHE_KEY, accData);
-            let storedAcc = localStorage.getItem(ACC_CACHE_KEY);
-            console.log('Frontend: 录用率数据存储验证', {
-                attempted: true,
-                retrieved: !!storedAcc,
-                sizeMatch: storedAcc ? storedAcc.length === accData.length : false
-            });
-            
-            console.log('Frontend: 存储时间戳...');
-            localStorage.setItem(CACHE_TIMESTAMP_KEY, timestampData);
-            let storedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
-            console.log('Frontend: 时间戳存储验证', {
-                attempted: true,
-                retrieved: !!storedTimestamp,
-                valueMatch: storedTimestamp === timestampData
-            });
-            
-            // 最终存储状态检查
-            const finalStorageInfo = getLocalStorageInfo();
-            console.log('Frontend: 存储完成后状态', {
-                finalStorageInfo,
-                allDataStored: !!storedConf && !!storedAcc && !!storedTimestamp
-            });
-            
-            // 立即测试缓存是否能正常工作
-            console.log('Frontend: 立即验证缓存读取...');
-            setTimeout(() => {
-                const testTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
-                const testConf = localStorage.getItem(CONF_CACHE_KEY);
-                const testAcc = localStorage.getItem(ACC_CACHE_KEY);
-                console.log('Frontend: 延迟验证缓存状态', {
-                    timestampExists: !!testTimestamp,
-                    confExists: !!testConf,
-                    accExists: !!testAcc,
-                    timestampValue: testTimestamp
+            try {
+                const timestamp = Date.now().toString();
+                
+                // 只存储较小的时间戳信息
+                localStorage.setItem(CACHE_TIMESTAMP_KEY, timestamp);
+                console.log('Frontend: 时间戳已存储到localStorage备用');
+                
+                // 尝试存储较小的数据子集或压缩数据
+                const confSample = conferences.slice(0, Math.min(100, conferences.length));
+                const accSample = acceptances.slice(0, Math.min(50, acceptances.length));
+                
+                localStorage.setItem(CONF_CACHE_KEY + '-sample', JSON.stringify(confSample));
+                localStorage.setItem(ACC_CACHE_KEY + '-sample', JSON.stringify(accSample));
+                
+                console.log('Frontend: 数据样本已存储到localStorage', {
+                    originalConf: conferences.length,
+                    sampleConf: confSample.length,
+                    originalAcc: acceptances.length,
+                    sampleAcc: accSample.length
                 });
-            }, 100);
-            
-        } catch (storageError) {
-            console.error('Frontend: localStorage存储失败', {
-                error: storageError,
-                message: storageError instanceof Error ? storageError.message : 'Unknown storage error',
-                stack: storageError instanceof Error ? storageError.stack : undefined,
-                storageInfo: getLocalStorageInfo(),
-                storageTest: testLocalStorage()
-            });
+                
+            } catch (lsError) {
+                console.error('Frontend: localStorage备用存储也失败', lsError);
+            }
         }
 
         return { conferences, acceptances };
