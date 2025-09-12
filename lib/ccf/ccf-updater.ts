@@ -4,7 +4,12 @@ import crypto from 'crypto';
 import yaml from 'js-yaml';
 import { CCFMetadata, CCFUpdateResult } from './types';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data', 'ccf');
+// 检测运行环境并选择合适的数据目录
+const isVercel = process.env.VERCEL || process.env.VERCEL_ENV;
+const DATA_DIR = isVercel 
+  ? '/tmp/ccf-data'  // Vercel环境使用/tmp（可写）
+  : path.resolve(process.cwd(), 'data', 'ccf');  // 本地开发环境
+
 const CONF_FILE = path.join(DATA_DIR, 'allconf.yml');
 const ACC_FILE = path.join(DATA_DIR, 'allacc.yml');
 const METADATA_FILE = path.join(DATA_DIR, 'metadata.json');
@@ -12,13 +17,36 @@ const METADATA_FILE = path.join(DATA_DIR, 'metadata.json');
 const CONF_URL = 'https://ccfddl.com/conference/allconf.yml';
 const ACC_URL = 'https://ccfddl.com/conference/allacc.yml';
 
+// 添加环境信息日志
+console.log('CCF数据服务环境信息:');
+console.log('- 运行环境:', isVercel ? 'Vercel' : 'Local');
+console.log('- 数据目录:', DATA_DIR);
+console.log('- VERCEL env:', process.env.VERCEL);
+console.log('- VERCEL_ENV:', process.env.VERCEL_ENV);
+
 function calculateMD5(data: string): string {
   return crypto.createHash('md5').update(data).digest('hex');
 }
 
 function ensureDataDir(): void {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+      console.log('✅ 创建数据目录成功:', DATA_DIR);
+    } else {
+      console.log('📁 数据目录已存在:', DATA_DIR);
+    }
+  } catch (error) {
+    console.error('❌ 创建数据目录失败:', error);
+    
+    // 如果是Vercel环境且目录创建失败，记录错误但不抛出异常
+    if (isVercel) {
+      console.error('⚠️ 警告：Vercel环境中无法创建目录，这可能是正常的文件系统限制');
+      console.error('将尝试直接写入文件，依赖系统自动创建目录');
+    } else {
+      // 本地环境中，目录创建失败是严重问题，需要抛出异常
+      throw error;
+    }
   }
 }
 
@@ -35,7 +63,20 @@ async function fetchData(url: string): Promise<string> {
 }
 
 function saveFile(filePath: string, content: string): void {
-  fs.writeFileSync(filePath, content, 'utf-8');
+  try {
+    // 确保父目录存在
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+      console.log('📁 自动创建父目录:', dir);
+    }
+    
+    fs.writeFileSync(filePath, content, 'utf-8');
+    console.log('✅ 文件保存成功:', filePath, '大小:', content.length, 'bytes');
+  } catch (error) {
+    console.error('❌ 文件保存失败:', filePath, error);
+    throw error;
+  }
 }
 
 function loadMetadata(): CCFMetadata | null {
