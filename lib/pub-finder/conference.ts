@@ -1,62 +1,181 @@
-import { load } from 'js-yaml';
 import { Conference, ConferenceAcceptance, DeadlineInfo, AcceptanceRate, AcceptanceRateItem } from './types';
 
 const CONF_CACHE_KEY = 'conference-data';
 const ACC_CACHE_KEY = 'conference-acceptance-data';
 const CACHE_TIMESTAMP_KEY = 'conference-data-timestamp';
-const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; // 一周的毫秒数
+const CACHE_DURATION = 1 * 24 * 60 * 60 * 1000; // 一天的毫秒数
 
 export async function fetchConferenceData() {
+    console.log('Frontend: 开始获取会议数据...');
+    
     // 首先检查缓存
     const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
     const cachedConf = localStorage.getItem(CONF_CACHE_KEY);
     const cachedAcc = localStorage.getItem(ACC_CACHE_KEY);
     
+    console.log('Frontend: 缓存状态检查', {
+        hasTimestamp: !!cachedTimestamp,
+        hasConf: !!cachedConf,
+        hasAcc: !!cachedAcc,
+        timestamp: cachedTimestamp,
+        now: Date.now(),
+        cacheAge: cachedTimestamp ? (Date.now() - parseInt(cachedTimestamp)) / (1000 * 60 * 60) : null // hours
+    });
+    
     // 如果所有缓存都存在，检查是否过期
     if (cachedTimestamp && cachedConf && cachedAcc) {
         const timestamp = parseInt(cachedTimestamp);
         const now = Date.now();
+        const cacheAge = now - timestamp;
+        
+        console.log('Frontend: 缓存年龄检查', {
+            cacheAgeHours: cacheAge / (1000 * 60 * 60),
+            maxAgeHours: CACHE_DURATION / (1000 * 60 * 60),
+            isExpired: cacheAge >= CACHE_DURATION
+        });
         
         // 如果缓存未过期，直接返回缓存数据
-        if (now - timestamp < CACHE_DURATION) {
-            return {
-                conferences: JSON.parse(cachedConf),
-                acceptances: JSON.parse(cachedAcc)
-            };
+        if (cacheAge < CACHE_DURATION) {
+            console.log('Frontend: 使用有效缓存数据');
+            try {
+                return {
+                    conferences: JSON.parse(cachedConf),
+                    acceptances: JSON.parse(cachedAcc)
+                };
+            } catch (parseError) {
+                console.error('Frontend: 缓存数据解析失败，清除缓存', parseError);
+                localStorage.removeItem(CONF_CACHE_KEY);
+                localStorage.removeItem(ACC_CACHE_KEY);
+                localStorage.removeItem(CACHE_TIMESTAMP_KEY);
+            }
+        } else {
+            console.log('Frontend: 缓存已过期，需要获取新数据');
         }
+    } else {
+        console.log('Frontend: 缓存不完整，需要获取新数据');
     }
 
-    // 如果没有缓存或缓存已过期，从远程获取数据
+    // 缓存过期或不存在，通过API获取数据
     try {
-        const [confResponse, accResponse] = await Promise.all([
-            fetch('https://ccfddl.com/conference/allconf.yml'),
-            fetch('https://ccfddl.com/conference/allacc.yml')
-        ]);
+        console.log('Frontend: 通过API获取数据...');
+        const response = await fetch('/api/ccf-data', {
+            cache: 'no-store',
+            headers: {
+                'Cache-Control': 'no-cache',
+            }
+        });
 
-        const [confYaml, accYaml] = await Promise.all([
-            confResponse.text(),
-            accResponse.text()
-        ]);
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Frontend: API请求失败', {
+                status: response.status,
+                statusText: response.statusText,
+                error: errorData
+            });
+            throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+        }
 
-        const conferences = load(confYaml) as Conference[];
-        const acceptances = load(accYaml) as AcceptanceRate[];
+        const result = await response.json();
+        
+        if (!result.success || !result.data) {
+            console.error('Frontend: API返回错误数据', result);
+            throw new Error('API returned invalid data');
+        }
 
-        // 更新缓存
-        localStorage.setItem(CONF_CACHE_KEY, JSON.stringify(conferences));
-        localStorage.setItem(ACC_CACHE_KEY, JSON.stringify(acceptances));
-        localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+        const { conferences, acceptances } = result.data;
+        
+        console.log('Frontend: API数据获取成功', {
+            conferencesCount: conferences?.length || 0,
+            acceptancesCount: acceptances?.length || 0,
+            serverTimestamp: result.timestamp,
+            serverFetchTime: result.fetchTime
+        });
+
+        // 验证数据格式
+        if (!Array.isArray(conferences) || !Array.isArray(acceptances)) {
+            console.error('Frontend: 数据格式验证失败', {
+                conferencesType: typeof conferences,
+                conferencesIsArray: Array.isArray(conferences),
+                acceptancesType: typeof acceptances,
+                acceptancesIsArray: Array.isArray(acceptances)
+            });
+            throw new Error('Invalid data format from API');
+        }
+
+        // 尝试更新缓存，添加详细的错误处理
+        try {
+            console.log('Frontend: 开始更新localStorage缓存...');
+            
+            const confData = JSON.stringify(conferences);
+            const accData = JSON.stringify(acceptances);
+            const timestampData = Date.now().toString();
+            
+            console.log('Frontend: 缓存数据准备完成', {
+                confDataSize: confData.length,
+                accDataSize: accData.length,
+                timestamp: timestampData
+            });
+            
+            localStorage.setItem(CONF_CACHE_KEY, confData);
+            console.log('Frontend: 会议数据已存储到localStorage');
+            
+            localStorage.setItem(ACC_CACHE_KEY, accData);
+            console.log('Frontend: 录用率数据已存储到localStorage');
+            
+            localStorage.setItem(CACHE_TIMESTAMP_KEY, timestampData);
+            console.log('Frontend: 时间戳已存储到localStorage');
+            
+            // 验证存储是否成功
+            const storedConf = localStorage.getItem(CONF_CACHE_KEY);
+            const storedAcc = localStorage.getItem(ACC_CACHE_KEY);
+            const storedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+            
+            console.log('Frontend: localStorage存储验证', {
+                confStored: !!storedConf && storedConf.length > 0,
+                accStored: !!storedAcc && storedAcc.length > 0,
+                timestampStored: !!storedTimestamp,
+                storedTimestamp: storedTimestamp
+            });
+            
+        } catch (storageError) {
+            console.error('Frontend: localStorage存储失败', {
+                error: storageError,
+                message: storageError instanceof Error ? storageError.message : 'Unknown storage error',
+                // 检查localStorage可用性
+                storageAvailable: typeof Storage !== 'undefined',
+                localStorageQuota: (() => {
+                    try {
+                        const test = 'test';
+                        localStorage.setItem(test, test);
+                        localStorage.removeItem(test);
+                        return 'available';
+                    } catch {
+                        return 'unavailable';
+                    }
+                })()
+            });
+            // 即使存储失败也继续返回数据
+        }
 
         return { conferences, acceptances };
-    } catch (error) {
-        console.error('Error fetching conference data:', error);
         
-        // 如果远程获取失败且有缓存数据，返回缓存数据（即使已过期）
+    } catch (fetchError) {
+        console.error('Frontend: 通过API获取数据失败', fetchError);
+        
+        // API获取失败，尝试使用缓存数据（即使已过期）
         if (cachedConf && cachedAcc) {
-            return {
-                conferences: JSON.parse(cachedConf),
-                acceptances: JSON.parse(cachedAcc)
-            };
+            console.log('Frontend: API获取失败，使用过期的缓存数据');
+            try {
+                return {
+                    conferences: JSON.parse(cachedConf),
+                    acceptances: JSON.parse(cachedAcc)
+                };
+            } catch (parseError) {
+                console.error('Frontend: 过期缓存数据解析也失败', parseError);
+            }
         }
+        
+        console.error('Frontend: 没有可用数据，返回空数据');
         return { conferences: [], acceptances: [] };
     }
 }
