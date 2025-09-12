@@ -32,39 +32,6 @@ async function shouldUpdateCache(): Promise<boolean> {
   }
 }
 
-async function fetchDataFromRemote(): Promise<{ conferences: Conference[], acceptances: AcceptanceRate[] } | null> {
-  try {
-    console.log('直接从远程获取CCF数据...');
-    const [confResponse, accResponse] = await Promise.all([
-      fetch('https://ccfddl.com/conference/allconf.yml'),
-      fetch('https://ccfddl.com/conference/allacc.yml')
-    ]);
-    
-    if (!confResponse.ok || !accResponse.ok) {
-      throw new Error(`远程数据获取失败: ${confResponse.status}, ${accResponse.status}`);
-    }
-    
-    const [confYaml, accYaml] = await Promise.all([
-      confResponse.text(),
-      accResponse.text()
-    ]);
-    
-    const { parse } = await import('yaml');
-    const conferences = parse(confYaml) as Conference[];
-    const acceptances = parse(accYaml) as AcceptanceRate[];
-    
-    console.log('从远程获取成功，会议数量:', conferences?.length || 0, '录用率记录数量:', acceptances?.length || 0);
-    
-    return {
-      conferences,
-      acceptances
-    };
-  } catch (error) {
-    console.error('从远程获取数据失败:', error);
-    return null;
-  }
-}
-
 async function fetchDataFromServer(): Promise<{ conferences: Conference[], acceptances: AcceptanceRate[] } | null> {
   try {
     console.log('从服务端获取CCF数据...');
@@ -127,22 +94,6 @@ async function fetchDataFromRemote(): Promise<{ conferences: Conference[], accep
     };
   } catch (error) {
     console.error('从远程获取数据失败:', error);
-    return null;
-  }
-}
-  try {
-    const cachedConf = localStorage.getItem(CONF_CACHE_KEY);
-    const cachedAcc = localStorage.getItem(ACC_CACHE_KEY);
-    
-    if (cachedConf && cachedAcc) {
-      return {
-        conferences: JSON.parse(cachedConf),
-        acceptances: JSON.parse(cachedAcc)
-      };
-    }
-    return null;
-  } catch (error) {
-    console.error('读取缓存数据失败:', error);
     return null;
   }
 }
