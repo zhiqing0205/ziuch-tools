@@ -59,7 +59,10 @@ export async function updateCCFData(): Promise<CCFUpdateResult> {
   try {
     ensureDataDir();
     
+    // 先检查文件是否存在
+    const filesExist = fs.existsSync(CONF_FILE) && fs.existsSync(ACC_FILE);
     console.log('开始更新CCF数据...');
+    console.log('数据文件存在状态:', filesExist, 'CONF:', fs.existsSync(CONF_FILE), 'ACC:', fs.existsSync(ACC_FILE));
     
     // 并行获取数据
     const [confData, accData] = await Promise.all([
@@ -71,12 +74,17 @@ export async function updateCCFData(): Promise<CCFUpdateResult> {
     const confMD5 = calculateMD5(confData);
     const accMD5 = calculateMD5(accData);
     
-    // 检查是否需要更新
     const currentMetadata = loadMetadata();
-    if (currentMetadata && 
+    console.log('当前metadata:', currentMetadata);
+    console.log('新计算的MD5 - conf:', confMD5, 'acc:', accMD5);
+    
+    // 如果文件不存在，强制更新（即使MD5相同）
+    if (!filesExist) {
+      console.log('数据文件不存在，强制更新...');
+    } else if (currentMetadata && 
         currentMetadata.confMD5 === confMD5 && 
         currentMetadata.accMD5 === accMD5) {
-      console.log('数据未发生变化，跳过更新');
+      console.log('数据未发生变化且文件存在，跳过更新');
       return {
         success: true,
         message: '数据未发生变化，跳过更新',
@@ -85,6 +93,7 @@ export async function updateCCFData(): Promise<CCFUpdateResult> {
     }
     
     // 保存数据文件
+    console.log('保存数据文件到:', CONF_FILE, ACC_FILE);
     saveFile(CONF_FILE, confData);
     saveFile(ACC_FILE, accData);
     
