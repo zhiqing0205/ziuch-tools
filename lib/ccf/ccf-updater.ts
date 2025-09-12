@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import { CCFMetadata, CCFUpdateResult } from './types';
 
-const DATA_DIR = path.join(process.cwd(), 'data', 'ccf');
+const DATA_DIR = path.resolve(process.cwd(), 'data', 'ccf');
 const CONF_FILE = path.join(DATA_DIR, 'allconf.yml');
 const ACC_FILE = path.join(DATA_DIR, 'allacc.yml');
 const METADATA_FILE = path.join(DATA_DIR, 'metadata.json');
@@ -115,19 +115,34 @@ export async function updateCCFData(): Promise<CCFUpdateResult> {
 
 export function getCCFData(): { conferences: any[], acceptances: any[] } | null {
   try {
+    // 添加详细日志
+    console.log('尝试读取CCF数据，目录:', DATA_DIR);
+    console.log('CONF_FILE路径:', CONF_FILE);
+    console.log('ACC_FILE路径:', ACC_FILE);
+    console.log('会议文件是否存在:', fs.existsSync(CONF_FILE));
+    console.log('录用率文件是否存在:', fs.existsSync(ACC_FILE));
+    
     if (!fs.existsSync(CONF_FILE) || !fs.existsSync(ACC_FILE)) {
+      console.log('数据文件不存在，需要先更新数据');
       return null;
     }
     
     const confData = fs.readFileSync(CONF_FILE, 'utf-8');
     const accData = fs.readFileSync(ACC_FILE, 'utf-8');
     
+    console.log('成功读取数据文件，会议数据长度:', confData.length, '录用率数据长度:', accData.length);
+    
     // 使用yaml解析
     const { parse } = require('yaml');
     
+    const conferences = parse(confData);
+    const acceptances = parse(accData);
+    
+    console.log('解析完成，会议数量:', conferences?.length || 0, '录用率记录数量:', acceptances?.length || 0);
+    
     return {
-      conferences: parse(confData),
-      acceptances: parse(accData)
+      conferences,
+      acceptances
     };
   } catch (error) {
     console.error('Error loading CCF data:', error);

@@ -32,14 +32,52 @@ async function shouldUpdateCache(): Promise<boolean> {
   }
 }
 
+async function fetchDataFromRemote(): Promise<{ conferences: Conference[], acceptances: AcceptanceRate[] } | null> {
+  try {
+    console.log('直接从远程获取CCF数据...');
+    const [confResponse, accResponse] = await Promise.all([
+      fetch('https://ccfddl.com/conference/allconf.yml'),
+      fetch('https://ccfddl.com/conference/allacc.yml')
+    ]);
+    
+    if (!confResponse.ok || !accResponse.ok) {
+      throw new Error(`远程数据获取失败: ${confResponse.status}, ${accResponse.status}`);
+    }
+    
+    const [confYaml, accYaml] = await Promise.all([
+      confResponse.text(),
+      accResponse.text()
+    ]);
+    
+    const { parse } = await import('yaml');
+    const conferences = parse(confYaml) as Conference[];
+    const acceptances = parse(accYaml) as AcceptanceRate[];
+    
+    console.log('从远程获取成功，会议数量:', conferences?.length || 0, '录用率记录数量:', acceptances?.length || 0);
+    
+    return {
+      conferences,
+      acceptances
+    };
+  } catch (error) {
+    console.error('从远程获取数据失败:', error);
+    return null;
+  }
+}
+
 async function fetchDataFromServer(): Promise<{ conferences: Conference[], acceptances: AcceptanceRate[] } | null> {
   try {
+    console.log('从服务端获取CCF数据...');
     const response = await fetch('/api/ccf/data');
     if (!response.ok) {
+      const errorData = await response.json();
+      console.error('服务端返回错误:', errorData);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
     const { conferences, acceptances, metadata } = await response.json();
+    
+    console.log('服务端数据获取成功，会议数量:', conferences?.length || 0, '录用率记录数量:', acceptances?.length || 0);
     
     // 更新缓存
     localStorage.setItem(CONF_CACHE_KEY, JSON.stringify(conferences));
@@ -51,6 +89,60 @@ async function fetchDataFromServer(): Promise<{ conferences: Conference[], accep
     return { conferences, acceptances };
   } catch (error) {
     console.error('从服务端获取数据失败:', error);
+    return null;
+  }
+}
+
+async function fetchDataFromRemote(): Promise<{ conferences: Conference[], acceptances: AcceptanceRate[] } | null> {
+  try {
+    console.log('直接从远程获取CCF数据...');
+    const [confResponse, accResponse] = await Promise.all([
+      fetch('https://ccfddl.com/conference/allconf.yml'),
+      fetch('https://ccfddl.com/conference/allacc.yml')
+    ]);
+    
+    if (!confResponse.ok || !accResponse.ok) {
+      throw new Error(`远程数据获取失败: ${confResponse.status}, ${accResponse.status}`);
+    }
+    
+    const [confYaml, accYaml] = await Promise.all([
+      confResponse.text(),
+      accResponse.text()
+    ]);
+    
+    const { parse } = await import('yaml');
+    const conferences = parse(confYaml) as Conference[];
+    const acceptances = parse(accYaml) as AcceptanceRate[];
+    
+    console.log('从远程获取成功，会议数量:', conferences?.length || 0, '录用率记录数量:', acceptances?.length || 0);
+    
+    // 缓存到localStorage
+    localStorage.setItem(CONF_CACHE_KEY, JSON.stringify(conferences));
+    localStorage.setItem(ACC_CACHE_KEY, JSON.stringify(acceptances));
+    localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+    
+    return {
+      conferences,
+      acceptances
+    };
+  } catch (error) {
+    console.error('从远程获取数据失败:', error);
+    return null;
+  }
+}
+  try {
+    const cachedConf = localStorage.getItem(CONF_CACHE_KEY);
+    const cachedAcc = localStorage.getItem(ACC_CACHE_KEY);
+    
+    if (cachedConf && cachedAcc) {
+      return {
+        conferences: JSON.parse(cachedConf),
+        acceptances: JSON.parse(cachedAcc)
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error('读取缓存数据失败:', error);
     return null;
   }
 }
@@ -75,8 +167,11 @@ function getCachedData(): { conferences: Conference[], acceptances: AcceptanceRa
 
 export async function fetchConferenceData(): Promise<{ conferences: Conference[], acceptances: AcceptanceRate[] }> {
   try {
+    console.log('开始获取会议数据...');
+    
     // 检查是否需要更新缓存（通过MD5验证）
     const needsUpdate = await shouldUpdateCache();
+    console.log('是否需要更新:', needsUpdate);
     
     if (!needsUpdate) {
       // MD5一致，使用本地缓存
@@ -88,23 +183,30 @@ export async function fetchConferenceData(): Promise<{ conferences: Conference[]
     }
     
     // 需要更新或没有缓存，从服务端获取
-    console.log('从服务端获取最新数据...');
-    const serverData = await fetchDataFromServer();
+    let serverData = await fetchDataFromServer();
     
     if (serverData) {
       console.log('从服务端获取数据成功');
       return serverData;
     }
     
-    // 服务端获取失败，尝试使用本地缓存
+    // 服务端获取失败，尝试直接从远程获取
+    console.log('服务端不可用，尝试直接从远程获取...');
+    const remoteData = await fetchDataFromRemote();
+    if (remoteData) {
+      console.log('从远程获取数据成功');
+      return remoteData;
+    }
+    
+    // 远程获取也失败，尝试使用本地缓存
     const cachedData = getCachedData();
     if (cachedData) {
-      console.log('服务端不可用，使用本地缓存数据');
+      console.log('所有远程数据源都不可用，使用本地缓存数据');
       return cachedData;
     }
     
     // 没有任何数据可用
-    console.error('无可用数据');
+    console.error('无可用数据源');
     return { conferences: [], acceptances: [] };
     
   } catch (error) {
