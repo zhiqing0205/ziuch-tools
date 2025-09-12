@@ -1,4 +1,5 @@
 import { Conference, ConferenceAcceptance, DeadlineInfo, AcceptanceRate, AcceptanceRateItem } from './types';
+import yaml from 'js-yaml';
 
 const CONF_CACHE_KEY = 'conference-data';
 const ACC_CACHE_KEY = 'conference-acceptance-data';
@@ -77,9 +78,16 @@ async function fetchDataFromRemote(): Promise<{ conferences: Conference[], accep
       accResponse.text()
     ]);
     
-    const { parse } = await import('yaml');
-    const conferences = parse(confYaml) as Conference[];
-    const acceptances = parse(accYaml) as AcceptanceRate[];
+    // 使用js-yaml解析
+    const conferences = yaml.load(confYaml) as Conference[];
+    const acceptances = yaml.load(accYaml) as AcceptanceRate[];
+    
+    // 验证解析结果是数组格式
+    if (!Array.isArray(conferences) || !Array.isArray(acceptances)) {
+      console.error('解析的数据不是数组格式，conferences:', typeof conferences, 'isArray:', Array.isArray(conferences));
+      console.error('acceptances:', typeof acceptances, 'isArray:', Array.isArray(acceptances));
+      throw new Error('YAML解析结果不是数组格式');
+    }
     
     console.log('从远程获取成功，会议数量:', conferences?.length || 0, '录用率记录数量:', acceptances?.length || 0);
     

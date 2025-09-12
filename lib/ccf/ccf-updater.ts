@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import yaml from 'js-yaml';
 import { CCFMetadata, CCFUpdateResult } from './types';
 
 const DATA_DIR = path.resolve(process.cwd(), 'data', 'ccf');
@@ -132,11 +133,16 @@ export function getCCFData(): { conferences: any[], acceptances: any[] } | null 
     
     console.log('成功读取数据文件，会议数据长度:', confData.length, '录用率数据长度:', accData.length);
     
-    // 使用yaml解析
-    const { parse } = require('yaml');
+    // 使用js-yaml解析
+    const conferences = yaml.load(confData);
+    const acceptances = yaml.load(accData);
     
-    const conferences = parse(confData);
-    const acceptances = parse(accData);
+    // 验证解析结果是数组格式
+    if (!Array.isArray(conferences) || !Array.isArray(acceptances)) {
+      console.error('解析的数据不是数组格式，conferences:', typeof conferences, 'isArray:', Array.isArray(conferences));
+      console.error('acceptances:', typeof acceptances, 'isArray:', Array.isArray(acceptances));
+      return null;
+    }
     
     console.log('解析完成，会议数量:', conferences?.length || 0, '录用率记录数量:', acceptances?.length || 0);
     
