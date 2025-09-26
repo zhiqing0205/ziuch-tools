@@ -89,6 +89,29 @@ const buttonClassName = "group bg-primary text-primary-foreground hover:bg-prima
 // 添加一个专门的查看全部按钮样式
 const viewAllButtonClassName = "w-full " + buttonClassName;
 
+// 等级信息排序函数
+const sortRankData = (data: Record<string, string>): [string, string][] => {
+    // 优先级映射
+    const priorityMap: Record<string, number> = {
+        ccf: 1,     // CCF-中国计算机学会
+        sci: 2,     // SCI分区-JCR
+        caai: 3,    // CAAI-中国人工智能学会
+        sciif: 4,   // SCI影响因子-JCR
+    };
+
+    return Object.entries(data).sort(([keyA], [keyB]) => {
+        const priorityA = priorityMap[keyA] || 999; // 未定义的排在最后
+        const priorityB = priorityMap[keyB] || 999;
+
+        if (priorityA !== priorityB) {
+            return priorityA - priorityB;
+        }
+
+        // 优先级相同时按字母顺序排序
+        return keyA.localeCompare(keyB);
+    });
+};
+
 export default function PubFinderPage() {
     const router = useRouter();
     const pathname = usePathname();
@@ -171,7 +194,10 @@ export default function PubFinderPage() {
                     });
                 }
 
-                setRankData(formattedRanks);
+                // 应用排序并转换为对象
+                const sortedRankEntries = sortRankData(formattedRanks);
+                const sortedRanks = Object.fromEntries(sortedRankEntries);
+                setRankData(sortedRanks);
 
                 // 搜索会议信息
                 if (conferenceData.conferences.length > 0) {
@@ -265,7 +291,9 @@ export default function PubFinderPage() {
 
     const formatRankValue = (key: string, value: string) => {
         const rankMap = RANK_VALUE_MAP[key.toLowerCase()];
-        return rankMap ? rankMap[value] || value : value;
+        const mappedValue = rankMap ? rankMap[value] || value : value;
+        // 过滤掉句号
+        return mappedValue.replace(/。/g, '');
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -319,7 +347,7 @@ export default function PubFinderPage() {
                                         <h3 className="text-lg font-semibold mb-4">期刊/会议等级</h3>
                                         <Separator />
                                         {rankData && Object.keys(rankData).length > 0 ? (
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8">
                                                 {Object.entries(rankData).map(([key, value]) => (
                                                     <RankCard
                                                         key={key}
