@@ -77,7 +77,19 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
             },
             {
                 label: "接收率",
-                value: `${(rate.rate * 100).toFixed(1)}%`,
+                value: (() => {
+                    // 如果rate有效，直接使用
+                    if (rate.rate && !isNaN(rate.rate)) {
+                        return `${(rate.rate * 100).toFixed(1)}%`;
+                    }
+                    // 如果rate无效但有submitted和accepted，计算
+                    if (rate.submitted > 0 && rate.accepted >= 0) {
+                        const calculatedRate = (rate.accepted / rate.submitted) * 100;
+                        return `${calculatedRate.toFixed(1)}%`;
+                    }
+                    // 否则显示N/A
+                    return 'N/A';
+                })(),
                 className: "text-orange-500 dark:text-orange-400"
             }
         ];
