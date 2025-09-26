@@ -195,6 +195,9 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
                                                     中国时间：{(() => {
                                                         try {
                                                             const convertedDate = convertToEast8(deadline.deadline, deadline.timezone);
+                                                            if (!convertedDate) {
+                                                                return '时间待定';
+                                                            }
                                                             return format(convertedDate, 'yyyy年MM月dd日 HH:mm', { locale: zhCN });
                                                         } catch (error) {
                                                             console.error('Date conversion error:', error);

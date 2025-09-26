@@ -298,21 +298,27 @@ function getChineseTime() {
 /**
  * 将指定时区的时间转换为东八区(UTC+8)时间
  * @param {string} dateStr - 时间字符串，格式："YYYY-MM-DD HH:mm:ss"
- * @param {string} timezone - 时区，格式："UTC±n" 或 "AoE"
- * @returns {Date} 转换后的东八区 Date 对象
+ * @param {string} timezone - 时区，格式："UTC±n" 或 "AoE" 或 "UTC"
+ * @returns {Date} 转换后的东八区 Date 对象，如果输入无效则返回null
  */
-export function convertToEast8(dateStr: string | Date, timezone?: string): Date {
+export function convertToEast8(dateStr: string | Date, timezone?: string): Date | null {
     // 如果输入已经是 Date 对象，直接使用
     let inputDate: Date;
     if (dateStr instanceof Date) {
         inputDate = dateStr;
     } else {
+        // 检查是否为TBD或其他无效日期字符串
+        if (typeof dateStr === 'string' && (dateStr.toUpperCase() === 'TBD' || dateStr.trim() === '')) {
+            console.warn('Date marked as TBD or empty:', dateStr);
+            return null; // 返回null表示无效日期
+        }
+
         // 尝试解析字符串为日期
         inputDate = new Date(dateStr);
         // 检查日期是否有效
         if (isNaN(inputDate.getTime())) {
             console.error('Invalid date string:', dateStr);
-            return new Date(); // 返回当前时间作为默认值
+            return null; // 返回null表示无效日期
         }
     }
 
@@ -322,13 +328,21 @@ export function convertToEast8(dateStr: string | Date, timezone?: string): Date 
     }
 
     try {
-        // 解析时区偏移量
-        const timezoneOffset = parseInt(timezone.replace('UTC', ''));
+        let timezoneOffset = 0;
 
-        // 如果时区偏移量无效，直接返回原始时间
-        if (isNaN(timezoneOffset)) {
-            console.warn('Invalid timezone format:', timezone);
-            return inputDate;
+        // 处理纯UTC格式
+        if (timezone.toUpperCase() === 'UTC') {
+            timezoneOffset = 0;
+        } else {
+            // 解析UTC±n格式的时区偏移量
+            const offsetStr = timezone.replace(/UTC/i, '');
+            timezoneOffset = parseInt(offsetStr);
+
+            // 如果时区偏移量无效，直接返回原始时间
+            if (isNaN(timezoneOffset)) {
+                console.warn('Invalid timezone format:', timezone);
+                return inputDate;
+            }
         }
 
         // 将输入时间转换为UTC时间
@@ -381,25 +395,36 @@ export function getUpcomingDeadlines(conferences: Conference[]): DeadlineInfo[] 
         conf.confs.forEach(instance => {
             instance.timeline.forEach(time => {
                 if (!time.deadline) return;
-                
-                // 处理时区转换
-                const deadline = instance.timezone ? 
-                    convertToEast8(time.deadline, instance.timezone) : 
-                    new Date(time.deadline);
-                
-                if (deadline.getTime() > now.getTime()) {
-                    deadlines.push({
-                        title: conf.title,
-                        description: conf.description,
-                        year: instance.year,
-                        rank: conf.rank?.ccf,
-                        sub: conf.sub,
-                        deadline,
-                        link: instance.link,
-                        comment: time.comment,
-                        diff: deadline.getTime() - now.getTime(),
-                        timezone: instance.timezone // 可选：添加时区信息到 DeadlineInfo 接口
-                    });
+
+                try {
+                    // 处理时区转换，现在可能返回null
+                    const deadline = instance.timezone ?
+                        convertToEast8(time.deadline, instance.timezone) :
+                        convertToEast8(time.deadline);
+
+                    // 如果转换失败（TBD或无效日期），跳过这个条目
+                    if (!deadline) {
+                        console.log(`Skipping invalid deadline for ${conf.title}: ${time.deadline}`);
+                        return;
+                    }
+
+                    // 只添加未来的截止日期
+                    if (deadline.getTime() > now.getTime()) {
+                        deadlines.push({
+                            title: conf.title,
+                            description: conf.description,
+                            year: instance.year,
+                            rank: conf.rank?.ccf,
+                            sub: conf.sub,
+                            deadline,
+                            link: instance.link,
+                            comment: time.comment,
+                            diff: deadline.getTime() - now.getTime(),
+                            timezone: instance.timezone
+                        });
+                    }
+                } catch (error) {
+                    console.error(`Error processing deadline for ${conf.title}:`, error);
                 }
             });
         });
@@ -422,22 +447,33 @@ export function searchConferenceDeadlines(conferences: Conference[], searchTerm:
             instance.timeline.forEach(time => {
                 if (!time.deadline) return;
 
-                const deadline = instance.timezone ? 
-                    convertToEast8(time.deadline, instance.timezone) : 
-                    new Date(time.deadline);
+                try {
+                    // 处理时区转换，现在可能返回null
+                    const deadline = instance.timezone ?
+                        convertToEast8(time.deadline, instance.timezone) :
+                        convertToEast8(time.deadline);
 
-                deadlines.push({
-                    title: conf.title,
-                    description: conf.description,
-                    year: instance.year,
-                    rank: conf.rank?.ccf,
-                    sub: conf.sub,
-                    deadline,
-                    link: instance.link,
-                    comment: time.comment,
-                    diff: deadline.getTime() - now.getTime(),
-                    timezone: instance.timezone
-                });
+                    // 如果转换失败（TBD或无效日期），跳过这个条目
+                    if (!deadline) {
+                        console.log(`Skipping invalid deadline for ${conf.title}: ${time.deadline}`);
+                        return;
+                    }
+
+                    deadlines.push({
+                        title: conf.title,
+                        description: conf.description,
+                        year: instance.year,
+                        rank: conf.rank?.ccf,
+                        sub: conf.sub,
+                        deadline,
+                        link: instance.link,
+                        comment: time.comment,
+                        diff: deadline.getTime() - now.getTime(),
+                        timezone: instance.timezone
+                    });
+                } catch (error) {
+                    console.error(`Error processing search deadline for ${conf.title}:`, error);
+                }
             });
         });
     });
