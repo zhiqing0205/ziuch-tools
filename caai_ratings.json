@@ -1,0 +1,3575 @@
+{
+  "A": {
+    "conferences": [
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "1",
+        "abbr": "AAAI",
+        "name": "AAAI Conference on Artificial Intelligence",
+        "publisher": "AAAI",
+        "url": "https://dblp.uni-trier.de/db/conf/aaai/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "2",
+        "abbr": "CICAI",
+        "name": "CAAI International Conference on Artificial Intelligence",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/cicai/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "3",
+        "abbr": "UAI",
+        "name": "Conference on Uncertainty in Artificial Intelligence",
+        "publisher": "AUAI",
+        "url": "https://dblp.uni-trier.de/db/conf/uai/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "4",
+        "abbr": "IJCAI",
+        "name": "International Joint Conference on Artificial Intelligence",
+        "publisher": "Morgan Kaufmann",
+        "url": "https://dblp.uni-trier.de/db/conf/ijcai/",
+        "source_page": 1
+      },
+      {
+        "domain": "机器学习",
+        "serial": "1",
+        "abbr": "COLT",
+        "name": "Conference on Learning Theory",
+        "publisher": "ACL",
+        "url": "https://dblp.uni-trier.de/db/conf/colt/",
+        "source_page": 4
+      },
+      {
+        "domain": "机器学习",
+        "serial": "2",
+        "abbr": "ICLR",
+        "name": "International Conference on Learning Representations",
+        "publisher": "ICLR",
+        "url": "https://dblp.uni-trier.de/db/conf/iclr/",
+        "source_page": 4
+      },
+      {
+        "domain": "机器学习",
+        "serial": "3",
+        "abbr": "ICML",
+        "name": "International Conference on Machine Learning",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/icml/",
+        "source_page": 4
+      },
+      {
+        "domain": "机器学习",
+        "serial": "4",
+        "abbr": "NeurIPS",
+        "name": "Neural Information Processing Systems",
+        "publisher": "MIT Press",
+        "url": "https://dblp.uni-trier.de/db/conf/nips/",
+        "source_page": 4
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "1",
+        "abbr": "ECCV",
+        "name": "European Conference on Computer Vision",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/eccv/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "2",
+        "abbr": "CVPR",
+        "name": "IEEE/CVF Computer Vision and Pattern Recognition Conference",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/cvpr/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "3",
+        "abbr": "ICCV",
+        "name": "IEEE/CVF International Conference on Computer Vision",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/iccv/",
+        "source_page": 5
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "1",
+        "abbr": "ACL",
+        "name": "Annual Meeting of the Association for Computational Linguistics",
+        "publisher": "ACL",
+        "url": "https://dblp.uni-trier.de/db/conf/acl/",
+        "source_page": 6
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "2",
+        "abbr": "EMNLP",
+        "name": "Conference on Empirical Methods in Natural Language Processing",
+        "publisher": "ACL",
+        "url": "https://dblp.uni-trier.de/db/conf/emnlp/",
+        "source_page": 6
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "1",
+        "abbr": "SIGKDD",
+        "name": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/kdd/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "2",
+        "abbr": "SIGMOD",
+        "name": "ACM SIGMOD Conference",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/sigmod/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "3",
+        "abbr": "ICDE",
+        "name": "IEEE International Conference on Data Engineering",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icde/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "4",
+        "abbr": "SIGIR",
+        "name": "International ACM SIGIR Conference on Research and Development in Inf ormation Retrieval",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/sigir/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "5",
+        "abbr": "VLDB",
+        "name": "International Conference on Very Large Data Bases",
+        "publisher": "Morgan Kaufmann",
+        "url": "https://dblp.uni-trier.de/db/conf/vldb/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "6",
+        "abbr": "WWW",
+        "name": "ACM Web Conference (International Conference on World Wide Web)",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/www/",
+        "source_page": 7
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "1",
+        "abbr": "CHI",
+        "name": "ACM Conference on Human Factors in Computing Systems",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/chi/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "2",
+        "abbr": "ACM MM",
+        "name": "ACM International Conference on Multimedia",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/mm/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "3",
+        "abbr": "VR",
+        "name": "IEEE Conference on Virtual Reality and 3D User Interfaces",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/vr/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "4",
+        "abbr": "SIGGRAPH",
+        "name": "ACM Special Interest Group on Computer Graphics",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/siggraph/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "5",
+        "abbr": "IEEE VIS",
+        "name": "IEEE Visualization Conference",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/visualization/",
+        "source_page": 9
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "1",
+        "abbr": "RSS",
+        "name": "Robotics: Science and Systems",
+        "publisher": "RSS",
+        "url": "https://dblp.uni-trier.de/db/conf/rss/",
+        "source_page": 11
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "2",
+        "abbr": "ICRA",
+        "name": "The International Conference on Robotics and Automation",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icra/",
+        "source_page": 11
+      },
+      {
+        "domain": "智能芯片与计算系统",
+        "serial": "1",
+        "abbr": "ISCA",
+        "name": "ACM/IEEE International Symposium on Computer Architecture",
+        "publisher": "ACM/IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/isca/",
+        "source_page": 12
+      },
+      {
+        "domain": "智能芯片与计算系统",
+        "serial": "2",
+        "abbr": "MICRO",
+        "name": "IEEE/ACM International Symposium on Microarchitecture",
+        "publisher": "IEEE/ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/micro/",
+        "source_page": 12
+      }
+    ],
+    "journals": [
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "1",
+        "abbr": "AIJ",
+        "name": "Artificial Intelligence",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/ai/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "2",
+        "abbr": "Engineering",
+        "name": "Engineering",
+        "publisher": "Elsevier",
+        "url": "https://www.sciencedirect.com/journal/engineering",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "3",
+        "abbr": "NSR",
+        "name": "National Science Review",
+        "publisher": "OUP",
+        "url": "https://academic.oup.com/nsr/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "4",
+        "abbr": "",
+        "name": "Nature Communications",
+        "publisher": "SpringerNature",
+        "url": "https://www.nature.com/ncomms/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "5",
+        "abbr": "Proc. IEEE",
+        "name": "Proceedings of the IEEE",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/pieee/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "6",
+        "abbr": "PNAS",
+        "name": "Proceedings of the National Academy of Sciences",
+        "publisher": "NAS",
+        "url": "https://dblp.uni-trier.de/db/journals/pnas/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "7",
+        "abbr": "TNNLS",
+        "name": "IEEE Transactions on Neural Networks and Learning Systems",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tnn/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "8",
+        "abbr": "NMI",
+        "name": "Nature Machine Intelligence",
+        "publisher": "SpringerNature",
+        "url": "https://www.nature.com/natmachintell/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "9",
+        "abbr": "SPM",
+        "name": "IEEE Signal Processing Magazine",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/spm/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "10",
+        "abbr": "",
+        "name": "Information Fusion",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/inffus/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "11",
+        "abbr": "",
+        "name": "IEEE Transactions on Cybernetics",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tcyb/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "12",
+        "abbr": "TOIS",
+        "name": "ACM Transactions on Information Systems",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tois/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "13",
+        "abbr": "SCIS",
+        "name": "Science China Information Sciences",
+        "publisher": "Springer",
+        "url": "https://www.springer.com/journal/11432/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "1",
+        "abbr": "TGRS",
+        "name": "IEEE Transactions on Geoscience and Remote Sensing",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tgrs/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "2",
+        "abbr": "TMI",
+        "name": "IEEE Transactions on Medical Imaging",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tmi/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "3",
+        "abbr": "",
+        "name": "Nature Human Behaviour",
+        "publisher": "Springer Nature",
+        "url": "https://www.nature.com/nathumbehav/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "4",
+        "abbr": "RSE",
+        "name": "Remote Sensing of Environment",
+        "publisher": "Elsevier",
+        "url": "https://www2.cloud.editorialmanager.com/rse/",
+        "source_page": 16
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "1",
+        "abbr": "",
+        "name": "Nature Neuroscience",
+        "publisher": "Springer Nature",
+        "url": "https://www.nature.com/neuro/",
+        "source_page": 18
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "2",
+        "abbr": "",
+        "name": "Nature Reviews Neuroscience",
+        "publisher": "Springer Nature",
+        "url": "https://www.nature.com/nrn/",
+        "source_page": 18
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "3",
+        "abbr": "TiCS",
+        "name": "Trends in Cognitive Sciences",
+        "publisher": "Elsevier",
+        "url": "https://www.cell.com/trends/cognitive-sciences/",
+        "source_page": 18
+      },
+      {
+        "domain": "机器学习",
+        "serial": "1",
+        "abbr": "JMLR",
+        "name": "Journal of Machine Learning Research",
+        "publisher": "MIT Press",
+        "url": "https://dblp.uni-trier.de/db/journals/jmlr/",
+        "source_page": 19
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "1",
+        "abbr": "TIP",
+        "name": "IEEE Transactions on Image Processing",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tip/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "2",
+        "abbr": "IJCV",
+        "name": "International Journal of Computer Vision",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ijcv/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "3",
+        "abbr": "TPAMI",
+        "name": "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/pami/",
+        "source_page": 20
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "1",
+        "abbr": "TASLP",
+        "name": "IEEE/ACM Transactions on Audio, Speech and Language Processing",
+        "publisher": "IEEE/ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/taslp/",
+        "source_page": 21
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "1",
+        "abbr": "TODS",
+        "name": "ACM Transactions on Database Systems",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tods/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "2",
+        "abbr": "TKDE",
+        "name": "IEEE Transactions on Knowledge and Data Engineering",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tkde/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "3",
+        "abbr": "VLDBJ",
+        "name": "The VLDB Journal",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/vldb/",
+        "source_page": 22
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "1",
+        "abbr": "TOCHI",
+        "name": "ACM Transactions on Computer-Human Interaction",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tochi/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "2",
+        "abbr": "TOG",
+        "name": "ACM Transactions on Graphics",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tog/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "3",
+        "abbr": "IJHCS",
+        "name": "International Journal of Human-Computer Studies",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/ijmms/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "4",
+        "abbr": "TAFFC",
+        "name": "IEEE Transactions on Affective Computing",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/taffco/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "5",
+        "abbr": "TMM",
+        "name": "IEEE Transactions on Multimedia",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tmm/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "6",
+        "abbr": "TVCG",
+        "name": "IEEE Transactions on Visualization and Computer Graphics",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tvcg/",
+        "source_page": 23
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "1",
+        "abbr": "T-RO",
+        "name": "IEEE Transactions on Robotics",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/trob/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "2",
+        "abbr": "",
+        "name": "Science Robotics",
+        "publisher": "AAAS",
+        "url": "https://dblp.uni-trier.de/db/journals/scirobotics/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能芯片与计算系统",
+        "serial": "1",
+        "abbr": "JSSC",
+        "name": "IEEE Journal of Solid-State Circuits",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/jssc/",
+        "source_page": 25
+      },
+      {
+        "domain": "智能芯片与计算系统",
+        "serial": "2",
+        "abbr": "TEVC",
+        "name": "IEEE Transactions on Evolutionary Computation",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tec/",
+        "source_page": 25
+      },
+      {
+        "domain": "人工智能伦理、安全与治理",
+        "serial": "1",
+        "abbr": "TDSC",
+        "name": "IEEE Transactions on Dependable and Secure Computing",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tdsc/",
+        "source_page": 26
+      },
+      {
+        "domain": "人工智能伦理、安全与治理",
+        "serial": "2",
+        "abbr": "TIFS",
+        "name": "IEEE Transactions on Information Forensics and Security",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tifs/",
+        "source_page": 26
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "1",
+        "abbr": "",
+        "name": "计算机学报",
+        "publisher": "科学出版社",
+        "url": "http://cjc.ict.ac.cn",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "2",
+        "abbr": "",
+        "name": "软件学报",
+        "publisher": "科学出版社",
+        "url": "http://www.jos.org.cn",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "3",
+        "abbr": "",
+        "name": "中国科学: 信息科学",
+        "publisher": "科学出版社",
+        "url": "https://www.sciengine.com/SCIS/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "4",
+        "abbr": "",
+        "name": "自动化学报",
+        "publisher": "科学出版社",
+        "url": "http://www.aas.net.cn/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "5",
+        "abbr": "",
+        "name": "智能系统学报",
+        "publisher": "中国人工智能学会、哈尔滨工程大学",
+        "url": "http://tis.hrbeu.edu.cn/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "6",
+        "abbr": "",
+        "name": "电子学报",
+        "publisher": "中国电子学会",
+        "url": "http://www.ejournal.org.cn",
+        "source_page": 27
+      }
+    ]
+  },
+  "B": {
+    "conferences": [
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "1",
+        "abbr": "ECAI",
+        "name": "European Conference on Artificial Intelligence",
+        "publisher": "IOS Press",
+        "url": "http://dblp.uni-trier.de/db/conf/ecai/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "2",
+        "abbr": "AISTATS",
+        "name": "International Conference on Artificial Intelligence and Statistics",
+        "publisher": "PMLR",
+        "url": "https://dblp.uni-trier.de/db/conf/aistats/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "1",
+        "abbr": "EMBC",
+        "name": "Annual International Conference of the IEEE Engineering in Medicine and Biology Society",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/embc/",
+        "source_page": 2
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "2",
+        "abbr": "AIED",
+        "name": "International Conference on Artificial Intelligence in Education",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/aied/",
+        "source_page": 2
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "3",
+        "abbr": "BIBM",
+        "name": "IEEE International Conference on Bioinformatics and Biomedicine",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/bibm/",
+        "source_page": 2
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "4",
+        "abbr": "PPSN",
+        "name": "Parallel Problem Solving from Nature",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/ppsn/",
+        "source_page": 2
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "1",
+        "abbr": "CogSci",
+        "name": "Annual Meeting of the Cognitive Science Society",
+        "publisher": "CSS",
+        "url": "https://dblp.uni-trier.de/db/conf/cogsci/",
+        "source_page": 3
+      },
+      {
+        "domain": "机器学习",
+        "serial": "1",
+        "abbr": "ECML",
+        "name": "European Conference on Machine Learning",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/ecml/",
+        "source_page": 4
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "1",
+        "abbr": "ICPR",
+        "name": "International Conference on Pattern Recognition",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icpr/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "2",
+        "abbr": "ICDAR",
+        "name": "International Conference on Document Analysis and Recognition",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icdar/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "3",
+        "abbr": "WACV",
+        "name": "IEEE/CVF Winter Conference on Applications of Computer Vision",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/wacv/",
+        "source_page": 5
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "1",
+        "abbr": "COLING",
+        "name": "International Conference on Computational Linguistics",
+        "publisher": "ICCL",
+        "url": "https://dblp.uni-trier.de/db/conf/coling/",
+        "source_page": 6
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "2",
+        "abbr": "NAACL",
+        "name": "North American Chapter of the Association for Computational Linguistics",
+        "publisher": "ACL",
+        "url": "https://dblp.uni-trier.de/db/conf/naacl/",
+        "source_page": 6
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "3",
+        "abbr": "INTERSPEECH",
+        "name": "Conference of the International Speech Communication Association",
+        "publisher": "ISCA",
+        "url": "https://dblp.uni-trier.de/db/conf/interspeech/",
+        "source_page": 6
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "4",
+        "abbr": "ICASSP",
+        "name": "IEEE International Conference on Acoustics, Speech and Signal Processing",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icassp/",
+        "source_page": 6
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "1",
+        "abbr": "RecSys",
+        "name": "ACM Conference on Recommender Systems",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/recsys/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "2",
+        "abbr": "CIKM",
+        "name": "ACM International Conference on Information and Knowledge Management",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/cikm/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "3",
+        "abbr": "WSDM",
+        "name": "ACM International Conference on Web Search and Data Mining",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/wsdm/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "4",
+        "abbr": "PODS",
+        "name": "ACM SIGMOD-SIGACT-SIGAI Symposium on Principles of Database Systems",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/pods/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "5",
+        "abbr": "CIDR",
+        "name": "Conference on Innovative Data Systems Research",
+        "publisher": "Online Proceeding",
+        "url": "https://dblp.uni-trier.de/db/conf/cidr/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "6",
+        "abbr": "DCC",
+        "name": "Data Compression Conference",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/dcc/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "7",
+        "abbr": "ISWC",
+        "name": "IEEE International Semantic Web Conference",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/semweb/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "8",
+        "abbr": "KR",
+        "name": "International Conference on Principles of Knowledge Representation and Reasoning",
+        "publisher": "Morgan Kaufmann",
+        "url": "https://dblp.uni-trier.de/db/conf/kr/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "9",
+        "abbr": "SDM",
+        "name": "SIAM International Conference on Data Mining",
+        "publisher": "SIAM",
+        "url": "https://dblp.uni-trier.de/db/conf/sdm/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "10",
+        "abbr": "DASFAA",
+        "name": "International Conference on Database Systems for Advanced Applications",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/dasfaa/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "11",
+        "abbr": "ICDT",
+        "name": "International Conference on Database Theory",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/icdt/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "12",
+        "abbr": "EDBT",
+        "name": "International Conference on Extending Database Technology",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/edbt/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "13",
+        "abbr": "ICDM",
+        "name": "IEEE International Conference on Data Mining",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icdm/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "14",
+        "abbr": "ECML PKDD",
+        "name": "European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/ecml/ https://dblp.uni-trier.de/db/conf/pkdd/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "15",
+        "abbr": "ICWSM",
+        "name": "The International AAAI Conference on Web and Social Media",
+        "publisher": "AAAI",
+        "url": "https://dblp.uni-trier.de/db/conf/icwsm/",
+        "source_page": 7
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "1",
+        "abbr": "IUI",
+        "name": "ACM International Conference on Intelligent User Interfaces",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/iui/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "2",
+        "abbr": "ITS",
+        "name": "ACM International Conference on Interactive Tabletops and Surfaces",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/tabletop/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "3",
+        "abbr": "ICME",
+        "name": "IEEE International Conference on Multimedia & Expo",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icmcs/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "4",
+        "abbr": "ISMAR",
+        "name": "International Symposium on Mixed and Augmented Reality",
+        "publisher": "IEEE/ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/ismar/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "5",
+        "abbr": "ECSCW",
+        "name": "European Conference on Computer Supported Cooperative Work",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/ecscw/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "6",
+        "abbr": "HAPTICS",
+        "name": "IEEE Haptics Symposium",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/haptics/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "7",
+        "abbr": "I3D",
+        "name": "ACM SIGGRAPH Symposium on Interactive 3D Graphics and Games",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/si3d/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "8",
+        "abbr": "SCA",
+        "name": "ACM SIGGRAPH/Eurographics Symposium on Computer Animation",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/sca/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "9",
+        "abbr": "EUROGRAPHICS",
+        "name": "Annual Conference of the European Association for Computer Graphics",
+        "publisher": "Wiley/ Blackwell",
+        "url": "https://dblp.uni-trier.de/db/conf/eurographics/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "10",
+        "abbr": "EuroVis",
+        "name": "Eurographics Conference on Visualization",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/vissym/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "11",
+        "abbr": "SGP",
+        "name": "Eurographics Symposium on Geometry Processing",
+        "publisher": "Wiley/Blackwell",
+        "url": "https://dblp.uni-trier.de/db/conf/sgp/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "12",
+        "abbr": "EGSR",
+        "name": "Eurographics Symposium on Rendering",
+        "publisher": "Wiley/Blackwell",
+        "url": "https://dblp.uni-trier.de/db/conf/rt/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "13",
+        "abbr": "PG",
+        "name": "Pacific Conference on Computer Graphics and Applications",
+        "publisher": "Wiley/Blackwell",
+        "url": "https://dblp.uni-trier.de/db/conf/pg/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "14",
+        "abbr": "SPM",
+        "name": "Symposium on Solid and Physical Modeling",
+        "publisher": "SMA/Elsevier",
+        "url": "https://dblp.uni-trier.de/db/conf/sma/",
+        "source_page": 9
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "1",
+        "abbr": "IROS",
+        "name": "IEEE/RSJ International Conference on Intelligent Robots and Systems",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/iros/",
+        "source_page": 11
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "2",
+        "abbr": "AAMAS",
+        "name": "International Conference on Autonomous Agents and Multiagent Systems",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/atal/",
+        "source_page": 11
+      },
+      {
+        "domain": "智能芯片与计算系统",
+        "serial": "1",
+        "abbr": "HOT CHIPS",
+        "name": "Hot Chips: A Symposium on High Performance Chips",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/hotchips/",
+        "source_page": 12
+      },
+      {
+        "domain": "智能芯片与计算系统",
+        "serial": "2",
+        "abbr": "ISSCC",
+        "name": "IEEE International Solid-State Circuits Conference",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/isscc/",
+        "source_page": 12
+      },
+      {
+        "domain": "智能芯片与计算系统",
+        "serial": "3",
+        "abbr": "VLSIC",
+        "name": "Symposium on VLSI Technology and Circuits",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/vlsic/",
+        "source_page": 12
+      }
+    ],
+    "journals": [
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "1",
+        "abbr": "CSUR",
+        "name": "ACM Computing Surveys",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/csur/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "2",
+        "abbr": "",
+        "name": "Artificial Intelligence Review",
+        "publisher": "Springer",
+        "url": "https://link.springer.com/journal/10462",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "3",
+        "abbr": "CAAI AIR",
+        "name": "CAAI Artificial Intelligence Research",
+        "publisher": "Tsinghua University Press",
+        "url": "https://www.sciopen.com/journal/2097-194X",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "4",
+        "abbr": "CAAI TIT",
+        "name": "CAAI Transactions on Intelligence Technology",
+        "publisher": "Wiley",
+        "url": "https://dblp.uni-trier.de/db/journals/caaitrit/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "5",
+        "abbr": "FCS",
+        "name": "Frontiers of Computer Science",
+        "publisher": "Higher Education Press/Springer",
+        "url": "https://journal.hep.com.cn/fcs/EN/2095-2228/home.shtml",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "6",
+        "abbr": "CIM",
+        "name": "IEEE Computational Intelligence Magazine",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/cim/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "7",
+        "abbr": "TAI",
+        "name": "IEEE Transactions on Artificial Intelligence",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tai/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "8",
+        "abbr": "T-BIOM",
+        "name": "IEEE Transactions on Biometrics, Behavior, and Identity Science",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tbbis/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "9",
+        "abbr": "TCAS-I",
+        "name": "IEEE Transactions on Circuits and System I: Regular Papers",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tcasI/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "10",
+        "abbr": "TETCI",
+        "name": "IEEE Transactions on Emerging Topics in Computational Intelligence",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tetci/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "11",
+        "abbr": "TFS",
+        "name": "IEEE Transactions on Fuzzy Systems",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tfs/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "12",
+        "abbr": "IJAR",
+        "name": "International Journal of Approximate Reasoning",
+        "publisher": "Elsevier",
+        "url": "https://www.sciencedirect.com/journal/international-journal-of-approximate- reasoning",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "13",
+        "abbr": "JAIR",
+        "name": "Journal of Artificial Intelligence Research",
+        "publisher": "AAAI",
+        "url": "https://dblp.uni-trier.de/db/journals/jair/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "14",
+        "abbr": "M3AS",
+        "name": "Mathematical models and Methods in Applied Sciences",
+        "publisher": "World Scientific",
+        "url": "https://www.worldscientific.com/worldscinet/m3as",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "15",
+        "abbr": "SIREV",
+        "name": "SIAM Review",
+        "publisher": "SIAM",
+        "url": "https://dblp.uni-trier.de/db/journals/siamrev/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "16",
+        "abbr": "",
+        "name": "Swarm and Evolutionary Computation",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/swevo/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "17",
+        "abbr": "TIST",
+        "name": "ACM Transactions on Intelligent Systems and Technology",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tist/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "18",
+        "abbr": "IJNS",
+        "name": "International Journal of Neural Systems",
+        "publisher": "World Scientific",
+        "url": "https://dblp.uni-trier.de/db/journals/ijns/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "19",
+        "abbr": "",
+        "name": "Neural Networks",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/nn/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "20",
+        "abbr": "",
+        "name": "Neural Computation",
+        "publisher": "MIT Press",
+        "url": "https://direct.mit.edu/neco",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "21",
+        "abbr": "",
+        "name": "Neurocomputing",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/ijon/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "22",
+        "abbr": "EJOR",
+        "name": "European Journal of Operational Research",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/eor/",
+        "source_page": 14
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "1",
+        "abbr": "TII",
+        "name": "IEEE Transactions on Industrial Informatics",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tii/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "2",
+        "abbr": "TITS",
+        "name": "IEEE Transactions on Intelligent Transportation Systems",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tits/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "3",
+        "abbr": "GRSL",
+        "name": "IEEE Geoscience and Remote Sensing Letters",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/lgrs/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "4",
+        "abbr": "GRSM",
+        "name": "IEEE Geoscience and Remote Sensing Magazine",
+        "publisher": "IEEE",
+        "url": "https://www.grss-ieee.org/publications/geoscience-and-remote-sensing-magazine/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "5",
+        "abbr": "P&RS",
+        "name": "ISPRS Journal of Photogrammetry and Remote Sensing",
+        "publisher": "Elsevier",
+        "url": "https://www.sciencedirect.com/journal/isprs-journal-of-photogrammetry-and- remote-sensing/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "6",
+        "abbr": "MedIA",
+        "name": "Medical Image Analysis",
+        "publisher": "Elsevier",
+        "url": "https://www.sciencedirect.com/journal/medical-image-analysis",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "7",
+        "abbr": "",
+        "name": "Advanced Engineering Informatics",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/aei/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "8",
+        "abbr": "",
+        "name": "Bioinformatics",
+        "publisher": "OUP",
+        "url": "https://dblp.uni-trier.de/db/journals/bioinformatics/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "9",
+        "abbr": "",
+        "name": "Remote Sensing",
+        "publisher": "Mdpi",
+        "url": "https://dblp.uni-trier.de/db/journals/remotesensing/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "10",
+        "abbr": "",
+        "name": "GeoInformatica",
+        "publisher": "Springer",
+        "url": "https://dblp.unitrier.de/db/journals/geoinformatica/",
+        "source_page": 16
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "1",
+        "abbr": "",
+        "name": "Annual Review of Neuroscience",
+        "publisher": "Annual Reviews",
+        "url": "https://www.annualreviews.org/journal/neuro/",
+        "source_page": 18
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "2",
+        "abbr": "",
+        "name": "Brain, Behavior, and Immunity",
+        "publisher": "Elsevier",
+        "url": "https://www.sciencedirect.com/journal/brain-behavior-and-immunity/",
+        "source_page": 18
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "3",
+        "abbr": "TNSRE",
+        "name": "IEEE Transactions on Neural Systems and Rehabilitation Engineering",
+        "publisher": "IEEE",
+        "url": "https://www.embs.org/tnsre/",
+        "source_page": 18
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "4",
+        "abbr": "BBS",
+        "name": "Behavioral and Brain Sciences",
+        "publisher": "CUP",
+        "url": "https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/",
+        "source_page": 18
+      },
+      {
+        "domain": "机器学习",
+        "serial": "1",
+        "abbr": "MLJ",
+        "name": "Machine Learning",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ml/",
+        "source_page": 19
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "1",
+        "abbr": "CVIU",
+        "name": "Computer Vision and Image Understanding",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/cviu/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "2",
+        "abbr": "TCI",
+        "name": "IEEE Transactions on Computational Imaging",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tci/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "3",
+        "abbr": "PRL",
+        "name": "Pattern Recognition Letters",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/prl/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "4",
+        "abbr": "PRJ",
+        "name": "Pattern Recognition",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/pr/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "5",
+        "abbr": "TCSVT",
+        "name": "IEEE Transactions on Circuits and Systems for Video Technology",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tcsv/",
+        "source_page": 20
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "1",
+        "abbr": "CL",
+        "name": "Computational Linguistics",
+        "publisher": "MIT Press",
+        "url": "https://dblp.uni-trier.de/db/journals/coling/",
+        "source_page": 21
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "2",
+        "abbr": "",
+        "name": "Speech Communication",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/speech/",
+        "source_page": 21
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "3",
+        "abbr": "TACL",
+        "name": "Transactions of the Association for Computational Linguistics",
+        "publisher": "ACL",
+        "url": "https://dblp.uni-trier.de/db/journals/tacl/",
+        "source_page": 21
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "1",
+        "abbr": "TKDD",
+        "name": "ACM Transactions on Knowledge Discovery from Data",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tkdd/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "2",
+        "abbr": "DKE",
+        "name": "Data & Knowledge Engineering",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/dke/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "3",
+        "abbr": "DMKD",
+        "name": "Data Mining and Knowledge Discovery",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/datamine/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "4",
+        "abbr": "EJIS",
+        "name": "European Journal of Information Systems",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ejis/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "5",
+        "abbr": "IPM",
+        "name": "Information Processing and Management",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/ipm/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "6",
+        "abbr": "",
+        "name": "Information Systems",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/is/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "7",
+        "abbr": "JASIST",
+        "name": "Journal of the Association for Information Science and Technology",
+        "publisher": "Wiley",
+        "url": "https://dblp.uni-trier.de/db/journals/jasis/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "8",
+        "abbr": "JWS",
+        "name": "Journal of Web Semantics",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/ws/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "9",
+        "abbr": "KAIS",
+        "name": "Knowledge and Information Systems",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/kais/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "10",
+        "abbr": "KBS",
+        "name": "Knowledge-Based Systems",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/kbs/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "11",
+        "abbr": "",
+        "name": "Foundations and Trends in Information Retrieval",
+        "publisher": "Now Publishers",
+        "url": "https://dblp.uni-trier.de/db/journals/ftir/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "12",
+        "abbr": "TWEB",
+        "name": "ACM Transactions on the Web",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tweb/",
+        "source_page": 22
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "1",
+        "abbr": "TOMM",
+        "name": "ACM Transactions on Multimedia Computing, Communications and Applications",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tomccap/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "2",
+        "abbr": "CSCW",
+        "name": "Computer Supported Cooperative Work",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/cscw/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "3",
+        "abbr": "HCI",
+        "name": "Human-Computer Interaction",
+        "publisher": "Taylor & Francis",
+        "url": "https://dblp.uni-trier.de/db/journals/hhci/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "4",
+        "abbr": "THMS",
+        "name": "IEEE Transactions on Human-Machine Systems",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/thms/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "5",
+        "abbr": "IwC",
+        "name": "Interacting with Computers",
+        "publisher": "OUP",
+        "url": "https://dblp.uni-trier.de/db/journals/iwc/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "6",
+        "abbr": "IJHCI",
+        "name": "International Journal of Human-Computer Interaction",
+        "publisher": "Taylor & Francis",
+        "url": "https://dblp.uni-trier.de/db/journals/ijhci/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "7",
+        "abbr": "UMUAI",
+        "name": "User Modeling and User-Adapted Interaction",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/umuai/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "8",
+        "abbr": "",
+        "name": "Computer Aided Geometric Design",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/cagd/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "9",
+        "abbr": "CGF",
+        "name": "Computer Graphics Forum",
+        "publisher": "Wiley",
+        "url": "https://dblp.uni-trier.de/db/journals/cgf/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "10",
+        "abbr": "CAD",
+        "name": "Computer-Aided Design",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/cad/",
+        "source_page": 23
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "1",
+        "abbr": "",
+        "name": "Autonomous Agents and Multi-Agent Systems",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/aamas/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "2",
+        "abbr": "TSMC",
+        "name": "IEEE Transactions on Systems, Man, and Cybernetics-Systems",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tsmc/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "3",
+        "abbr": "TVT",
+        "name": "IEEE Transactions on Vehicular Technology",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tvt/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "4",
+        "abbr": "RA-L",
+        "name": "IEEE Robotics and Automation Letters",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/ral/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "5",
+        "abbr": "IJRR",
+        "name": "International Journal of Robotics Research",
+        "publisher": "Sage Publications Ltd",
+        "url": "https://dblp.uni-trier.de/db/journals/ijrr/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "6",
+        "abbr": "",
+        "name": "Journal of Field Robotics",
+        "publisher": "Wiley",
+        "url": "https://dblp.uni-trier.de/db/journals/jfr/",
+        "source_page": 24
+      },
+      {
+        "domain": "人工智能伦理、安全与治理",
+        "serial": "1",
+        "abbr": "TOPS",
+        "name": "ACM Transactions on Privacy and Security",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tissec/",
+        "source_page": 26
+      },
+      {
+        "domain": "人工智能伦理、安全与治理",
+        "serial": "2",
+        "abbr": "",
+        "name": "Artificial Intelligence and Law",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ail/",
+        "source_page": 26
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "1",
+        "abbr": "",
+        "name": "计算机研究与发展",
+        "publisher": "科学出版社",
+        "url": "https://crad.ict.ac.cn/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "2",
+        "abbr": "",
+        "name": "遥感学报",
+        "publisher": "中国科学院遥感应用研究所、中国环境遥感学会",
+        "url": "https://www.ygxb.ac.cn/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "3",
+        "abbr": "",
+        "name": "模式识别与人工智能",
+        "publisher": "科学出版社",
+        "url": "http://manu46.magtech.com.cn",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "4",
+        "abbr": "",
+        "name": "中国图象图形学报",
+        "publisher": "中国科学院空天信息创新研究院、中国图象图形学学会 、北 京应用物理与计算数学研究所",
+        "url": "http://zgtxtx.soripan.net/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "5",
+        "abbr": "",
+        "name": "中文信息学报",
+        "publisher": "中国中文信息学会",
+        "url": "http://jcip.cipsc.org.cn/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "6",
+        "abbr": "",
+        "name": "计算机辅助设计与图形学学报",
+        "publisher": "科学出版社",
+        "url": "https://www.jcad.cn/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "7",
+        "abbr": "",
+        "name": "机器人",
+        "publisher": "科学出版社",
+        "url": "https://robot.sia.cn/",
+        "source_page": 27
+      }
+    ]
+  },
+  "C": {
+    "conferences": [
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "1",
+        "abbr": "ICTAI",
+        "name": "IEEE International Conference on Tools with Artificial Intelligence",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/ictai/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "2",
+        "abbr": "ICANN",
+        "name": "International Conference on Artificial Neural Networks",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/icann/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "3",
+        "abbr": "PRICAI",
+        "name": "Pacific Rim International Conference on Artificial Intelligence",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/pricai/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "4",
+        "abbr": "GECCO",
+        "name": "Genetic and Evolutionary Computation Conference",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/gecco/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "5",
+        "abbr": "CEC",
+        "name": "IEEE Congress on Evolutionary Computation",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/cec/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "6",
+        "abbr": "ICONIP",
+        "name": "International Conference on Neural Information Processing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/iconip/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "7",
+        "abbr": "IJCNN",
+        "name": "International Joint Conference on Neural Networks",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/ijcnn/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "8",
+        "abbr": "ICDSP",
+        "name": "International Conference on Digital Signal Processing",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icdsp/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "9",
+        "abbr": "ICISCI",
+        "name": "IEEE International Conference on Intelligent Systems and Computational Intelligence",
+        "publisher": "IEEE",
+        "url": "https://www.ieee-is.org/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "10",
+        "abbr": "WCCI",
+        "name": "IEEE World Congress on Computational Intelligence",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/wcci/",
+        "source_page": 1
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "1",
+        "abbr": "SMC",
+        "name": "IEEE Conference on Systems, Man and Cybernetics",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/smc/",
+        "source_page": 2
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "2",
+        "abbr": "IGARSS",
+        "name": "IEEE International Geoscience and Remote Sensing Symposium",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/igarss/",
+        "source_page": 2
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "3",
+        "abbr": "ER",
+        "name": "International Conference on Conceptual Modeling",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/er/",
+        "source_page": 2
+      },
+      {
+        "domain": "机器学习",
+        "serial": "1",
+        "abbr": "ALT",
+        "name": "Algorithmic Learning Theory",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/alt/",
+        "source_page": 4
+      },
+      {
+        "domain": "机器学习",
+        "serial": "2",
+        "abbr": "ACML",
+        "name": "Asian Conference on Machine Learning",
+        "publisher": "JMLR",
+        "url": "https://dblp.uni-trier.de/db/conf/acml/",
+        "source_page": 4
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "1",
+        "abbr": "ACIVS",
+        "name": "Advanced Concepts for Intelligent Vision Systems",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/acivs/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "2",
+        "abbr": "ACCV",
+        "name": "Asian Conference on Computer Vision",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/accv/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "3",
+        "abbr": "ACPR",
+        "name": "Asian Conference on Pattern Recognition",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/acpr/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "4",
+        "abbr": "BMVC",
+        "name": "British Machine Vision Conference",
+        "publisher": "British Machine Vision Association",
+        "url": "https://dblp.uni-trier.de/db/conf/bmvc/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "5",
+        "abbr": "PRCV",
+        "name": "Chinese Conference on Pattern Recognition and Computer Vision",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/prcv/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "6",
+        "abbr": "FG",
+        "name": "IEEE International Conference on Automatic Face and Gesture Recognition",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/fgr/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "7",
+        "abbr": "ICCP",
+        "name": "IEEE International Conference on Computational Photography",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/iccp/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "8",
+        "abbr": "ICIP",
+        "name": "IEEE International Conference on Image Processing",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icip/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "9",
+        "abbr": "3DV",
+        "name": "International Conference on 3D Vision",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/3dim/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "10",
+        "abbr": "ICVS",
+        "name": "International Conference on Computer Vision Systems",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/icvs/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "11",
+        "abbr": "VISAPP",
+        "name": "International Conference on Computer Vision Theory and Applications",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/visapp/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "12",
+        "abbr": "ICFHR",
+        "name": "International Conference on Frontiers in Handwriting Recognition",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/icfhr/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "13",
+        "abbr": "ICIAP",
+        "name": "International Conference on Image Analysis and Processing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/iciap/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "14",
+        "abbr": "ICMVA",
+        "name": "International Conference on Machine Vision and Applications",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/icmva/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "15",
+        "abbr": "ICPRAI",
+        "name": "International Conference on Pattern Recognition and Artificial Intelligence",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/icprai/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "16",
+        "abbr": "ICPRAM",
+        "name": "International Conference on Pattern Recognition Application and Methods",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/icpram/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "17",
+        "abbr": "DAS",
+        "name": "International Workshop on Document Analysis Systems",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/das/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "18",
+        "abbr": "IJCB",
+        "name": "International Joint Conference on Biometrics",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/icb/",
+        "source_page": 5
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "19",
+        "abbr": "S+SSPR",
+        "name": "Joint IAPR International Workshops on Statistical Techniques in Pattern Recognition and Structural and Syntactic Pattern Recognition",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/sspr/",
+        "source_page": 5
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "1",
+        "abbr": "NLPCC",
+        "name": "CCF International Conference on Natural Language Processing and Chinese Computing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/nlpcc/",
+        "source_page": 6
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "2",
+        "abbr": "CoNLL",
+        "name": "Conference on Computational Natural Language Learning",
+        "publisher": "ACL",
+        "url": "https://dblp.uni-trier.de/db/conf/conll/",
+        "source_page": 6
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "3",
+        "abbr": "EACL",
+        "name": "Conference of the European Chapter of the Association for Computational Linguistics",
+        "publisher": "ACL",
+        "url": "https://dblp.uni-trier.de/db/conf/eacl/",
+        "source_page": 6
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "4",
+        "abbr": "AACL/IJCNLP",
+        "name": "Conference of the Asia-Pacific Chapter of the Association for Computational Linguistics / International Joint Conference on Natural",
+        "publisher": "ACL",
+        "url": "https://dblp.uni-trier.de/db/conf/acl/",
+        "source_page": 6
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "1",
+        "abbr": "APWeb",
+        "name": "Asia Pacific Web Conference",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/apweb/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "2",
+        "abbr": "ECIR",
+        "name": "European Conference on Information Retrieval",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/ecir/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "3",
+        "abbr": "ESWC",
+        "name": "Extended Semantic Web Conference",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/esws/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "4",
+        "abbr": "ADMA",
+        "name": "International Conference on Advanced Data Mining and Applications",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/adma/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "5",
+        "abbr": "KSEM",
+        "name": "International conference on Knowledge Science, Engineering and Management",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/ksem/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "6",
+        "abbr": "MDM",
+        "name": "International Conference on Mobile Data Management",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/mdm/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "7",
+        "abbr": "SEKE",
+        "name": "International Conference on Software Engineering and Knowledge Engineering",
+        "publisher": "KSI Research Inc",
+        "url": "https://dblp.uni-trier.de/db/conf/seke/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "8",
+        "abbr": "SSDBM",
+        "name": "International Conference on Scientific and Statistical Database Management",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/ssdbm/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "9",
+        "abbr": "WAIM",
+        "name": "International Conference on Web Age Information Management",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/waim/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "10",
+        "abbr": "SSTD",
+        "name": "International Symposium on Spatial and Temporal Databases",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/ssd/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "11",
+        "abbr": "WebDB",
+        "name": "International Workshop on Web and Databases",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/webdb/",
+        "source_page": 7
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "12",
+        "abbr": "PAKDD",
+        "name": "Pacific-Asia Conference on Knowledge Discovery and Data Mining",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/pakdd/",
+        "source_page": 7
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "1",
+        "abbr": "IDC",
+        "name": "ACM Interaction Design and Children",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/acmidc/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "2",
+        "abbr": "ICMI",
+        "name": "ACM International Conference on Multimodal Interaction",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/icmi/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "3",
+        "abbr": "MM Asia",
+        "name": "ACM Multimedia Asia",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/mmasia/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "4",
+        "abbr": "DIS",
+        "name": "ACM Designing Interactive Systems",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/ACMdis/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "5",
+        "abbr": "GI",
+        "name": "Graphics Interface",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/graphicsinterface/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "6",
+        "abbr": "INTERACT",
+        "name": "IFIP TC13 Conference on Human-Computer Interaction",
+        "publisher": "IFIP",
+        "url": "https://dblp.uni-trier.de/db/conf/interact/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "7",
+        "abbr": "MMM",
+        "name": "International Conference on Multimedia Modeling",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/mmm/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "8",
+        "abbr": "AVI",
+        "name": "International Working Conference on Advanced Visual Interfaces",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/avi/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "9",
+        "abbr": "VRST",
+        "name": "ACM Symposium on Virtual Reality Software and Technology",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/vrst/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "10",
+        "abbr": "WHC",
+        "name": "IEEE World Haptics Conference",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/haptics/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "11",
+        "abbr": "ASSETS",
+        "name": "International ACM SIGACCESS Conference on Computers and Accessibility",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/assets/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "12",
+        "abbr": "VRIPHYS",
+        "name": "Virtual Reality Interactions and Physical Simulations",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/vriphys/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "13",
+        "abbr": "CVM",
+        "name": "Computational Visual Media",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/cvm/",
+        "source_page": 9
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "14",
+        "abbr": "CGI",
+        "name": "Computer Graphics International",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/conf/cgi/",
+        "source_page": 9
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "1",
+        "abbr": "CoRL",
+        "name": "Conference on Robot Learning",
+        "publisher": "PMLR",
+        "url": "https://dblp.uni-trier.de/db/conf/corl/",
+        "source_page": 11
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "2",
+        "abbr": "CYBER",
+        "name": "IEEE International Conference on CYBER Technology in Automation, Control and Intelligent Systems",
+        "publisher": "IEEE",
+        "url": "https://ieee-cyber.org",
+        "source_page": 11
+      },
+      {
+        "domain": "智能芯片与计算系统",
+        "serial": "1",
+        "abbr": "A-SSCC",
+        "name": "Asian Solid-State Circuits Conference",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/asscc/",
+        "source_page": 12
+      },
+      {
+        "domain": "智能芯片与计算系统",
+        "serial": "2",
+        "abbr": "HPCA",
+        "name": "IEEE International Symposium on High-Performance Computer Architecture",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/conf/hpca/",
+        "source_page": 12
+      },
+      {
+        "domain": "人工智能伦理、安全与治理",
+        "serial": "1",
+        "abbr": "AIES",
+        "name": "AAAI/ACM Conference on AI, Ethics, and Society",
+        "publisher": "AAAI/ACM",
+        "url": "https://dblp.uni-trier.de/db/conf/aies/",
+        "source_page": 13
+      },
+      {
+        "domain": "人工智能伦理、安全与治理",
+        "serial": "2",
+        "abbr": "AIESD",
+        "name": "International Conference on AI Ethics and Sustainable Development",
+        "publisher": "AI-FOR-SDGS",
+        "url": "https://www.ai-for-sdgs.academy/ai-ethics-and-sustainable-development",
+        "source_page": 13
+      }
+    ],
+    "journals": [
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "1",
+        "abbr": "",
+        "name": "Advanced Intelligent Systems",
+        "publisher": "Wiley",
+        "url": "https://dblp.uni-trier.de/db/journals/aisy/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "2",
+        "abbr": "",
+        "name": "Applied Soft Computing",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/asc/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "3",
+        "abbr": "",
+        "name": "Archives of Computational Methods in Engineering",
+        "publisher": "Springer",
+        "url": "https://www.springer.com/journal/11831",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "4",
+        "abbr": "",
+        "name": "Complex & Intelligent Systems",
+        "publisher": "Springer",
+        "url": "https://link.springer.com/journal/40747",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "5",
+        "abbr": "",
+        "name": "Computational Intelligence",
+        "publisher": "Wiley",
+        "url": "https://dblp.uni-trier.de/db/journals/ci/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "6",
+        "abbr": "",
+        "name": "Intelligence",
+        "publisher": "Elsevier",
+        "url": "https://www.sciencedirect.com/journal/intelligence",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "7",
+        "abbr": "IJFS",
+        "name": "International Journal of Fuzzy Systems",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ijfs/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "8",
+        "abbr": "IJIS",
+        "name": "International Journal of Intelligent Systems",
+        "publisher": "Wiley",
+        "url": "https://dblp.uni-trier.de/db/journals/ijis/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "9",
+        "abbr": "JIIS",
+        "name": "Journal of Intelligent Information Systems",
+        "publisher": "Springer",
+        "url": "https://link.springer.com/journal/10844",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "10",
+        "abbr": "MIR",
+        "name": "Machine Intelligence Research",
+        "publisher": "Springer",
+        "url": "https://link.springer.com/journal/11633",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "11",
+        "abbr": "MPC",
+        "name": "Mathematical Programming Computation",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/mpc/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "12",
+        "abbr": "",
+        "name": "Natural Computing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/nc/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "13",
+        "abbr": "",
+        "name": "PAIN",
+        "publisher": "LWW",
+        "url": "https://journals.lww.com/pain/pages/default.aspx",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "14",
+        "abbr": "ITETC",
+        "name": "IEEE Transactions on Emerging Topics in Computing",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tetc/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "15",
+        "abbr": "JCS&T",
+        "name": "Journal of Computer Science and Technology",
+        "publisher": "Springer",
+        "url": "https://jcst.ict.ac.cn/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "16",
+        "abbr": "",
+        "name": "Network-Computation in Neural Systems",
+        "publisher": "Taylor & Francis",
+        "url": "https://informahealthcare.com/journals/inet20",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "17",
+        "abbr": "",
+        "name": "Advances in Nonlinear Analysis",
+        "publisher": "De Gruyter",
+        "url": "https://www.degruyter.com/journal/key/anona/html",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "18",
+        "abbr": "",
+        "name": "Applied and Computational Mathematics",
+        "publisher": "SciencePG",
+        "url": "https://sciencepublishinggroup.com/journal/147/home",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "19",
+        "abbr": "CGTA",
+        "name": "Computational Geometry: Theory and Applications",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/comgeo/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "20",
+        "abbr": "DCG",
+        "name": "Discrete & Computational Geometry",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/dcg/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "21",
+        "abbr": "",
+        "name": "Engineering Optimization",
+        "publisher": "Taylor & Francis",
+        "url": "https://www.tandfonline.com/journals/geno20",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "22",
+        "abbr": "FODM",
+        "name": "Fuzzy Optimization and Decision Making",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/fodm/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "23",
+        "abbr": "IFSA",
+        "name": "Fuzzy Sets and Systems",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/fss/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "24",
+        "abbr": "DSP",
+        "name": "Digital Signal Processing",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/dsp/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "25",
+        "abbr": "JASP",
+        "name": "EURASIP Journal on Advances in Signal Processing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ejasp/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "26",
+        "abbr": "",
+        "name": "IET Signal Processing",
+        "publisher": "IET",
+        "url": "https://dblp.uni-trier.de/db/journals/iet-spr/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "27",
+        "abbr": "MSSP",
+        "name": "Multidimensional Systems and Signal Processing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/mssp/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "28",
+        "abbr": "JACM",
+        "name": "Journal of the ACM",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/jacm/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "29",
+        "abbr": "",
+        "name": "IEEE Intelligent Systems",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/expert/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能基础与综合",
+        "serial": "30",
+        "abbr": "SPL",
+        "name": "IEEE Signal Processing Letters",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/spl/",
+        "source_page": 15
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "1",
+        "abbr": "",
+        "name": "Applied Intelligence",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/apin/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "2",
+        "abbr": "",
+        "name": "Artificial Intelligence in Medicine",
+        "publisher": "Elsevier",
+        "url": "http://www.journals.elsevier.com/artificial-intelligence-in-medicine/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "3",
+        "abbr": "",
+        "name": "Biocybernetics and Biomedical Engineering",
+        "publisher": "Elsevier",
+        "url": "https://www.sciencedirect.com/journal/biocybernetics-and-biomedical-engineering",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "4",
+        "abbr": "",
+        "name": "Biomedical Signal Processing and Control",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/bspc/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "5",
+        "abbr": "CJRS",
+        "name": "Canadian Journal of Remote Sensing",
+        "publisher": "Taylor & Francis",
+        "url": "https://www.tandfonline.com/journals/ujrs20",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "6",
+        "abbr": "EAAI",
+        "name": "Engineering Applications of Artificial Intelligence",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/eaai/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "7",
+        "abbr": "",
+        "name": "GIScience & Remote Sensing",
+        "publisher": "Taylor & Francis",
+        "url": "https://www.tandfonline.com/journals/tgrs20",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "8",
+        "abbr": "JSTARS",
+        "name": "IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/staeors/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "9",
+        "abbr": "JARS",
+        "name": "Journal of Applied Remote Sensing",
+        "publisher": "SPIE",
+        "url": "https://www.spiedigitallibrary.org/journals/journal-of-applied-remote-sensing",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "10",
+        "abbr": "IJAIED",
+        "name": "International Journal of Artificial Intelligence in Education",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/aiedu/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "11",
+        "abbr": "TCBB",
+        "name": "IEEE/ACM Transactions on Computational Biology and Bioinformatics",
+        "publisher": "IEEE/ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tcbb/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "12",
+        "abbr": "TBME",
+        "name": "IEEE Transactions on Biomedical Engineering",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tbe/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "13",
+        "abbr": "IJRS",
+        "name": "International Journal of Remote Sensing",
+        "publisher": "Taylor & Francis",
+        "url": "https://www.tandfonline.com/journals/tres20",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "14",
+        "abbr": "PE&RS",
+        "name": "Photogrammetric Engineering and Remote Sensing",
+        "publisher": "Elsevier",
+        "url": "https://www.asprs.org/asprs-publications/pers",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "15",
+        "abbr": "",
+        "name": "Scientific Data",
+        "publisher": "Springer Nature",
+        "url": "https://dblp.uni-trier.de/db/journals/scidata/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "16",
+        "abbr": "ALife",
+        "name": "Artificial Life",
+        "publisher": "MIT Press",
+        "url": "https://dblp.uni-trier.de/db/journals/alife/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "17",
+        "abbr": "WI",
+        "name": "Web Intelligence",
+        "publisher": "IOS Press",
+        "url": "https://dblp.uni-trier.de/db/journals/wias/",
+        "source_page": 16
+      },
+      {
+        "domain": "人工智能交叉与应用",
+        "serial": "18",
+        "abbr": "",
+        "name": "Connection Science",
+        "publisher": "Taylor & Francis",
+        "url": "https://dblp.uni-trier.de/db/journals/connection/",
+        "source_page": 16
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "1",
+        "abbr": "BIT",
+        "name": "Behaviour & Information Technology",
+        "publisher": "Taylor & Francis",
+        "url": "https://dblp.uni-trier.de/db/journals/behaviourIT/",
+        "source_page": 18
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "2",
+        "abbr": "",
+        "name": "Cognitive Computation",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/cogcom/",
+        "source_page": 18
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "3",
+        "abbr": "TCDS",
+        "name": "IEEE Transactions on Cognitive and Developmental Systems",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tamd/",
+        "source_page": 18
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "4",
+        "abbr": "",
+        "name": "Journal of Neural Engineering",
+        "publisher": "IOP",
+        "url": "https://iopscience.iop.org/journal/1741-2552",
+        "source_page": 18
+      },
+      {
+        "domain": "脑认知与类脑智能",
+        "serial": "5",
+        "abbr": "",
+        "name": "MINDS AND MACHINES",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/mima/",
+        "source_page": 18
+      },
+      {
+        "domain": "机器学习",
+        "serial": "1",
+        "abbr": "IJMLC",
+        "name": "International Journal of Machine Learning and Cybernetics",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/mlc/",
+        "source_page": 19
+      },
+      {
+        "domain": "机器学习",
+        "serial": "2",
+        "abbr": "MLST",
+        "name": "Machine Learning: Science and Technology",
+        "publisher": "IOP",
+        "url": "https://dblp.uni-trier.de/db/journals/mlst/",
+        "source_page": 19
+      },
+      {
+        "domain": "机器学习",
+        "serial": "3",
+        "abbr": "TMLR",
+        "name": "Transactions on Machine Learning Research",
+        "publisher": "JMLR",
+        "url": "https://dblp.uni-trier.de/db/journals/tmlr/",
+        "source_page": 19
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "1",
+        "abbr": "JIVP",
+        "name": "EURASIP Journal on Image and Video Processing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ejivp/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "2",
+        "abbr": "IET-BMT",
+        "name": "IET Biometrics",
+        "publisher": "IET",
+        "url": "https://dblp.uni-trier.de/db/journals/iet-bmt/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "3",
+        "abbr": "IET-CVI",
+        "name": "IET Computer Vision",
+        "publisher": "IET",
+        "url": "https://dblp.uni-trier.de/db/journals/iet-cvi/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "4",
+        "abbr": "IET-IPR",
+        "name": "IET Image Processing",
+        "publisher": "IET",
+        "url": "https://dblp.uni-trier.de/db/journals/iet-ipr/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "5",
+        "abbr": "IMAVIS",
+        "name": "Image and Vision Computing",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/ivc/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "6",
+        "abbr": "IJPRAI",
+        "name": "International Journal of Pattern Recognition and Artificial Intelligence",
+        "publisher": "World Scientific",
+        "url": "https://dblp.uni-trier.de/db/journals/ijprai/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "7",
+        "abbr": "IJDAR",
+        "name": "International Journal on Document Analysis and Recognition",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ijdar/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "8",
+        "abbr": "JEI",
+        "name": "Journal of Electronic Imaging",
+        "publisher": "SPIE",
+        "url": "https://dblp.uni-trier.de/db/journals/jei/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "9",
+        "abbr": "JMIV",
+        "name": "Journal of Mathematical Imaging and Vision",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/jmiv/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "10",
+        "abbr": "JRTIP",
+        "name": "Journal of Real-Time Image Processing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/jrtip/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "11",
+        "abbr": "",
+        "name": "Journal of Signal Processing, Systems for Signal Image and Video Processing",
+        "publisher": "Springer",
+        "url": "https://link.springer.com/journal/11265",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "12",
+        "abbr": "JVCIR",
+        "name": "Journal of Visual Communication and Image Representation",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/jvcir/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "13",
+        "abbr": "MVA",
+        "name": "Machine Vision and Applications",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/mva/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "14",
+        "abbr": "PAA",
+        "name": "Pattern Analysis and Applications",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/paa/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "15",
+        "abbr": "SIIMS",
+        "name": "SIAM Journal on Imaging Sciences",
+        "publisher": "SIAM",
+        "url": "https://dblp.uni-trier.de/db/journals/siamis/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "16",
+        "abbr": "",
+        "name": "Signal, Image and Video Processing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/sivp/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "17",
+        "abbr": "SPIC",
+        "name": "Signal Processing: Image Communication",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/spic/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "18",
+        "abbr": "TVC",
+        "name": "The Visual Computer",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/vc/",
+        "source_page": 20
+      },
+      {
+        "domain": "模式识别与计算机视觉",
+        "serial": "19",
+        "abbr": "",
+        "name": "Visual Intelligence",
+        "publisher": "Springer",
+        "url": "https://link.springer.com/journal/44267",
+        "source_page": 20
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "1",
+        "abbr": "TALLIP",
+        "name": "ACM Transactions on Asian and Low-Resource Language Information Processing",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/talip/",
+        "source_page": 21
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "2",
+        "abbr": "",
+        "name": "Machine Translation",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/mt/",
+        "source_page": 21
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "3",
+        "abbr": "NLE",
+        "name": "Natural Language Engineering",
+        "publisher": "Cambridge University Press",
+        "url": "https://dblp.uni-trier.de/db/journals/nle/",
+        "source_page": 21
+      },
+      {
+        "domain": "语言与语音处理",
+        "serial": "4",
+        "abbr": "CSL",
+        "name": "Computer Speech & Language",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/csl/",
+        "source_page": 21
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "1",
+        "abbr": "",
+        "name": "Data Intelligence",
+        "publisher": "MIT press",
+        "url": "https://direct.mit.edu/dint",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "2",
+        "abbr": "DSE",
+        "name": "Data Science and Engineering",
+        "publisher": "CCF",
+        "url": "https://dblp.uni-trier.de/db/journals/dase/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "3",
+        "abbr": "",
+        "name": "Expert Systems",
+        "publisher": "Blackwell/Wiley",
+        "url": "https://dblp.uni-trier.de/db/journals/es/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "4",
+        "abbr": "ESWA",
+        "name": "Expert Systems with Applications",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/eswa/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "5",
+        "abbr": "I&M",
+        "name": "Information & Management",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/iam/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "6",
+        "abbr": "IPL",
+        "name": "Information Processing Letters",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/ipl/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "7",
+        "abbr": "",
+        "name": "Information Retrieval Journal",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ir/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "8",
+        "abbr": "",
+        "name": "Information Systems Frontiers",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/isf/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "9",
+        "abbr": "IDA",
+        "name": "Intelligent Data Analysis",
+        "publisher": "IOS Press",
+        "url": "https://dblp.uni-trier.de/db/journals/ida/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "10",
+        "abbr": "IJKM",
+        "name": "International Journal of Knowledge Management",
+        "publisher": "IGI",
+        "url": "https://dblp.uni-trier.de/db/journals/ijkm/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "11",
+        "abbr": "IJSWIS",
+        "name": "International Journal on Semantic Web and Information Systems",
+        "publisher": "IGI",
+        "url": "https://dblp.uni-trier.de/db/journals/ijswis/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "12",
+        "abbr": "JSIS",
+        "name": "The Journal of Strategic Information Systems",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/jsis/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "13",
+        "abbr": "TBD",
+        "name": "IEEE Transactions on BIG Data",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tbd/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "14",
+        "abbr": "JDM",
+        "name": "Journal of Database Management",
+        "publisher": "IGI",
+        "url": "https://dblp.uni-trier.de/db/journals/jdm/",
+        "source_page": 22
+      },
+      {
+        "domain": "知识工程与数据挖掘",
+        "serial": "15",
+        "abbr": "TCSS",
+        "name": "IEEE Transactions on Computational Social Systems",
+        "publisher": "IEEE",
+        "url": "https://dblp.uni-trier.de/db/journals/tcss/",
+        "source_page": 22
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "1",
+        "abbr": "TiiS",
+        "name": "ACM Transactions on Interactive Intelligent Systems",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/tiis/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "2",
+        "abbr": "CVM",
+        "name": "Computational Visual Media",
+        "publisher": "Tsinghua University; Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/cvm/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "3",
+        "abbr": "CG",
+        "name": "Computers & Graphics",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/cg/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "4",
+        "abbr": "",
+        "name": "Multimedia Systems",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/mms/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "5",
+        "abbr": "",
+        "name": "Personal and Ubiquitous Computing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/puc/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "6",
+        "abbr": "PMC",
+        "name": "Pervasive and Mobile Computing",
+        "publisher": "Elsevier",
+        "url": "https://dblp.uni-trier.de/db/journals/percom/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "7",
+        "abbr": "HCI",
+        "name": "Proceedings of the ACM on Human-Computer Interaction",
+        "publisher": "ACM",
+        "url": "https://dblp.uni-trier.de/db/journals/pacmhci/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "8",
+        "abbr": "",
+        "name": "Computer animation & virtual worlds",
+        "publisher": "Wiley",
+        "url": "https://dblp.uni-trier.de/db/journals/jvca/",
+        "source_page": 23
+      },
+      {
+        "domain": "跨媒体智能与人机交互",
+        "serial": "9",
+        "abbr": "IJMIR",
+        "name": "International Journal of Multimedia Information Retrieval",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ijmir/",
+        "source_page": 23
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "1",
+        "abbr": "ITSM",
+        "name": "IEEE Intelligent Transportation Systems Magazine",
+        "publisher": "IEEE",
+        "url": "https://dblp.org/db/journals/itsm/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "2",
+        "abbr": "",
+        "name": "IET Intelligent Transport Systems",
+        "publisher": "IET",
+        "url": "http://scitation.aip.org/IET-ITS",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "3",
+        "abbr": "IJARS",
+        "name": "International Journal of Advanced Robotic Systems",
+        "publisher": "SAGE",
+        "url": "https://journals.sagepub.com/home/arx",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "4",
+        "abbr": "",
+        "name": "Journal of Intelligent Manufacturing",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/jim/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "5",
+        "abbr": "",
+        "name": "Journal of Intelligent Transportation Systems",
+        "publisher": "Taylor & Francis",
+        "url": "https://dblp.org/db/journals/jits/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "6",
+        "abbr": "RIA",
+        "name": "Robotic Intelligence and Automation",
+        "publisher": "Emerald",
+        "url": "https://www.emeraldgrouppublishing.com/journal/ria",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "7",
+        "abbr": "",
+        "name": "Robotica",
+        "publisher": "Cambridge University Press",
+        "url": "https://dblp.uni-trier.de/db/journals/robotica/",
+        "source_page": 24
+      },
+      {
+        "domain": "智能机器人与系统",
+        "serial": "8",
+        "abbr": "SI",
+        "name": "Swarm Intelligence",
+        "publisher": "Springer",
+        "url": "https://dblp.org/db/journals/swarm",
+        "source_page": 24
+      },
+      {
+        "domain": "人工智能伦理、安全与治理",
+        "serial": "1",
+        "abbr": "",
+        "name": "AI & Society",
+        "publisher": "Springer",
+        "url": "https://dblp.uni-trier.de/db/journals/ais/",
+        "source_page": 26
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "1",
+        "abbr": "",
+        "name": "计算机科学",
+        "publisher": "重庆西南信息有限公司",
+        "url": "https://www.jsjkx.com/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "2",
+        "abbr": "",
+        "name": "计算机科学与探索",
+        "publisher": "北京《计算机工程与应用》期刊有限公司、科学出版社",
+        "url": "http://fcst.ceaj.org/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "3",
+        "abbr": "",
+        "name": "信号处理学报",
+        "publisher": "信号处理专业委员会",
+        "url": "https://www.signalpro.com.cn/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "4",
+        "abbr": "",
+        "name": "计算机应用",
+        "publisher": "四川计算机应用杂志社有限公司",
+        "url": "http://www.joca.cn/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "5",
+        "abbr": "",
+        "name": "计算机工程与应用",
+        "publisher": "北京《计算机工程与应用》期刊有限公司",
+        "url": "http://cea.ceaj.org/",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "6",
+        "abbr": "",
+        "name": "数据采集与处理",
+        "publisher": "南京航空航天大学",
+        "url": "http://sjcj.nuaa.edu.cn/sjcjycl/home",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "7",
+        "abbr": "",
+        "name": "数据分析与知识发现",
+        "publisher": "《数据分析与知识发现》编辑部",
+        "url": "https://manu44.magtech.com.cn/Jwk_infotech_wk3/CN/2096- 3467/home.shtml",
+        "source_page": 27
+      },
+      {
+        "domain": "中文学术期刊",
+        "serial": "8",
+        "abbr": "",
+        "name": "计算机集成制造系统",
+        "publisher": "中国兵器工业集团第210研究所",
+        "url": "http://www.cims-journal.cn/",
+        "source_page": 27
+      }
+    ]
+  }
+}

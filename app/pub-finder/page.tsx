@@ -41,7 +41,8 @@ const RANK_FIELD_MAP: Record<string, string> = {
     // nju: "南京大学",
     // xju: "新疆大学",
     // cug: "中国地质大学",
-    ccf: "CCF中国计算机学会",
+    ccf: "CCF-中国计算机学会",
+    caai: "CAAI-中国人工智能学会",
     // cju: "长江大学",
     // zju: "浙江大学",
     // zhongguokejihexin: "中国科技核心期刊",
@@ -322,7 +323,7 @@ export default function PubFinderPage() {
                                                 {Object.entries(rankData).map(([key, value]) => (
                                                     <RankCard
                                                         key={key}
-                                                        title={RANK_FIELD_MAP[key] || key}
+                                                        title={RANK_FIELD_MAP[key] || key.toUpperCase()}
                                                         value={value}
                                                     />
                                                 ))}
