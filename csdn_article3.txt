@@ -1,0 +1,587 @@
+Title: 重磅！《中国人工智能学会推荐国际学术会议和国际/国内期刊目录》正式发布（内附下载地址）
+
+URL Source: https://blog.csdn.net/audyxiao001/article/details/141499909
+
+Published Time: 2024-08-24T15:09:17+08:00
+
+Markdown Content:
+重磅！《中国人工智能学会推荐国际学术会议和国际/国内期刊目录》正式发布（内附下载地址）-CSDN博客
+
+===============
+
+[![Image 2: CSDN首页](https://img-home.csdnimg.cn/images/20201124032511.png)](https://www.csdn.net/)
+
+*   [博客](https://blog.csdn.net/)
+*   [下载](https://download.csdn.net/)
+*   [学习](https://edu.csdn.net/?utm_source=zhuzhantoolbar)
+*   [社区](https://devpress.csdn.net/)
+*   [![Image 3](https://img-home.csdnimg.cn/images/20240829093757.png)GitCode](https://link.csdn.net/?target=https%3A%2F%2Fgitcode.com%3Futm_source%3Dcsdn_toolbar)
+*   [InsCodeAI](https://inscode.csdn.net/?utm_source=260232576)
+*   [会议](https://summit.csdn.net/)
+
+搜索
+AI 搜索
+
+[登录](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+登录后您可以：
+
+*   复制代码和一键运行
+*   与博主大V深度互动
+*   解锁海量精选资源
+*   获取前沿技术资讯
+
+[立即登录](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+[会员·新人礼包 ![Image 4](https://i-operation.csdnimg.cn/images/105eda9d414f4250a7c3fe45be3cd15f.png)](https://mall.csdn.net/vip)
+
+[消息](https://i.csdn.net/#/msg/index)
+
+[历史](https://i.csdn.net/#/user-center/history)
+
+[创作中心](https://mp.csdn.net/ "创作中心")
+
+[创作](https://mp.csdn.net/edit)
+
+[![Image 5](https://i-operation.csdnimg.cn/images/6e41bd372d1f4ec39b3cd36ab95046c4.png)](https://mp.csdn.net/edit)![Image 6](https://i-operation.csdnimg.cn/images/43349e98a45341699652b0b6fa4ea541.png)![Image 7](https://i-operation.csdnimg.cn/images/0f13ec529b6b4195ad99894f76653e56.png)
+
+重磅！《中国人工智能学会推荐国际学术会议和国际/国内期刊目录》正式发布（内附下载地址）
+===========================================
+
+![Image 8](https://csdnimg.cn/release/blogv2/dist/pc/img/original.png)
+
+[audyxiao001](https://blog.csdn.net/audyxiao001 "audyxiao001")![Image 9](https://csdnimg.cn/release/blogv2/dist/pc/img/newUpTime2.png)已于 2024-08-24 15:22:14 修改
+
+![Image 10](https://csdnimg.cn/release/blogv2/dist/pc/img/articleReadEyes2.png)阅读量2.1k[![Image 11](https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollect2.png)![Image 12](https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive2.png)收藏 2](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+![Image 13](https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Active.png)![Image 14](https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Black.png)点赞数 6 
+
+[CC 4.0 BY-SA版权](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+文章标签：[人工智能](https://so.csdn.net/so/search/s.do?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD&t=all&o=vip&s=&l=&f=&viparticle=&from_tracking_code=tag_word&from_code=app_blog_art)[大数据](https://so.csdn.net/so/search/s.do?q=%E5%A4%A7%E6%95%B0%E6%8D%AE&t=all&o=vip&s=&l=&f=&viparticle=&from_tracking_code=tag_word&from_code=app_blog_art)[语言模型](https://so.csdn.net/so/search/s.do?q=%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B&t=all&o=vip&s=&l=&f=&viparticle=&from_tracking_code=tag_word&from_code=app_blog_art)
+
+于 2024-08-24 15:09:17 首次发布
+
+ 版权声明：本文为博主原创文章，遵循[CC 4.0 BY-SA](http://creativecommons.org/licenses/by-sa/4.0/)版权协议，转载请附上原文出处链接和本声明。 
+
+ 本文链接：[https://blog.csdn.net/audyxiao001/article/details/141499909](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+[![Image 15](https://i-blog.csdnimg.cn/devpress/blog/1438a9d22e0140f29c34897647903521.jpg)讯飞AI开发者社区 文章已被社区收录](javascript:; "讯飞AI开发者社区")
+
+[加入社区](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+8月24日，2024 人工智能 产学融合创新论坛在西安成功举办。论坛开幕式上正式发布了《中国[人工智能学会](https://so.csdn.net/so/search?q=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AD%A6%E4%BC%9A&spm=1001.2101.3001.7020)推荐国际学术会议和国际/国内期刊目录》（以下简称“目录”）。
+
+![Image 16: 图片](https://i-blog.csdnimg.cn/blog_migrate/6bed80d21c70f8da15a126ed08208dfd.png)
+
+**图1 目录发布会现场（图片来源于中国人工智能学会官网）**
+
+**目录发布的重要意义**：该目录的正式发布将为指导研究方向、加强学术沟通、推动职业进步方面提供重要的参考。
+
+**目录形成和发布的重要历程**：2023年6月，中国人工智能学会成立专家组，开展了推荐[学术会议](https://so.csdn.net/so/search?q=%E5%AD%A6%E6%9C%AF%E4%BC%9A%E8%AE%AE&spm=1001.2101.3001.7020)/期刊目录的工作。2024年1月，中国人工智能学会发布了《中国人工智能学会推荐国际学术会议和国际/国内期刊目录》初稿，面向人工智能领域专家和学者征求意见，正式启动了学科领域学术会议、期刊分类完善工作。2024年8月，形成了《中国人工智能学会推荐国际学术会议、国际/国内期刊目录》正式版并予以公布。
+
+**目录的特点**：《目录》分为A类、B类、C类三档。A类通常被认为是该领域内最顶尖的学术会议或刊物，具有极高的学术标准和影响力；B类代表在国际上广泛认可的重要学术会议或刊物，在特定领域或子领域内具有较高的声誉；C类代表国际学术界所认可的重要学术会议或刊物，是学术交流的重要平台。
+
+**目录包含的人工智能研究领域**：共包含了人工智能的11个细分领域，具体如下。
+
+（1）人工智能基础与综合
+
+（2）人工智能交叉与应用
+
+（3）脑认知与类脑智能
+
+（4）机器学习
+
+（5）模式识别与 计算机 视觉
+
+（6）语言与语音处理
+
+（7）知识工程与 数据挖掘
+
+（8）跨媒体智能与人机交互
+
+（9）智能机器人与系统
+
+（10）智能芯片与计算系统
+
+（11）人工智能伦理、安全与治理
+
+**目录的下载地址（请复制到浏览器内打开）**：[https://pan.baidu.com/s/1zlwgNpCUzfLK1H9W7nd-rg?pwd=7x8v](https://pan.baidu.com/s/1zlwgNpCUzfLK1H9W7nd-rg?pwd=7x8v "https://pan.baidu.com/s/1zlwgNpCUzfLK1H9W7nd-rg?pwd=7x8v")或者[https://caai.cn/index.php?s=/home/file/download/id/788.html](https://caai.cn/index.php?s=/home/file/download/id/788.html "https://caai.cn/index.php?s=/home/file/download/id/788.html")
+
+更多介绍请浏览官方报道：[https://caai.cn/index.php?s=/home/article/detail/id/4024.html](https://caai.cn/index.php?s=/home/article/detail/id/4024.html "https://caai.cn/index.php?s=/home/article/detail/id/4024.html")
+
+![Image 17](https://img-blog.csdnimg.cn/bcbfa460256c436ab68e89d97ddbdc40.jpeg)人工智能怎么学 介绍人工智能的最新方法及技术
+
+![Image 18](https://g.csdnimg.cn/extension-box/2.0.0/image/weixin.png)微信公众号
+
+![Image 19](https://g.csdnimg.cn/extension-box/2.0.0/image/ic_move.png)
+
+![Image 20](https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-newWhite.png)
+
+ 确定要放弃本次机会？ 
+
+福利倒计时
+
+_:_ _:_
+
+![Image 21](https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-roup.png)立减 ¥
+
+普通VIP年卡可用
+
+[立即使用](https://mall.csdn.net/vip)
+
+[![Image 22](https://profile-avatar.csdnimg.cn/default.jpg!1) audyxiao001](https://blog.csdn.net/audyxiao001)
+
+[关注](javascript:;)[关注](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+*   [![Image 23](https://csdnimg.cn/release/blogv2/dist/pc/img/tobarThumbUpactive.png)![Image 24](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like-active.png)![Image 25](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like.png) 6](https://blog.csdn.net/audyxiao001/article/details/141499909)点赞 
+*   [![Image 26](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike-active.png)![Image 27](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike.png)](https://blog.csdn.net/audyxiao001/article/details/141499909)踩 
+*   [![Image 28](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect-active.png)![Image 29](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect.png)![Image 30](https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectActive.png) 2](javascript:;) 收藏    觉得还不错?  一键收藏 ![Image 31](https://csdnimg.cn/release/blogv2/dist/pc/img/collectionCloseWhite.png)  
+*   [![Image 32](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/comment.png) 0](https://blog.csdn.net/audyxiao001/article/details/141499909#commentBox)评论 
+*   [![Image 33](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/share.png)分享](javascript:;)[复制链接](https://blog.csdn.net/audyxiao001/article/details/141499909) [分享到 QQ](https://blog.csdn.net/audyxiao001/article/details/141499909) [分享到新浪微博](https://blog.csdn.net/audyxiao001/article/details/141499909) ![Image 34](https://blog.csdn.net/audyxiao001/article/details/141499909) ![Image 35](https://csdnimg.cn/release/blogv2/dist/pc/img/share/icon-wechat.png)扫一扫     
+*   [![Image 36](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/more.png)](https://blog.csdn.net/audyxiao001/article/details/141499909)[![Image 37](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png)举报](https://blog.csdn.net/audyxiao001/article/details/141499909) [![Image 38](https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png)举报](https://blog.csdn.net/audyxiao001/article/details/141499909)  
+
+[_重磅_！_人工智能_ 技术辅助材料科学第一性原理迎来史诗级进度！](https://blog.csdn.net/weixin_41194129/article/details/144212239)
+
+[源代码杀手的博客](https://blog.csdn.net/weixin_41194129)
+
+12-03![Image 39](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 994 
+
+[**2024 年诺贝尔物理奖与化学奖都颁给“AI for Science”相关领域，这一重大事件无疑为该领域的蓬勃发展注入了强劲动力。**随着计算物理学 _和_ 材料科学的迅速发展，第一性原理（First-Principles）计算已经成为研究材料性质、反应机制 _和_ 结构设计等问题的核心工具。第一性原理计算，尤其是基于密度泛函理论（DFT）的方法，能够在不依赖经验参数的情况下预测物质的行为。传统上，第一性原理计算方法需要极高的计算资源，限制了其在大规模系统中的应用。因此，近年来，深度学习技术的快速发展为第一性原理计算提](https://blog.csdn.net/weixin_41194129/article/details/144212239)
+
+[一文搞懂异常检测中离群、异常、新类、开集、分布外检测异同](https://charmve.blog.csdn.net/article/details/121005803)
+
+[迈微AI研习社 · 号主](https://blog.csdn.net/Charmve)
+
+10-27![Image 40](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 759 
+
+[你是否也曾迷惑于「离群检测，异常检测，新类检测，开集识别，分布外检测」之间错综复杂的关系？你是否也想要解决开放世界的问题却不知道从哪个任务入手？不知道利用什么方法解决问题？这篇最新综述将让你对开放世界领域有全新的认识！](https://charmve.blog.csdn.net/article/details/121005803)
+
+[](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+参与评论 您还未登录，请先 登录 后发表或查看评论
+
+[_重磅_ _发布_|_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ _期刊目录_-CSDN...](https://blog.csdn.net/moxibingdao/article/details/141749826)
+
+9-20
+
+[2024年1月,_中国_ _人工智能_ _学会_ _(_ CAAI _)_ _发布_《_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ _期刊目录_》初稿,面向 _人工智能_ 领域专家 _和_ 学者征求意见,_正式_ 启动了学科领域 _学术会议_、期刊分类完善工作。 在各位专家的积极参与、辛勤付出 _和_ 大力支持下,目前形成了《_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_、_国际_/_国内_ _期刊目录_》_(_ 以下简称“目录”_)_,现予以](https://blog.csdn.net/moxibingdao/article/details/141749826)
+
+[《_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ _期刊目录_》:学术研究者...](https://blog.csdn.net/gitblog_06556/article/details/142406074)
+
+9-15
+
+[全面性:涵盖了 _人工智能_ 的11个细分领域,几乎覆盖了 _人工智能_ 领域的所有重要方向。 实用性:根据学术影响力 _和_ 认可度,将会议 _和_ 期刊分为A类、B类、C类三档,为研究者提供了明确的投稿参考。 时效性:目录的编制 _和_ _发布_ 过程紧跟学术前沿,确保了信息的时效性 _和_ 前沿性。 结语 《_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ 期刊...](https://blog.csdn.net/gitblog_06556/article/details/142406074)
+
+[《_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ _期刊目录_》](https://blog.csdn.net/gitblog_06544/article/details/142399943)
+
+[gitblog_06544的博客](https://blog.csdn.net/gitblog_06544)
+
+09-20![Image 41](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 414 
+
+[《_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ _期刊目录_》 去发现同类优质开源项目:https://gitcode.com/ 本仓库提供《_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ _期刊目录_》的 _下载_ 资源。该目录由 _中国_ _人工智能_ _学会_ _正式_ _发布_，旨在为 _人工智能_ 领域的研究者提供权威的 _学术会议_ _和_ 期刊 _推荐_。 目录内容 该目录分为A类、B类、C类三档： A类：通常被认为是该领域内最顶尖的 _学术会议_ 或刊物，具有极高的...](https://blog.csdn.net/gitblog_06544/article/details/142399943)
+
+[_重磅_ _发布_｜_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ _期刊目录_](https://devpress.csdn.net/v1/article/detail/141749826)
+
+[我爱计算机视觉](https://blog.csdn.net/moxibingdao)
+
+08-30![Image 42](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 891 
+
+[CAAI 副理事长刘成林研究员现场 _发布_ 本文转自 _中国_ _人工智能_ _学会_。2023年6月，_中国_ _人工智能_ _学会_（CAAI）成立专家组，开展了 _推荐_ _学术会议_/_期刊目录_ 的工作。专家组对智能科学与技术基础理论、智能科学与技术交叉、脑认知与类脑智能、机器学习、机器感知与模式识别、自然语言处理、知识工程与数据挖掘、跨媒体智能与人机交互、智能机器人与系统、智能芯片与计算系统以及 _人工智能_ 伦理、安全与治理等领域的期刊 _和_ 会议进行了...](https://devpress.csdn.net/v1/article/detail/141749826)
+
+[_中国_ 计算机 _学会_ _推荐_ _国际_ _学术会议_ _(_ _人工智能_ _)_ _英国york的british machine...](https://blog.csdn.net/qq_38163755/article/details/100919322)
+
+9-22
+
+[_中国_ 计算机 _学会_ _推荐_ _国际_ _学术会议_ _(_ _人工智能_ _)_ 一、A 类 序号 会议简称 会议全称 出版社 网址 AAAI AAAI Conference on Artificial Intelligence AAAI http://dblp.uni-trier.de/db/conf/aaai/ NeurIPS Annual Conference on Neural Information Processing Systems MIT Press http://dblp.uni-trier.de/db/conf/nips/...](https://blog.csdn.net/qq_38163755/article/details/100919322)
+
+[【_中国_ _人工智能_ 百人会、西安理工大学主办 | ACM出版,见刊速度最快且最...](https://blog.csdn.net/AisssScholarrr/article/details/152080946)
+
+9-25
+
+[2025年 _人工智能_ 与基础模型 _国际_ _学术会议_ _(_ AIFM 2025 _)_ 2025 International Conference on Artificial Intelligence and Foundation Model 会议时间: 2025年11月14-16日 会议地点: _中国_ 北京 | 北京海淀区中关村国家自主创新示范区会议中心 大会官网:查看详情 截稿日期:见官网 ...](https://blog.csdn.net/AisssScholarrr/article/details/152080946)
+
+[AI人的列表！《_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ _期刊目录_》_正式_ _发布_](https://lijfrank.blog.csdn.net/article/details/141528477)
+
+[I‘m Frank Lee](https://blog.csdn.net/Frank_LJiang)
+
+08-25![Image 43](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 959 
+
+[AI人的列表！《_中国_ _人工智能_ _学会_ _推荐_ _国际_ _学术会议_ _和_ _国际_/_国内_ _期刊目录_》_正式_ _发布_](https://lijfrank.blog.csdn.net/article/details/141528477)
+
+[_中国_ _人工智能_ _学会_ _学会_ 通讯 2018年 第1期 到 第6期](https://download.csdn.net/download/sinat_29046147/10552096)
+
+07-19
+
+[_中国_ _人工智能_ _学会_ _学会_ 通讯 2018年 第1期 到 第6期 ，_人工智能_ 专业期刊，值得一读。](https://download.csdn.net/download/sinat_29046147/10552096)
+
+[_人工智能_ 相关领域的 _国际_ 顶会介绍_nips](https://blog.csdn.net/Sophia_11/article/details/86301255)
+
+9-23
+
+[NIPS,全称神经信息处理系统大会 _(_ Conference and Workshop on Neural InformationProcessingSystems _)_,是一个关于机器学习 _和_ 计算神经科学的 _国际_ 会议。该会议固定在每年的12月举行,由NIPS基金会主办。NIPS是机器学习领域的顶级会议。在 _中国_ 计算机 _学会_ 的 _国际_ _学术会议_ 排名中,NIPS为 _人工智能_ 领域的A类会议。](https://blog.csdn.net/Sophia_11/article/details/86301255)
+
+[2025年7月计算机 _人工智能_ _学术会议_ 介绍_aicsip 2025](https://blog.csdn.net/PaperAccept/article/details/148760060)
+
+9-22
+
+[1. ​​_中国_ 计算机 _学会_ _人工智能_ 会议 _(_ CCFAI 2025 _)_​​ ​​时间地点​​:2025年7月31日-8月3日 · 云南昆明 ​​简介​​:由 _中国_ 计算机 _学会_ _(_ CCF _)_ 主办。聚焦​​大模型、图机器学习、AI Agent​​等前沿方向,设置6场院士级学术报告 _(_ 如何友院士 _)_ _和_ 4场产业高峰论坛 _(_ 腾讯、华为、京东等...](https://blog.csdn.net/PaperAccept/article/details/148760060)
+
+[收藏！2023年CCF _推荐_ 的『_人工智能_』领域 _国际_ _学术会议_ _和_ _期刊目录_ 热门推荐](https://devpress.csdn.net/v1/article/detail/132607648)
+
+[夏小悠的博客](https://blog.csdn.net/qq_42730750)
+
+09-21![Image 44](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 2万+ 
+
+[2023年CCF _推荐_ 的 _人工智能_ 领域 _国际_ _学术会议_ _和_ 期刊。](https://devpress.csdn.net/v1/article/detail/132607648)
+
+[最新 _发布_！_中国_ _人工智能_ _学会_ _(_ CAAI _)_ _推荐_ 目录，涵盖11个AI领域方向！](https://devpress.csdn.net/v1/article/detail/141858808)
+
+[I‘m Frank Lee](https://blog.csdn.net/Frank_LJiang)
+
+09-03![Image 45](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 917 
+
+[_重磅_ 消息，_中国_ _人工智能_ _学会_ _(_ CAAI _)_ 最新 _发布_ _推荐_ 目录，为AI领域的科研工作者提供权威参考！](https://devpress.csdn.net/v1/article/detail/141858808)
+
+[值得收藏 _!_ 2025年 _人工智能_ 顶级会议投稿信息汇总 _(_ 机器学习领域 _)_ _nips2025...](https://blog.csdn.net/audyxiao001/article/details/147308256)
+
+9-24
+
+[会议时间/地点:2025年8月16日至22日,蒙特利尔,加拿大 会议链接:http://2025.ijcai.org/ IJCAI _(_ International Joint Conference on Artificial Intelligence _)_ 自1969年首次举办以来,已经成为了 _人工智能_ 领域展示最新研究成果 _和_ 技术创新的 _国际_ 性盛会。该会议由 _国际_ _人工智能_ 联合会组织,覆盖了 _人工智能_ 领域的广泛主题,不仅包括机器...](https://blog.csdn.net/audyxiao001/article/details/147308256)
+
+[CCF _推荐_ 列表 _重磅_ 更新, RecSys升级成为B类会议, _中国_ 科学: 信息科学成为A类期刊......](https://blog.csdn.net/weixin_44289754/article/details/128295687)
+
+[张小磊的博客](https://blog.csdn.net/weixin_44289754)
+
+12-01![Image 46](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 818 
+
+[嘿，记得给“机器学习与 _推荐_ 算法”添加星标2022年11月30日CCF官网 _发布_ 了关于 _中国_ 计算机 _学会_ 关于 _推荐_ _国际_ _学术会议_ _和_ _期刊目录_ 更新公告。公告指出：在既有基础上进行微调，保持宁缺毋滥的原则；领域划分方式保持不变，期刊 _和_ 会议的 _推荐_ 类别体系保持不变，在同等情况下增加对 _国内_ 期刊的支持。相较于上一版目录，此次《目录》拟新增期刊4个，会议6个；升级期刊18个，会议19个；移除期刊1个。https://www....](https://blog.csdn.net/weixin_44289754/article/details/128295687)
+
+[第1138期AI100_机器学习日报 _(_ 2017-10-30 _)_](https://blog.csdn.net/ai100_ml/article/details/78557204)
+
+[ai100_ml的博客](https://blog.csdn.net/ai100_ml)
+
+10-31![Image 47](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 1867 
+
+[AI100_机器学习日报 2017-10-30 论文 _推荐_：NVIDIA Research _发布_ 可生长GANs模型，效果令人赞叹 @新智元ICLR 2018 匿名提交论文列表 @wx:专知内容组keras中最常用深度学习的API @ChatbotsChina音乐分类/回归任务迁移学习 @爱可可-爱生活Subgraphs：Web界面可视化深度网络 _(_ 计算图 _)_ 开发平台 @爱可可-爱生活](https://blog.csdn.net/ai100_ml/article/details/78557204)
+
+[_中国_ _人工智能_ _学会_ _学会_ 通讯 2018年 第1期 new](https://download.csdn.net/download/zhuf14/10268270)
+
+03-04
+
+[_人工智能_ : 预见 2018，从脑科学到 _人工智能_——机遇与挑战；](https://download.csdn.net/download/zhuf14/10268270)
+
+[_重磅_ _发布_ | “基于昇思MindSpore的智能通信”实践课程在兰州大学 _正式_ 上线！](https://devpress.csdn.net/v1/article/detail/135528881)
+
+[Kenji_Shinji的博客](https://blog.csdn.net/Kenji_Shinji)
+
+01-11![Image 48](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 1219 
+
+[在信道编码码率盲识别领域，针对通信信号侦察领域需要进行信道编码码率盲识别的问题，先介绍了传统的LDPC码码率盲识别算法，然后开发了多种利用DL进行码率盲识别的案例，让学生了解利用DL进行码率盲识别的优势 _和_ 掌握相关设计方法。在基础性实践案例中，帮助学生运用Matlab、Python等编程工具，完成传统无线通信物理层算法的开发，同时通过实践掌握昇思MindSpore _和_ 经典深度学习网络模型（如AlexNet、ResNet等），全面参与智能通信实践案例的开发；第三步是网络模型的训练及验证训练后网络模型的效果。](https://devpress.csdn.net/v1/article/detail/135528881)
+
+[_中国_ 工程院院士、_中国_ _人工智能_ _学会_ 理事长李德毅：_人工智能_ 研究新进展](https://tangxiaoyin.blog.csdn.net/article/details/80130481)
+
+[唐小引的 CSDN 博客](https://blog.csdn.net/tangxiaoyin)
+
+07-10![Image 49](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 2241 
+
+[7 月 22 - 23 日，由 _中国_ _人工智能_ _学会_、阿里巴巴集团 &amp; 蚂蚁金服主办，CSDN、_中国_ 科学院自动化研究所承办的第三届 _中国_ _人工智能_ 大会（CCAI 2017）将在杭州 _国际_ 会议中心盛大开幕。作为 _中国_ _国内_ 高规格、规模空前的 _人工智能_ 大会，CCAI 一直致力于打造 _中国_ _人工智能_ 领域产、学、研紧密结合的高端前沿交流平台，将全球 _人工智能_ 领域的顶级专家、学者 _和_ 产业界优秀人才汇聚一堂，围绕着当前 AI ...](https://tangxiaoyin.blog.csdn.net/article/details/80130481)
+
+[_中国_ 计算机 _学会_ _推荐_ 期刊 _和_ 会议（_人工智能_ 领域）](https://positive.blog.csdn.net/article/details/114548931)
+
+[专注于AI领域前沿技术学习与分享：目标检测、图像修复、超分重建、AI工程化](https://blog.csdn.net/sinat_28442665)
+
+03-08![Image 50](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 544 
+
+[中科院分区2019，祝早登顶会； 每隔一定年份，个别期刊会议分区会有一些变化，敬请关注 中科院分区（_人工智能_ 领域）_中国_ 计算机 _学会_ _推荐_ 会议 _中国_ 计算机 _学会_ _推荐_ 期刊中科院分区-2019 and 一份期刊会议影响因子分享 _中国_ 计算机 _学会_ _推荐_ 会议 _中国_ 计算机 _学会_ _推荐_ 期刊 中科院分区-2019 and 一份期刊会议影响因子分享 后台回复 20210306 获取本博文 CCF 分区 pdf - 云盘 _下载_ 链接： 20210306 ...](https://positive.blog.csdn.net/article/details/114548931)
+
+[_人工智能_ 领域CCF _推荐_ _国际_ 学术刊物最新目录（全）](https://devpress.csdn.net/v1/article/detail/134169168)
+
+[Jurio的博客](https://blog.csdn.net/qq_43811536)
+
+11-01![Image 51](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 1162 
+
+[2023年3月8日 _发布_ 的 _人工智能_ 领域CCF _推荐_ _国际_ 学术刊物最新目录（全！！！）](https://devpress.csdn.net/v1/article/detail/134169168)
+
+[《_中国_ _人工智能_ _学会_ 通讯》——11.56 情境感知的移动用户个性化偏好 挖掘方法...](https://blog.csdn.net/weixin_33873846/article/details/90354698)
+
+[weixin_33873846的博客](https://blog.csdn.net/weixin_33873846)
+
+09-04![Image 52](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 220 
+
+[11.56 情境感知的移动用户个性化偏好 挖掘方法 近年来，随着移动产业的高速发展，智能手机、平板电脑等移动设备已经成为了人们最重要的社交娱乐 _和_ 信息获取媒介。与此同时，这些新型的移动设备都配备了许多高性能的情境传感器，例如GPS、3D 加速及光学传感器等。这些情境传感器能够捕获到来自于移动用户的丰富情境数据，从而帮助实现一系列基于情境感知的移动服务。 这...](https://blog.csdn.net/weixin_33873846/article/details/90354698)
+
+[【2023年3月8月更新】CCF _推荐_ 的A/B/C类期刊等级，会议等级](https://blog.csdn.net/lez1021/article/details/142525088)
+
+[lez1021的博客](https://blog.csdn.net/lez1021)
+
+09-25![Image 53](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 319 
+
+[请看大屏幕，自行 _下载_：](https://blog.csdn.net/lez1021/article/details/142525088)
+
+[活动 | 2018中兴通讯&_中国_ _人工智能_ _学会_ 自然语言理解技术峰会](https://blog.csdn.net/O4dC8OjO7ZL6/article/details/84270854)
+
+[中兴开发者社区](https://blog.csdn.net/O4dC8OjO7ZL6)
+
+11-19![Image 54](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 1066 
+
+[一、背景介绍语言是人类智慧的结晶，是人类思维逻辑 _和_ 情感线索的载体。自然语言处理是 _人工智能_ 中最为困难的领域之一，充满魅力与挑战。微软创始人比尔·盖茨曾经表示，“自然语言处理...](https://blog.csdn.net/O4dC8OjO7ZL6/article/details/84270854)
+
+[_中国_ 计算机 _学会_ _(_ CCF _)_ _推荐_ _国际_ _学术会议_ _和_ _期刊目录_-2022版（2024年6月官方更新）](https://devpress.csdn.net/v1/article/detail/145989896)
+
+[半个冯博士](https://blog.csdn.net/cauchy7203)
+
+03-03![Image 55](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png) 3986 
+
+[注：***标黄：表示现在2019年第五版目录中，升级至A/B***红字：表示不在2019年第五版目录中， 直接申请A/B/C***：表示从2019年第五版目录中移除***绿色：表示名称更新。](https://devpress.csdn.net/v1/article/detail/145989896)
+
+[_重磅_！Stable Diffusion 3 最新发布](https://wenku.csdn.net/answer/2fzkn0rfqc)
+
+03-04
+
+[### Stable Diffusion 3 _发布_ 信息 _和_ 特性 #### 架构特点 Stable Diffusion 3采用扩散转换器架构作为其核心竞争力，这种架构使得模型能够更有效地处理复杂的图像生成任务[^1]。 #### 性能提升 相比前代版本，Stable ...](https://wenku.csdn.net/answer/2fzkn0rfqc)
+
+*   [关于我们](https://www.csdn.net/company/index.html#about)
+*   [招贤纳士](https://www.csdn.net/company/index.html#recruit)
+*   [商务合作](https://fsc-p05.txscrm.com/T8PN8SFII7W)
+*   [寻求报道](https://marketing.csdn.net/questions/Q2202181748074189855)
+*   ![Image 56](https://g.csdnimg.cn/common/csdn-footer/images/tel.png)400-660-0108
+*   ![Image 57](https://g.csdnimg.cn/common/csdn-footer/images/email.png)[kefu@csdn.net](mailto:webmaster@csdn.net)
+*   ![Image 58](https://g.csdnimg.cn/common/csdn-footer/images/cs.png)[在线客服](https://csdn.s2.udesk.cn/im_client/?web_plugin_id=29181)
+*    工作时间 8:30-22:00 
+
+*   ![Image 59](https://g.csdnimg.cn/common/csdn-footer/images/badge.png)[公安备案号11010502030143](http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502030143)
+*   [京ICP备19004658号](http://beian.miit.gov.cn/publish/query/indexFirst.action)
+*   [京网文〔2020〕1039-165号](https://csdnimg.cn/release/live_fe/culture_license.png)
+*   [经营性网站备案信息](https://csdnimg.cn/cdn/content-toolbar/csdn-ICP.png)
+*   [北京互联网违法和不良信息举报中心](http://www.bjjubao.org/)
+*   [家长监护](https://download.csdn.net/tutelage/home)
+*   [网络110报警服务](https://cyberpolice.mps.gov.cn/)
+*   [中国互联网举报中心](http://www.12377.cn/)
+*   [Chrome商店下载](https://chrome.google.com/webstore/detail/csdn%E5%BC%80%E5%8F%91%E8%80%85%E5%8A%A9%E6%89%8B/kfkdboecolemdjodhmhmcibjocfopejo?hl=zh-CN)
+*   [账号管理规范](https://blog.csdn.net/blogdevteam/article/details/126135357)
+*   [版权与免责声明](https://www.csdn.net/company/index.html#statement)
+*   [版权申诉](https://blog.csdn.net/blogdevteam/article/details/90369522)
+*   [出版物许可证](https://img-home.csdnimg.cn/images/20250103023206.png)
+*   [营业执照](https://img-home.csdnimg.cn/images/20250103023201.png)
+*   ©1999-2025北京创新乐知网络技术有限公司
+
+[![Image 60](https://profile-avatar.csdnimg.cn/default.jpg!1)](https://blog.csdn.net/audyxiao001)[![Image 61](https://csdnimg.cn/release/blogv2/dist/mobile/img/vipIcon.png)](https://blog.csdn.net/audyxiao001)
+
+[audyxiao001](https://blog.csdn.net/audyxiao001 "audyxiao001")
+
+博客等级 ![Image 62](https://csdnimg.cn/identity/blog6.png)
+
+码龄10年
+
+[315 原创](https://blog.csdn.net/audyxiao001)3912 点赞 4597 收藏 2109 粉丝
+
+[关注](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+[私信](https://im.csdn.net/chat/audyxiao001)
+
+[![Image 63](https://i-operation.csdnimg.cn/images/bfc20af708654cc689adbb6361f6dc98.png)](https://mp.csdn.net/edit?utm_source=blog)
+
+### TA的精选
+
+*   [新 一文了解arXiv 2025年8月计算语言学领域的研究热点](https://blog.csdn.net/audyxiao001/article/details/152120388)
+689 阅读
+
+*   [新 ICCV 2025论文分享｜一种快速生成更逼真3D动画数字人的模型](https://blog.csdn.net/audyxiao001/article/details/152075523)
+524 阅读
+
+*   [热 值得收藏！2024年人工智能顶级会议投稿信息汇总（机器学习领域）](https://blog.csdn.net/audyxiao001/article/details/136542768)
+25190 阅读
+
+*   [热 值得收藏！2024年人工智能顶级会议投稿信息汇总（计算机视觉领域）](https://blog.csdn.net/audyxiao001/article/details/137148697)
+23286 阅读
+
+*   [热 人工智能热点跟踪：CVPR 2024热门研究领域分析](https://blog.csdn.net/audyxiao001/article/details/137647382)
+18075 阅读
+
+[查看更多 ![Image 64](https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowRightWhite.png)](https://blog.csdn.net/audyxiao001?type=blog)
+
+2025
+
+[09月 12篇](https://blog.csdn.net/audyxiao001?type=blog&year=2025&month=09)
+
+[08月 11篇](https://blog.csdn.net/audyxiao001?type=blog&year=2025&month=08)
+
+[07月 13篇](https://blog.csdn.net/audyxiao001?type=blog&year=2025&month=07)
+
+[06月 13篇](https://blog.csdn.net/audyxiao001?type=blog&year=2025&month=06)
+
+[05月 9篇](https://blog.csdn.net/audyxiao001?type=blog&year=2025&month=05)
+
+[04月 23篇](https://blog.csdn.net/audyxiao001?type=blog&year=2025&month=04)
+
+[03月 7篇](https://blog.csdn.net/audyxiao001?type=blog&year=2025&month=03)
+
+[02月 4篇](https://blog.csdn.net/audyxiao001?type=blog&year=2025&month=02)
+
+[01月 7篇](https://blog.csdn.net/audyxiao001?type=blog&year=2025&month=01)
+
+[2024年 148篇](https://blog.csdn.net/audyxiao001?type=blog&year=2024&month=12)
+
+[2023年 72篇](https://blog.csdn.net/audyxiao001?type=blog&year=2023&month=10)
+
+[2022年 1篇](https://blog.csdn.net/audyxiao001?type=blog&year=2022&month=10)
+
+### 大家在看
+
+*   [MobaXterm提升远程运维效率 ![Image 65](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png)588](https://blog.csdn.net/2302_79277377/article/details/152134818)
+*   [1Panel：现代化服务器管理的新选择 ![Image 66](https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png)467](https://blog.csdn.net/2302_79277377/article/details/152135850)
+*   [解决AJAX调用问题：实例与最佳实践](https://blog.csdn.net/m0_62153576/article/details/152144014)
+
+### 分类专栏
+
+*   [![Image 67](https://i-blog.csdnimg.cn/blog_column_migrate/cf931070e35f6925b67e2e696f1045f6.jpeg?x-oss-process=image/resize,m_fixed,h_64,w_64) 人工智能怎么学](https://blog.csdn.net/audyxiao001/category_12261403.html)72篇
+*   [![Image 68](https://i-blog.csdnimg.cn/blog_column_migrate/f208c52440042380c24e812663e5bbf7.png?x-oss-process=image/resize,m_fixed,h_64,w_64) 如何用AI填报高考志愿](https://blog.csdn.net/audyxiao001/category_12696735.html)5篇
+*   [![Image 69](https://i-blog.csdnimg.cn/blog_column_migrate/6c98736a66df019b465752b89433d804.jpeg?x-oss-process=image/resize,m_fixed,h_64,w_64) 中学生学人工智能系列](https://blog.csdn.net/audyxiao001/category_12680092.html)11篇
+*   [![Image 70](https://i-blog.csdnimg.cn/direct/5b791f031c09401f954fec6b7c214987.jpeg?x-oss-process=image/resize,m_fixed,h_64,w_64) 大学新生的学习秘诀](https://blog.csdn.net/audyxiao001/category_12774523.html)
+
+ 上一篇： [一文了解机器学习顶会ICML 2024的研究热点](https://blog.csdn.net/audyxiao001/article/details/141472839) 下一篇： [智能交通最新论文分享┆使用STG-Mamba进行时空图数据预测](https://blog.csdn.net/audyxiao001/article/details/141674720)
+
+ 上一篇： [一文了解机器学习顶会ICML 2024的研究热点](https://blog.csdn.net/audyxiao001/article/details/141472839) 下一篇： [智能交通最新论文分享┆使用STG-Mamba进行时空图数据预测](https://blog.csdn.net/audyxiao001/article/details/141674720)
+
+### 分类专栏
+
+*   [![Image 71](https://i-blog.csdnimg.cn/blog_column_migrate/cf931070e35f6925b67e2e696f1045f6.jpeg?x-oss-process=image/resize,m_fixed,h_64,w_64) 人工智能怎么学](https://blog.csdn.net/audyxiao001/category_12261403.html)72篇
+*   [![Image 72](https://i-blog.csdnimg.cn/blog_column_migrate/f208c52440042380c24e812663e5bbf7.png?x-oss-process=image/resize,m_fixed,h_64,w_64) 如何用AI填报高考志愿](https://blog.csdn.net/audyxiao001/category_12696735.html)5篇
+*   [![Image 73](https://i-blog.csdnimg.cn/blog_column_migrate/6c98736a66df019b465752b89433d804.jpeg?x-oss-process=image/resize,m_fixed,h_64,w_64) 中学生学人工智能系列](https://blog.csdn.net/audyxiao001/category_12680092.html)11篇
+*   [![Image 74](https://i-blog.csdnimg.cn/direct/5b791f031c09401f954fec6b7c214987.jpeg?x-oss-process=image/resize,m_fixed,h_64,w_64) 大学新生的学习秘诀](https://blog.csdn.net/audyxiao001/category_12774523.html)
+
+[展开全部![Image 75](https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-bot-White.png)](https://blog.csdn.net/audyxiao001/article/details/141499909)[收起![Image 76](https://csdnimg.cn/release/blogv2/dist/pc/img/arrowup-line-top-White.png)](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+登录后您可以享受以下权益：
+
+*   ![Image 77](blob:http://localhost/e891c3a7c1a92038da15617ead1c0096)免费复制代码
+*   ![Image 78](blob:http://localhost/3d84693e43989ca72c63590d38052fc8)和博主大V互动
+*   ![Image 79](blob:http://localhost/a746ba3bd4746d1ec8acd6b5071ccf00)下载海量资源
+*   ![Image 80](blob:http://localhost/7cd6e3cbe7e0076d0b9199193b4b832d)发动态/写文章/加入社区
+
+×立即登录
+
+评论![Image 81](https://csdnimg.cn/release/blogv2/dist/pc/img/closeBt.png)
+
+![Image 82](https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowLeftWhite.png)被折叠的 条评论 [为什么被折叠?](https://blogdev.blog.csdn.net/article/details/122245662)[![Image 83](https://csdnimg.cn/release/blogv2/dist/pc/img/iconPark.png)到【灌水乐园】发言](https://bbs.csdn.net/forums/FreeZone)
+
+[查看更多评论![Image 84](https://csdnimg.cn/release/blogv2/dist/pc/img/commentArrowDownWhite.png)](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+ 添加红包 [](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+祝福语 
+
+[](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+请填写红包祝福语或标题
+
+红包数量 
+
+个
+
+红包个数最小为10个
+
+红包总金额 
+
+元
+
+红包金额最低5元
+
+余额支付 
+
+ 当前余额 3.43 元 [前往充值 >](https://i.csdn.net/#/wallet/balance/recharge)
+
+ 需支付：10.00 元 
+
+取消 确定
+
+![Image 85](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+成就一亿技术人!
+
+ 领取后你会自动成为博主和红包主的粉丝 [规则](https://blogdev.blog.csdn.net/article/details/128932621)
+
+[![Image 86](https://profile-avatar.csdnimg.cn/default.jpg!2)](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+hope_wisdom
+
+ 发出的红包 
+
+实付 元
+
+[使用余额支付](javascript:;)
+
+![Image 87](https://csdnimg.cn/release/blogv2/dist/pc/img/pay-time-out.png)点击重新获取
+
+![Image 88](https://csdnimg.cn/release/blogv2/dist/pc/img/weixin.png)![Image 89](https://csdnimg.cn/release/blogv2/dist/pc/img/zhifubao.png)![Image 90](https://csdnimg.cn/release/blogv2/dist/pc/img/jingdong.png)扫码支付
+
+钱包余额 0
+
+![Image 91](https://csdnimg.cn/release/blogv2/dist/pc/img/pay-help.png)
+
+抵扣说明：
+
+1.余额是钱包充值的虚拟货币，按照1:1的比例进行支付金额的抵扣。
+
+ 2.余额无法直接购买下载，可以购买VIP、付费专栏及课程。
+
+[![Image 92](https://csdnimg.cn/release/blogv2/dist/pc/img/recharge.png)余额充值](https://i.csdn.net/#/wallet/balance/recharge)
+
+![Image 93](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+确定 取消![Image 94](https://csdnimg.cn/release/blogv2/dist/pc/img/closeBt.png)
+
+举报
+
+![Image 95](https://csdnimg.cn/release/blogv2/dist/pc/img/closeBlack.png)
+
+选择你想要举报的内容（必选）
+
+*   内容涉黄
+*   政治相关
+*   内容抄袭
+*   涉嫌广告
+*   内容侵权
+*   侮辱谩骂
+*   样式问题
+*   其他
+
+原文链接（必填）
+
+请选择具体原因（必选）
+
+*   包含不实信息
+*   涉及个人隐私
+
+请选择具体原因（必选）
+
+*   侮辱谩骂
+*   诽谤
+
+请选择具体原因（必选）
+
+*   搬家样式
+*   博文样式
+
+补充说明（选填）
+
+取消
+
+确定
+
+![Image 96](https://csdnimg.cn/release/blogv2/dist/pc/img/ai-cknow-White.png) AI助手 
+
+[![Image 97](https://csdnimg.cn/release/blogv2/dist/pc/img/icon-wrap-ai-White.png) AI 搜索](https://ai.csdn.net/?utm_source=cknow_pc_blog_right_hover)[![Image 98](https://csdnimg.cn/release/blogv2/dist/pc/img/icon-wrap-White.png) 智能体](https://ai.csdn.net/cmd?utm_source=cknow_pc_blog_right_hover)[![Image 99](https://csdnimg.cn/release/blogv2/dist/pc/img/message-programming-White.png) AI 编程](https://ai.csdn.net/coding?utm_source=cknow_pc_blog_right_hover)[![Image 100](https://csdnimg.cn/release/blogv2/dist/pc/img/AI-work-White.png) AI 作业助手](https://ai.csdn.net/homework?utm_source=cknow_pc_blog_right_hover)
+
+[![Image 101](https://g.csdnimg.cn/side-toolbar/3.6/images/mobile.png) 下载APP ![Image 102: 程序员都在用的中文IT技术交流社区](https://g.csdnimg.cn/side-toolbar/3.6/images/qr_app.png) 程序员都在用的中文IT技术交流社区 公众号 ![Image 103: 专业的中文 IT 技术社区，与千万技术人共成长](https://g.csdnimg.cn/side-toolbar/3.6/images/qr_wechat.png) 专业的中文 IT 技术社区，与千万技术人共成长 视频号 ![Image 104: 关注【CSDN】视频号，行业资讯、技术分享精彩不断，直播好礼送不停！](https://g.csdnimg.cn/side-toolbar/3.6/images/qr_video.png) 关注【CSDN】视频号，行业资讯、技术分享精彩不断，直播好礼送不停！](https://blog.csdn.net/audyxiao001/article/details/141499909)[![Image 105](https://g.csdnimg.cn/side-toolbar/3.6/images/customer.png)客服](https://blog.csdn.net/audyxiao001/article/details/141499909)[![Image 106](https://g.csdnimg.cn/side-toolbar/3.6/images/totop.png)返回顶部](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+微信公众号![Image 107](https://g.csdnimg.cn/extension-box/2.0.0/image/ic_close.png)
+
+![Image 108](https://img-blog.csdnimg.cn/74fafdf84d604c8cbca273d50c3d1218.jpeg)公众号名称：人工智能怎么学 微信扫码关注或搜索公众号名称
+
+复制公众号名称
+
+[![Image 109](https://csdnimg.cn/release/blogv2/dist/pc/img/quoteClose1White.png)](https://blog.csdn.net/audyxiao001/article/details/141499909)
+
+![Image 110](https://i-blog.csdnimg.cn/blog_migrate/6bed80d21c70f8da15a126ed08208dfd.png)

@@ -23,7 +23,7 @@ export function RankCard({ title, value }: RankCardProps) {
                     {title}
                 </div>
                 <div className={`font-bold ${getFontSize(value)} break-words`}>
-                    {value}
+                    {value.toUpperCase()}
                 </div>
             </CardContent>
         </Card>

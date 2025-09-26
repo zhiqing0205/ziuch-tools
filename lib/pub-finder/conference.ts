@@ -301,26 +301,48 @@ function getChineseTime() {
  * @param {string} timezone - 时区，格式："UTC±n" 或 "AoE"
  * @returns {Date} 转换后的东八区 Date 对象
  */
-export function convertToEast8(dateStr: string, timezone: string): Date {
-    // 如果是 AoE，直接使用原始时间，不进行时区转换
-    if (timezone.toUpperCase() === 'AOE') {
-        return new Date(dateStr);
+export function convertToEast8(dateStr: string | Date, timezone?: string): Date {
+    // 如果输入已经是 Date 对象，直接使用
+    let inputDate: Date;
+    if (dateStr instanceof Date) {
+        inputDate = dateStr;
+    } else {
+        // 尝试解析字符串为日期
+        inputDate = new Date(dateStr);
+        // 检查日期是否有效
+        if (isNaN(inputDate.getTime())) {
+            console.error('Invalid date string:', dateStr);
+            return new Date(); // 返回当前时间作为默认值
+        }
     }
-    
-    // 解析时区偏移量
-    const timezoneOffset = parseInt(timezone.replace('UTC', ''));
-    
-    // 解析输入的时间
-    const inputDate = new Date(dateStr);
-    
-    // 将输入时间转换为UTC时间
-    const utcTime = new Date(inputDate.getTime() - (timezoneOffset * 60 * 60 * 1000));
-    
-    // 转换为东八区时间 (UTC+8)
-    const targetTimezone = 8;
-    const east8Time = new Date(utcTime.getTime() + (targetTimezone * 60 * 60 * 1000));
-    
-    return east8Time;
+
+    // 如果没有提供时区或者是 AoE，直接返回原始时间
+    if (!timezone || timezone.toUpperCase() === 'AOE') {
+        return inputDate;
+    }
+
+    try {
+        // 解析时区偏移量
+        const timezoneOffset = parseInt(timezone.replace('UTC', ''));
+
+        // 如果时区偏移量无效，直接返回原始时间
+        if (isNaN(timezoneOffset)) {
+            console.warn('Invalid timezone format:', timezone);
+            return inputDate;
+        }
+
+        // 将输入时间转换为UTC时间
+        const utcTime = new Date(inputDate.getTime() - (timezoneOffset * 60 * 60 * 1000));
+
+        // 转换为东八区时间 (UTC+8)
+        const targetTimezone = 8;
+        const east8Time = new Date(utcTime.getTime() + (targetTimezone * 60 * 60 * 1000));
+
+        return east8Time;
+    } catch (error) {
+        console.error('Error converting timezone:', error);
+        return inputDate; // 出错时返回原始时间
+    }
 }
 
 /**

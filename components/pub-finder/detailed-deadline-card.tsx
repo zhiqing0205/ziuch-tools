@@ -192,7 +192,15 @@ export function DetailedDeadlineCard({ deadline, acceptanceRate }: DetailedDeadl
                                                     )}
                                                 </div>
                                                 <div>
-                                                    中国时间：{format(new Date(convertToEast8(deadline.deadline, deadline.timezone)), 'yyyy年MM月dd日 HH:mm', { locale: zhCN })}
+                                                    中国时间：{(() => {
+                                                        try {
+                                                            const convertedDate = convertToEast8(deadline.deadline, deadline.timezone);
+                                                            return format(convertedDate, 'yyyy年MM月dd日 HH:mm', { locale: zhCN });
+                                                        } catch (error) {
+                                                            console.error('Date conversion error:', error);
+                                                            return '时间格式错误';
+                                                        }
+                                                    })()}
                                                 </div>
                                             </div>
                                         </div>
