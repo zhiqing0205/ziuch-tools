@@ -67,9 +67,14 @@ export const Timeline = ({ pathD, viewBox, currentRatio, monthAnchors, showPast 
 
   const clampedRatio = Math.max(0, Math.min(1, currentRatio));
 
+  // 统一的指示器样式常量
+  const INDICATOR_OUTER_RADIUS = 10;
+  const INDICATOR_INNER_RADIUS = 3;
+  const INDICATOR_STROKE_WIDTH = 3;
+
   return (
     <g aria-label="学术日历时间线">
-      {/* 背景路径（灰色） */}
+      {/* 背景路径（浅灰色） */}
       <path
         d={pathD}
         fill="none"
@@ -77,26 +82,27 @@ export const Timeline = ({ pathD, viewBox, currentRatio, monthAnchors, showPast 
         strokeWidth={6}
         strokeLinecap="round"
         strokeLinejoin="round"
-        opacity={0.35}
+        opacity={0.3}
         pathLength={1}
       />
 
-      {/* 已过去的路径（仅在开启时显示） */}
+      {/* 已过去的路径（灰色虚线，仅在开启时显示） */}
       {showPast && (
         <path
           d={pathD}
           fill="none"
-          stroke="hsl(var(--primary))"
-          strokeWidth={7}
+          stroke="hsl(var(--muted-foreground))"
+          strokeWidth={5}
           strokeLinecap="round"
           strokeLinejoin="round"
           pathLength={1}
-          strokeDasharray={`${clampedRatio} 1`}
+          strokeDasharray="6 4"
           strokeDashoffset={0}
+          opacity={0.5}
         />
       )}
 
-      {/* 未过去的路径（当不显示已过去样式时显示完整路径） */}
+      {/* 未来的路径（主色实线，从当前到结束） */}
       {!showPast && (
         <path
           d={pathD}
@@ -109,13 +115,18 @@ export const Timeline = ({ pathD, viewBox, currentRatio, monthAnchors, showPast 
         />
       )}
 
-      {/* 当前时间指示器 - 只使用圆点样式 */}
+      {/* 当前时间指示器 - 使用统一样式 */}
       {currentPoint && (
         <g transform={`translate(${currentPoint.x}, ${currentPoint.y})`} aria-label="当前时间位置">
           {/* 外圈 */}
-          <circle r={12} fill="hsl(var(--card))" stroke="hsl(var(--primary))" strokeWidth={4} />
+          <circle
+            r={INDICATOR_OUTER_RADIUS}
+            fill="hsl(var(--card))"
+            stroke="hsl(var(--primary))"
+            strokeWidth={INDICATOR_STROKE_WIDTH}
+          />
           {/* 内圈 */}
-          <circle r={4} fill="hsl(var(--primary))" />
+          <circle r={INDICATOR_INNER_RADIUS} fill="hsl(var(--primary))" />
         </g>
       )}
 
