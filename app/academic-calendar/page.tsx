@@ -29,7 +29,6 @@ const AcademicCalendarPage = () => {
   // 状态管理
   const [conferences, setConferences] = useState<CalendarConference[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>(initialSettings.selectedIds);
-  const [visibleOnlySelected, setVisibleOnlySelected] = useState(initialSettings.visibleOnlySelected);
   const [showPast, setShowPast] = useState(initialSettings.showPast);
   const [cutoffMode, setCutoffMode] = useState<CutoffMode>(initialSettings.cutoffMode);
   const [showAvatarIndicator, setShowAvatarIndicator] = useState(initialSettings.showAvatarIndicator);
@@ -44,13 +43,12 @@ const AcademicCalendarPage = () => {
     () => ({
       version: 1,
       selectedIds,
-      visibleOnlySelected,
       showPast,
       cutoffMode,
       showAvatarIndicator,
       showMonthHighlight,
     }),
-    [selectedIds, visibleOnlySelected, showPast, cutoffMode, showAvatarIndicator, showMonthHighlight]
+    [selectedIds, showPast, cutoffMode, showAvatarIndicator, showMonthHighlight]
   );
 
   // 自动保存设置到 localStorage
@@ -137,33 +135,7 @@ const AcademicCalendarPage = () => {
   // 按月份分组会议
   const monthMap = useMemo(() => groupConferencesByMonth(conferences), [conferences]);
 
-  // 计算可见的会议 - 优化逻辑：默认显示全部，选中用于高亮
-  const visibleConferences = useMemo(() => {
-    const selectedSet = new Set(selectedIds);
-
-    // 默认显示全部会议
-    if (selectedSet.size === 0) {
-      return conferences;
-    }
-
-    // "仅显示已选"开关开启时，只显示选中的会议
-    if (visibleOnlySelected) {
-      return conferences.filter((conf) => selectedSet.has(conf.id));
-    }
-
-    // 否则显示全部会议（选中的会议将被高亮显示）
-    return conferences;
-  }, [conferences, selectedIds, visibleOnlySelected]);
-
-  // 处理会议选择
-  const handleSelectConference = useCallback((id: string) => {
-    setSelectedIds((prev) => {
-      if (prev.includes(id)) return prev;
-      return [...prev, id];
-    });
-  }, []);
-
-  // 处理会议切换
+  // 处理会议选择切换
   const handleToggleSelection = useCallback((id: string) => {
     setSelectedIds((prev) => {
       if (prev.includes(id)) {
@@ -193,10 +165,7 @@ const AcademicCalendarPage = () => {
       <Controls
         conferences={conferences}
         selectedIds={selectedIds}
-        onSelectConference={handleSelectConference}
         onToggleSelection={handleToggleSelection}
-        visibleOnlySelected={visibleOnlySelected}
-        onToggleVisibleOnlySelected={setVisibleOnlySelected}
         showPast={showPast}
         onToggleShowPast={setShowPast}
         cutoffMode={cutoffMode}
@@ -258,7 +227,6 @@ const AcademicCalendarPage = () => {
             <ConferenceMarkers
               monthAnchors={monthAnchors}
               monthMap={monthMap}
-              visibleConferenceIds={new Set(visibleConferences.map((c) => c.id))}
               selectedConferenceIds={new Set(selectedIds)}
               cutoffMode={cutoffMode}
               showPast={showPast}

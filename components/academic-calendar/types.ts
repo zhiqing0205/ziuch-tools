@@ -78,8 +78,6 @@ export interface CalendarSettings {
   version: number;
   /** 选中的会议ID列表 */
   selectedIds: string[];
-  /** 是否只显示已选会议 */
-  visibleOnlySelected: boolean;
   /** 是否显示已过去时间的样式 */
   showPast: boolean;
   /** 时间分界模式 */
@@ -96,7 +94,6 @@ export interface CalendarSettings {
 export const DEFAULT_SETTINGS: CalendarSettings = {
   version: 1,
   selectedIds: [],
-  visibleOnlySelected: false,
   showPast: true,
   cutoffMode: 'ddl',
   showAvatarIndicator: true,
