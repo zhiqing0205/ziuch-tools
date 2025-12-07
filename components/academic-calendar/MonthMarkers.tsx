@@ -26,7 +26,7 @@ export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true 
         const isCurrentMonth = showHighlight && currentMonth === anchor.month;
 
         return (
-          <g key={anchor.month} transform={`translate(${anchor.x}, ${anchor.y})`}>
+          <g key={anchor.month} transform={`translate(${anchor.x}, ${anchor.y})`} pointerEvents="none">
             {/* 外层光晕（仅当前月份） */}
             {isCurrentMonth && (
               <circle
@@ -38,25 +38,44 @@ export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true 
               />
             )}
 
-            {/* 月份圆点 */}
+            {/* 月份圆点 - 添加更宽的背景描边确保清晰可见 */}
             <circle
               r={isCurrentMonth ? 12 : 10}
               fill="hsl(var(--background))"
               stroke={isCurrentMonth ? 'hsl(var(--primary))' : 'hsl(var(--border))'}
-              strokeWidth={isCurrentMonth ? 3 : 2}
+              strokeWidth={isCurrentMonth ? 4 : 3}
               aria-hidden="true"
               className={isCurrentMonth ? 'transition-all duration-300' : ''}
+              style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}
+            />
+
+            {/* 月份文字背景 - 确保文字不被遮挡 */}
+            <rect
+              x={-18}
+              y={18}
+              width={36}
+              height={20}
+              rx={4}
+              fill="hsl(var(--background))"
+              opacity={0.9}
+              aria-hidden="true"
             />
 
             {/* 月份文字 */}
             <text
               x={0}
-              y={28}
+              y={32}
               textAnchor="middle"
               className={`text-xs transition-all duration-300 ${
                 isCurrentMonth ? 'fill-primary font-bold' : 'fill-current font-medium'
               }`}
               aria-label={monthName}
+              style={{
+                paintOrder: 'stroke fill',
+                stroke: 'hsl(var(--background))',
+                strokeWidth: '2px',
+                strokeLinejoin: 'round'
+              }}
             >
               {monthName}
             </text>

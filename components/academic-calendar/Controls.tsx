@@ -101,6 +101,12 @@ export const Controls = ({
 
   return (
     <div className="flex flex-col gap-4 rounded-lg border bg-card p-4 shadow-sm">
+      {/* 使用说明 */}
+      <div className="text-sm text-muted-foreground bg-muted/50 rounded-md p-3">
+        💡 <strong>使用提示：</strong>
+        从下拉菜单选择会议，已选会议将在时间线上高亮显示。开启"仅显示已选"可隐藏未选会议。
+      </div>
+
       {/* 主要控制区域 */}
       <div className="grid gap-4 md:grid-cols-3">
         {/* 会议搜索 */}
@@ -164,9 +170,14 @@ export const Controls = ({
               id="visible-only-selected"
               checked={visibleOnlySelected}
               onCheckedChange={onToggleVisibleOnlySelected}
+              disabled={selectedIds.length === 0}
             />
-            <Label htmlFor="visible-only-selected" className="text-sm cursor-pointer">
+            <Label
+              htmlFor="visible-only-selected"
+              className={`text-sm cursor-pointer ${selectedIds.length === 0 ? 'text-muted-foreground' : ''}`}
+            >
               仅显示已选会议
+              {selectedIds.length === 0 && <span className="ml-1 text-xs">(请先选择会议)</span>}
             </Label>
           </div>
 
@@ -226,25 +237,34 @@ export const Controls = ({
       </div>
 
       {/* 已选会议标签 */}
-      {selectedIds.length > 0 && (
-        <div className="flex flex-wrap gap-2 pt-2 border-t">
-          {selectedIds.map((id) => {
-            const label = getConferenceLabel(id);
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={() => onToggleSelection(id)}
-                className="inline-flex items-center gap-2 rounded-full bg-primary/10 hover:bg-primary/20 px-3 py-1 text-xs font-medium transition-colors"
-                aria-label={`移除 ${label}`}
-              >
-                {label}
-                <span aria-hidden="true" className="text-base font-bold">
-                  ×
-                </span>
-              </button>
-            );
-          })}
+      {selectedIds.length > 0 ? (
+        <div className="flex flex-col gap-2 pt-2 border-t">
+          <div className="text-sm font-medium text-muted-foreground">
+            已选会议 ({selectedIds.length} 个) - 点击标签可移除
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {selectedIds.map((id) => {
+              const label = getConferenceLabel(id);
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => onToggleSelection(id)}
+                  className="inline-flex items-center gap-2 rounded-full bg-primary/10 hover:bg-primary/20 px-3 py-1 text-xs font-medium transition-colors"
+                  aria-label={`移除 ${label}`}
+                >
+                  {label}
+                  <span aria-hidden="true" className="text-base font-bold">
+                    ×
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div className="pt-2 border-t text-sm text-muted-foreground text-center">
+          暂未选择会议，请从上方下拉菜单中选择
         </div>
       )}
     </div>

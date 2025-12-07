@@ -15,6 +15,8 @@ interface ConferenceMarkersProps {
   monthMap: MonthMap;
   /** 可见的会议ID集合 */
   visibleConferenceIds: Set<string>;
+  /** 已选中的会议ID集合（用于高亮） */
+  selectedConferenceIds: Set<string>;
   /** 时间分界模式 */
   cutoffMode: CutoffMode;
   /** 是否显示已过去时间的样式 */
@@ -31,7 +33,8 @@ const renderConferenceMarker = (
   anchor: TimelineAnchor,
   index: number,
   isPast: boolean,
-  showPast: boolean
+  showPast: boolean,
+  selectedConferenceIds: Set<string>
 ) => {
   // 计算偏移量，避免重叠
   const offsetY = (index % 2 === 0 ? -1 : 1) * (36 + Math.floor(index / 2) * 18);
@@ -41,9 +44,14 @@ const renderConferenceMarker = (
   const displayName = conference.abbr || conference.name || conference.id || '会议';
   const truncatedName = displayName.length > 12 ? `${displayName.slice(0, 10)}...` : displayName;
 
-  // 根据是否过去选择颜色
-  const fillColor = isPast && showPast ? 'hsl(var(--muted))' : 'hsl(var(--primary))';
-  const opacity = isPast && showPast ? 0.5 : 1;
+  // 根据是否过去和是否选中选择颜色
+  const isSelected = selectedConferenceIds.has(conference.id);
+  const fillColor = isPast && showPast
+    ? 'hsl(var(--muted))'
+    : isSelected
+      ? 'hsl(var(--primary))'
+      : 'hsl(var(--secondary))';
+  const opacity = isPast && showPast ? 0.5 : isSelected ? 1 : 0.6;
 
   return (
     <g
@@ -78,7 +86,13 @@ const renderConferenceMarker = (
           x={0}
           y={4}
           textAnchor="middle"
-          className="fill-[hsl(var(--primary-foreground))] text-[10px] font-semibold"
+          className={`text-[10px] font-semibold ${
+            isPast && showPast
+              ? 'fill-[hsl(var(--muted-foreground))]'
+              : isSelected
+                ? 'fill-[hsl(var(--primary-foreground))]'
+                : 'fill-[hsl(var(--secondary-foreground))]'
+          }`}
           style={{ userSelect: 'none' }}
         >
           {truncatedName}
@@ -92,6 +106,7 @@ export const ConferenceMarkers = ({
   monthAnchors,
   monthMap,
   visibleConferenceIds,
+  selectedConferenceIds,
   cutoffMode,
   showPast,
   now,
@@ -112,7 +127,7 @@ export const ConferenceMarkers = ({
           if (!visibleConferenceIds.has(conference.id)) return null;
 
           const isPast = isPastConference(conference, cutoffMode, now);
-          return renderConferenceMarker(conference, anchor, index, isPast, showPast);
+          return renderConferenceMarker(conference, anchor, index, isPast, showPast, selectedConferenceIds);
         })}
       </g>
     );

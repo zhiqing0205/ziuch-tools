@@ -37,12 +37,20 @@ export const Legend = () => {
         <span>当前时间前的时间线</span>
       </div>
 
-      {/* 即将到来/进行中的会议 */}
+      {/* 已选中的会议 */}
       <div className="flex items-center gap-2">
         <svg width="48" height="20" viewBox="0 0 48 20" aria-hidden="true">
           <rect x="4" y="4" width="40" height="12" rx="4" fill="hsl(var(--primary))" />
         </svg>
-        <span>即将到来/进行中的会议</span>
+        <span>已选中的会议</span>
+      </div>
+
+      {/* 未选中的会议 */}
+      <div className="flex items-center gap-2">
+        <svg width="48" height="20" viewBox="0 0 48 20" aria-hidden="true">
+          <rect x="4" y="4" width="40" height="12" rx="4" fill="hsl(var(--secondary))" opacity="0.6" />
+        </svg>
+        <span>未选中的会议</span>
       </div>
 
       {/* 已过去的会议 */}

@@ -137,24 +137,22 @@ const AcademicCalendarPage = () => {
   // 按月份分组会议
   const monthMap = useMemo(() => groupConferencesByMonth(conferences), [conferences]);
 
-  // 计算可见的会议
+  // 计算可见的会议 - 优化逻辑：默认显示全部，选中用于高亮
   const visibleConferences = useMemo(() => {
     const selectedSet = new Set(selectedIds);
 
-    // 如果没有选中任何会议
+    // 默认显示全部会议
     if (selectedSet.size === 0) {
-      // "仅显示已选"开启时不显示任何会议，否则显示全部
-      return visibleOnlySelected ? [] : conferences;
-    }
-
-    // 如果有选中的会议
-    if (visibleOnlySelected) {
-      // "仅显示已选"开启时只显示选中的
-      return conferences.filter((conf) => selectedSet.has(conf.id));
-    } else {
-      // "仅显示已选"关闭时显示全部（包括选中和未选中）
       return conferences;
     }
+
+    // "仅显示已选"开关开启时，只显示选中的会议
+    if (visibleOnlySelected) {
+      return conferences.filter((conf) => selectedSet.has(conf.id));
+    }
+
+    // 否则显示全部会议（选中的会议将被高亮显示）
+    return conferences;
   }, [conferences, selectedIds, visibleOnlySelected]);
 
   // 处理会议选择
@@ -256,18 +254,19 @@ const AcademicCalendarPage = () => {
               showAvatarIndicator={showAvatarIndicator}
             />
 
-            {/* 月份标记 */}
-            <MonthMarkers monthAnchors={monthAnchors} currentMonth={currentMonth} showHighlight={showMonthHighlight} />
-
             {/* 会议标记 */}
             <ConferenceMarkers
               monthAnchors={monthAnchors}
               monthMap={monthMap}
               visibleConferenceIds={new Set(visibleConferences.map((c) => c.id))}
+              selectedConferenceIds={new Set(selectedIds)}
               cutoffMode={cutoffMode}
               showPast={showPast}
               now={now}
             />
+
+            {/* 月份标记 - 最后渲染，确保不被遮挡 */}
+            <MonthMarkers monthAnchors={monthAnchors} currentMonth={currentMonth} showHighlight={showMonthHighlight} />
           </svg>
 
           {/* 图例说明 */}
