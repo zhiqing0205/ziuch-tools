@@ -48,19 +48,31 @@ export const useExportImage = () => {
         await document.fonts?.ready;
 
         // 2. 小延迟确保 SVG 和布局完全稳定
-        await new Promise((resolve) => setTimeout(resolve, 150));
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-        // 3. 获取背景色
+        // 3. 获取元素的实际位置和尺寸
+        const rect = element.getBoundingClientRect();
+        const x = Math.floor(rect.left + window.scrollX);
+        const y = Math.floor(rect.top + window.scrollY);
+        const width = Math.ceil(rect.width);
+        const height = Math.ceil(rect.height);
+
+        // 4. 获取背景色
         const backgroundColor =
           options.backgroundColor || getComputedStyle(element).backgroundColor || '#ffffff';
 
-        // 4. 直接截取元素本身（最简单可靠的方式）
-        const canvas = await html2canvas(element, {
+        // 5. 使用 body + rect 裁剪方式截取
+        const canvas = await html2canvas(document.body, {
+          x,
+          y,
+          width,
+          height,
           backgroundColor,
-          scale: Math.min(options.scale ?? window.devicePixelRatio ?? 1, 2), // 限制最大scale为2
+          scale: Math.min(options.scale ?? window.devicePixelRatio ?? 1, 2),
           useCORS: true,
           logging: false,
-          allowTaint: true,
+          scrollX: -window.scrollX,
+          scrollY: -window.scrollY,
         });
 
         // 6. 转换为 blob

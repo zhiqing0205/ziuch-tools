@@ -76,7 +76,7 @@ const AcademicCalendarPage = () => {
   const { pathD, viewBox, monthAnchors } = useSinePath({
     months: 12,
     viewBoxWidth: 960,
-    viewBoxHeight: 560, // 增加高度预留顶部和底部空间
+    viewBoxHeight: 520, // 回退到原始高度
   });
 
   // 图片导出
@@ -198,10 +198,12 @@ const AcademicCalendarPage = () => {
       {/* 时间线视图 */}
       {!loading && !error && (
         <div className="mt-6 flex justify-center">
-          <div ref={containerRef} className="inline-block rounded-lg border bg-card p-4 shadow-sm">
+          <div ref={containerRef} className="inline-block rounded-lg border bg-card p-4 shadow-sm text-center">
             <svg
               className="block mx-auto"
-              style={{ width: '960px', maxWidth: '100%' }}
+              width={960}
+              height={520}
+              style={{ maxWidth: '100%', height: 'auto' }}
               viewBox={viewBox}
               preserveAspectRatio="xMidYMid meet"
               role="img"
