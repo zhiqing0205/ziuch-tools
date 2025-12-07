@@ -57,7 +57,7 @@ export const useExportImage = () => {
         // 4. 直接截取元素本身（最简单可靠的方式）
         const canvas = await html2canvas(element, {
           backgroundColor,
-          scale: options.scale ?? window.devicePixelRatio ?? 1,
+          scale: Math.min(options.scale ?? window.devicePixelRatio ?? 1, 2), // 限制最大scale为2
           useCORS: true,
           logging: false,
           allowTaint: true,

@@ -47,8 +47,8 @@ export interface LayoutConfig {
 }
 
 const DEFAULT_CONFIG: Required<LayoutConfig> = {
-  baseOffset: 38,
-  sideOffset: 50,
+  baseOffset: 42,  // 增加基础偏移，防止顶部溢出
+  sideOffset: 52,
   verticalJitter: 6,
   horizontalJitter: 8,
   cardWidth: 84,
@@ -67,8 +67,8 @@ export const computeMonthLayout = (
   config: LayoutConfig = {}
 ): LayoutSlot[] => {
   const {
-    baseOffset = 38,
-    sideOffset = 50,
+    baseOffset = 42,  // 增加基础偏移
+    sideOffset = 52,
     verticalJitter = 6,
     horizontalJitter = 8,
   } = config;

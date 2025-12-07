@@ -76,7 +76,7 @@ const AcademicCalendarPage = () => {
   const { pathD, viewBox, monthAnchors } = useSinePath({
     months: 12,
     viewBoxWidth: 960,
-    viewBoxHeight: 520,
+    viewBoxHeight: 560, // 增加高度预留顶部和底部空间
   });
 
   // 图片导出
