@@ -17,6 +17,7 @@ import { useSinePath } from '@/components/academic-calendar/hooks/useSinePath';
 import { useCalendarSettings, useInitialSettings } from '@/components/academic-calendar/hooks/useCalendarSettings';
 import { CalendarConference, CutoffMode, CalendarSettings } from '@/components/academic-calendar/types';
 import { groupConferencesByMonth, pickLatestConferences } from '@/components/academic-calendar/utils';
+import { fetchConferenceData } from '@/lib/pub-finder/conference';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
@@ -90,27 +91,16 @@ const AcademicCalendarPage = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch('/api/ccf-data');
-        if (!response.ok) {
-          throw new Error(`无法加载会议数据: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
+        // 使用与pub-finder相同的数据获取方式
+        const data = await fetchConferenceData();
 
         if (!isActive) return;
 
-        // 从API响应中提取会议数据，兼容多种数据结构
-        let rawConferences = [];
-        if (Array.isArray(data?.data?.conferences)) {
-          rawConferences = data.data.conferences;
-        } else if (Array.isArray(data?.conferences)) {
-          rawConferences = data.conferences;
-        } else if (Array.isArray(data)) {
-          rawConferences = data;
-        }
+        // 提取会议数据
+        const rawConferences = data.conferences || [];
 
         if (rawConferences.length === 0) {
-          console.warn('API返回的会议数据为空或格式不符');
+          console.warn('会议数据为空');
         }
 
         const latestConferences = pickLatestConferences(rawConferences);
