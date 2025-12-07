@@ -76,16 +76,26 @@ export const Controls = ({
 
         {/* 开关组 */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <Switch id="show-past" checked={showPast} onCheckedChange={onToggleShowPast} />
-            <Label htmlFor="show-past" className="text-xs cursor-pointer whitespace-nowrap">
+          <div className="flex items-center gap-2">
+            <Switch
+              id="show-past"
+              checked={showPast}
+              onCheckedChange={onToggleShowPast}
+              className="h-6 w-11 data-[state=checked]:bg-primary"
+            />
+            <Label htmlFor="show-past" className="text-sm cursor-pointer whitespace-nowrap">
               区分过去
             </Label>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <Switch id="show-month-highlight" checked={showMonthHighlight} onCheckedChange={onToggleMonthHighlight} />
-            <Label htmlFor="show-month-highlight" className="text-xs cursor-pointer whitespace-nowrap">
+          <div className="flex items-center gap-2">
+            <Switch
+              id="show-month-highlight"
+              checked={showMonthHighlight}
+              onCheckedChange={onToggleMonthHighlight}
+              className="h-6 w-11 data-[state=checked]:bg-primary"
+            />
+            <Label htmlFor="show-month-highlight" className="text-sm cursor-pointer whitespace-nowrap">
               高亮当月
             </Label>
           </div>

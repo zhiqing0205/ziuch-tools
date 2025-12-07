@@ -201,9 +201,10 @@ const AcademicCalendarPage = () => {
 
       {/* 时间线视图 */}
       {!loading && !error && (
-        <div ref={containerRef} className="mt-6 overflow-x-auto rounded-lg border bg-card p-6 shadow-sm">
+        <div ref={containerRef} className="mt-6 rounded-lg border bg-card p-6 shadow-sm">
           <svg
-            className="mx-auto w-full max-w-6xl"
+            className="block mx-auto"
+            style={{ width: 'min(100%, 1200px)' }}
             viewBox={viewBox}
             preserveAspectRatio="xMidYMid meet"
             role="img"
