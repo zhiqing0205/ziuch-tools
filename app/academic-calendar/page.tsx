@@ -200,7 +200,7 @@ const AcademicCalendarPage = () => {
         <div className="mt-6 flex justify-center">
           <div ref={containerRef} className="inline-block rounded-lg border bg-card p-4 shadow-sm">
             <svg
-              className="block"
+              className="block mx-auto"
               style={{ width: '960px', maxWidth: '100%' }}
               viewBox={viewBox}
               preserveAspectRatio="xMidYMid meet"

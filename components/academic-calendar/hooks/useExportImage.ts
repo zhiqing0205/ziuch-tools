@@ -1,6 +1,6 @@
 /**
- * 图片导出 Hook
- * 用于将页面内容导出为PNG图片
+ * 图片导出 Hook - 重构版本
+ * 简化逻辑，确保导出图片完整且居中
  */
 
 'use client';
@@ -24,71 +24,78 @@ export const useExportImage = () => {
 
   /**
    * 将DOM元素导出为PNG图片
-   * @param element - 要导出的DOM元素
+   * 使用 html2canvas 截取 body 并裁剪到元素区域
+   *
+   * @param element - 要导出的DOM元素（应该是 inline-block 容器）
    * @param filename - 文件名（不含扩展名）
    * @param options - 导出选项
    */
   const exportAsImage = useCallback(
     async (element: HTMLElement, filename: string, options: ExportOptions = {}) => {
+      if (!element) {
+        setError('导出元素不存在');
+        return;
+      }
+
       setExporting(true);
       setError(null);
 
       try {
-        // 动态导入 html2canvas 以减少初始加载体积
+        // 动态导入 html2canvas
         const html2canvas = (await import('html2canvas')).default;
 
-        // 等待字体加载完成，确保截图准确
+        // 1. 等待字体加载完成
         await document.fonts?.ready;
 
-        // 额外等待确保 SVG 完全渲染
-        await new Promise((resolve) => setTimeout(resolve, 200));
+        // 2. 小延迟确保 SVG 和布局完全稳定
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-        // 获取元素的实际位置和尺寸
+        // 3. 获取元素的实际位置和尺寸
         const rect = element.getBoundingClientRect();
         const width = Math.ceil(rect.width);
         const height = Math.ceil(rect.height);
+        const x = Math.floor(rect.left + window.scrollX);
+        const y = Math.floor(rect.top + window.scrollY);
 
-        // 获取元素背景色
-        const computedStyle = getComputedStyle(element);
-        const backgroundColor = options.backgroundColor || computedStyle.backgroundColor || '#ffffff';
+        // 4. 获取背景色
+        const backgroundColor =
+          options.backgroundColor || getComputedStyle(element).backgroundColor || '#ffffff';
 
-        // 使用 x/y 参数裁剪，只截取元素区域
+        // 5. 截取整个 body，但裁剪到元素区域
+        // 这样可以避免容器宽度问题，只截取实际内容
         const canvas = await html2canvas(document.body, {
-          x: rect.left + window.scrollX,
-          y: rect.top + window.scrollY,
+          x,
+          y,
           width,
           height,
           backgroundColor,
           scale: options.scale ?? window.devicePixelRatio ?? 1,
           useCORS: true,
           logging: false,
+          scrollX: -window.scrollX,
+          scrollY: -window.scrollY,
         });
 
-        // 转换为 blob 并下载
-        await new Promise<void>((resolve, reject) => {
-          canvas.toBlob((blob) => {
-            try {
-              if (!blob) {
-                reject(new Error('图片生成失败'));
-                return;
-              }
-
-              const url = URL.createObjectURL(blob);
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = `${filename}-${new Date().toISOString().split('T')[0]}.png`;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-
-              // 释放 URL 对象
-              setTimeout(() => URL.revokeObjectURL(url), 100);
-              resolve();
-            } catch (err) {
-              reject(err);
-            }
-          }, 'image/png');
+        // 6. 转换为 blob
+        const blob = await new Promise<Blob | null>((resolve) => {
+          canvas.toBlob(resolve, 'image/png');
         });
+
+        if (!blob) {
+          throw new Error('图片生成失败');
+        }
+
+        // 7. 下载图片
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${filename}-${new Date().toISOString().split('T')[0]}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // 8. 清理
+        setTimeout(() => URL.revokeObjectURL(url), 100);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : '导出失败';
         setError(errorMessage);
