@@ -26,6 +26,9 @@ export function Navbar() {
         if (path === '/pub-finder') {
             return pathname === '/pub-finder' || pathname.startsWith('/pub-finder/');
         }
+        if (path === '/academic-calendar') {
+            return pathname === '/academic-calendar' || pathname.startsWith('/academic-calendar/');
+        }
         return pathname === path;
     };
 
@@ -49,7 +52,7 @@ export function Navbar() {
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <Link href="/latex-ocr" legacyBehavior passHref>
-                                <NavigationMenuLink 
+                                <NavigationMenuLink
                                     className={cn(
                                         navigationMenuTriggerStyle(),
                                         "text-base font-medium",
@@ -57,6 +60,19 @@ export function Navbar() {
                                     )}
                                 >
                                     公式识别
+                                </NavigationMenuLink>
+                            </Link>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <Link href="/academic-calendar" legacyBehavior passHref>
+                                <NavigationMenuLink
+                                    className={cn(
+                                        navigationMenuTriggerStyle(),
+                                        "text-base font-medium",
+                                        isActive('/academic-calendar') ? "text-primary" : "text-muted-foreground"
+                                    )}
+                                >
+                                    学术日历
                                 </NavigationMenuLink>
                             </Link>
                         </NavigationMenuItem>
