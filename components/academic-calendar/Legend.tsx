@@ -13,6 +13,11 @@ const INDICATOR_STROKE_WIDTH = 3;
 // 当前月份高亮使用的红色
 const CURRENT_MONTH_COLOR = 'hsl(0, 84%, 60%)';
 
+// 当前月份图例的缩小尺寸
+const LEGEND_MONTH_OUTER_RADIUS = 7;
+const LEGEND_MONTH_INNER_RADIUS = 2;
+const LEGEND_MONTH_STROKE_WIDTH = 2;
+
 export const Legend = () => {
   return (
     <div
@@ -20,34 +25,18 @@ export const Legend = () => {
       role="region"
       aria-label="图例说明"
     >
-      {/* 当前时间指示 */}
-      <div className="flex items-center gap-2">
-        <svg width="24" height="20" viewBox="0 0 24 20" aria-hidden="true">
-          <circle
-            cx="12"
-            cy="10"
-            r={INDICATOR_OUTER_RADIUS}
-            fill="hsl(var(--card))"
-            stroke="hsl(var(--primary))"
-            strokeWidth={INDICATOR_STROKE_WIDTH}
-          />
-          <circle cx="12" cy="10" r={INDICATOR_INNER_RADIUS} fill="hsl(var(--primary))" />
-        </svg>
-        <span>当前时间</span>
-      </div>
-
       {/* 当前月份高亮 */}
       <div className="flex items-center gap-2">
-        <svg width="24" height="20" viewBox="0 0 24 20" aria-hidden="true">
+        <svg width="18" height="16" viewBox="0 0 18 16" aria-hidden="true">
           <circle
-            cx="12"
-            cy="10"
-            r={INDICATOR_OUTER_RADIUS}
+            cx="9"
+            cy="8"
+            r={LEGEND_MONTH_OUTER_RADIUS}
             fill="hsl(var(--card))"
             stroke={CURRENT_MONTH_COLOR}
-            strokeWidth={INDICATOR_STROKE_WIDTH}
+            strokeWidth={LEGEND_MONTH_STROKE_WIDTH}
           />
-          <circle cx="12" cy="10" r={INDICATOR_INNER_RADIUS} fill={CURRENT_MONTH_COLOR} />
+          <circle cx="9" cy="8" r={LEGEND_MONTH_INNER_RADIUS} fill={CURRENT_MONTH_COLOR} />
         </svg>
         <span>当前月份</span>
       </div>
