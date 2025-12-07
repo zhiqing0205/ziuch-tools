@@ -120,9 +120,9 @@ export const groupConferencesByMonth = (conferences: CalendarConference[]): Mont
 };
 
 /**
- * 从CCF会议数据中提取最新届会议
+ * 从CCF会议数据中提取所有年份的会议（不再只保留最新一届）
  * @param conferences - Conference 类型的会议数组
- * @returns 适用于日历展示的会议列表
+ * @returns 适用于日历展示的会议列表（包含所有有效年份）
  */
 export const pickLatestConferences = (conferences: Conference[]): CalendarConference[] => {
   if (!Array.isArray(conferences)) {
@@ -130,7 +130,7 @@ export const pickLatestConferences = (conferences: Conference[]): CalendarConfer
     return [];
   }
 
-  const result = new Map<string, CalendarConference>();
+  const result: CalendarConference[] = [];
 
   for (const conf of conferences) {
     // 验证基本字段
@@ -138,10 +138,8 @@ export const pickLatestConferences = (conferences: Conference[]): CalendarConfer
       continue;
     }
 
-    // 按年份降序排序实例，优先选择最新年份
-    const instances = [...conf.confs].sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
-
-    for (const instance of instances) {
+    // 遍历所有年份的实例（不再只保留最新一届）
+    for (const instance of conf.confs) {
       if (!Array.isArray(instance.timeline) || instance.timeline.length === 0) {
         continue;
       }
@@ -160,13 +158,13 @@ export const pickLatestConferences = (conferences: Conference[]): CalendarConfer
         continue;
       }
 
-      // 选择最晚的截止日期作为展示
+      // 选择该实例中最晚的截止日期作为展示
       const chosen = validDeadlines.sort((a, b) => b.date!.getTime() - a.date!.getTime())[0];
 
       const calendarConference: CalendarConference = {
-        id: `${instance.id ?? conf.title}-${instance.year ?? 'unknown'}`,
+        id: `${conf.title}-${instance.year ?? 'unknown'}`, // 使用 title-year 作为唯一ID
         name: conf.title,
-        abbr: conf.title, // 数据中没有单独的缩写字段，使用 title
+        abbr: conf.title,
         year: instance.year,
         category: conf.sub || conf.rank?.ccf,
         ddl: chosen.date!.toISOString(),
@@ -175,33 +173,32 @@ export const pickLatestConferences = (conferences: Conference[]): CalendarConfer
         link: instance.link || conf.dblp,
       };
 
-      // 使用 title + sub 作为去重键，避免同名不同领域的会议冲突
-      const dedupeKey = `${conf.title}-${conf.sub ?? ''}`;
-      const existingConference = result.get(dedupeKey);
-
-      if (!existingConference) {
-        result.set(dedupeKey, calendarConference);
-        break; // 只保留最新一届
-      }
-
-      // 若已有记录，保留 ddl 更晚的
-      const existingDate = safeParseDate(existingConference.ddl);
-      const chosenDate = chosen.date!;
-
-      // 如果现有日期无效，或新日期更晚，则替换
-      if (!existingDate || chosenDate.getTime() > existingDate.getTime()) {
-        result.set(dedupeKey, calendarConference);
-      }
-
-      break; // 只保留最新一届
+      result.push(calendarConference);
     }
   }
 
-  // 转换为数组并按月份排序，无效月份放到最后
-  const resultArray = Array.from(result.values());
-  return resultArray.sort((a, b) => {
-    const monthA = a.month ?? 99;
-    const monthB = b.month ?? 99;
-    return monthA - monthB;
+  // 按年份降序排序
+  return result.sort((a, b) => {
+    const yearA = a.year ?? 0;
+    const yearB = b.year ?? 0;
+    return yearB - yearA;
   });
+};
+
+/**
+ * 按会议名称分组
+ * @param conferences - 会议列表
+ * @returns 会议名称到会议列表的映射
+ */
+export const groupConferencesByTitle = (
+  conferences: CalendarConference[]
+): Record<string, CalendarConference[]> => {
+  return conferences.reduce<Record<string, CalendarConference[]>>((acc, conf) => {
+    const title = conf.name;
+    if (!acc[title]) {
+      acc[title] = [];
+    }
+    acc[title].push(conf);
+    return acc;
+  }, {});
 };
