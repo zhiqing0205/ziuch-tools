@@ -22,6 +22,15 @@ export const Legend = () => {
   return (
     <div
       className="mt-6 flex flex-wrap gap-6 text-xs text-muted-foreground"
+      style={{
+        // 内联样式兜底，确保离屏导出时样式一致
+        marginTop: '24px',
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '24px',
+        fontSize: '12px',
+        // 注意：不设置 justifyContent，保持与 Tailwind 默认一致
+      }}
       role="region"
       aria-label="图例说明"
     >
