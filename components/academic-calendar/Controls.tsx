@@ -28,10 +28,6 @@ interface ControlsProps {
   cutoffMode: CutoffMode;
   /** 时间分界模式变更回调 */
   onCutoffModeChange: (mode: CutoffMode) => void;
-  /** 是否显示人物形象指示器 */
-  showAvatarIndicator: boolean;
-  /** 切换人物形象指示器的回调 */
-  onToggleAvatarIndicator: (value: boolean) => void;
   /** 是否高亮当前月份 */
   showMonthHighlight: boolean;
   /** 切换月份高亮的回调 */
@@ -50,8 +46,6 @@ export const Controls = ({
   onToggleShowPast,
   cutoffMode,
   onCutoffModeChange,
-  showAvatarIndicator,
-  onToggleAvatarIndicator,
   showMonthHighlight,
   onToggleMonthHighlight,
   onDownload,
@@ -66,9 +60,9 @@ export const Controls = ({
       </div>
 
       {/* 主要控制区域 */}
-      <div className="grid gap-4 md:grid-cols-[1fr_auto]">
+      <div className="flex flex-wrap gap-3">
         {/* 会议选择 - 使用 Combobox */}
-        <div className="space-y-2">
+        <div className="flex-1 min-w-[200px] max-w-[320px] space-y-2">
           <Label className="text-sm font-medium">选择会议</Label>
           <ConferenceCombobox
             conferences={conferences}
@@ -78,9 +72,9 @@ export const Controls = ({
         </div>
 
         {/* 导出按钮 */}
-        <div className="space-y-2">
+        <div className="w-full sm:w-auto space-y-2">
           <Label className="text-sm font-medium">导出日历</Label>
-          <Button className="w-full md:w-auto md:px-8" onClick={onDownload} disabled={exporting}>
+          <Button className="w-full sm:w-[140px]" onClick={onDownload} disabled={exporting}>
             <Download className="mr-2 h-4 w-4" />
             {exporting ? '导出中...' : '下载图片'}
           </Button>
@@ -121,18 +115,6 @@ export const Controls = ({
         {/* 第二行：当前时间指示 */}
         <div className="flex flex-wrap items-center gap-6">
           <div className="text-sm font-medium text-muted-foreground">当前时间指示:</div>
-
-          {/* 显示人物形象 */}
-          <div className="flex items-center gap-2">
-            <Switch
-              id="show-avatar-indicator"
-              checked={showAvatarIndicator}
-              onCheckedChange={onToggleAvatarIndicator}
-            />
-            <Label htmlFor="show-avatar-indicator" className="text-sm cursor-pointer">
-              显示人物形象
-            </Label>
-          </div>
 
           {/* 高亮当前月份 */}
           <div className="flex items-center gap-2">

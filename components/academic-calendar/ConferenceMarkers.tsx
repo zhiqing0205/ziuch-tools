@@ -1,13 +1,13 @@
 /**
  * 会议标记组件
- * 在时间线上显示选中的会议，使用智能布局算法
+ * 在时间线上显示选中的会议，使用四方向智能布局算法
  */
 
 'use client';
 
 import { CalendarConference, CutoffMode, MonthMap, TimelineAnchor } from './types';
 import { isPastConference } from './utils';
-import { computeMonthLayout, generateCurvePath, LayoutSlot } from './layout';
+import { computeMonthLayout, generateCurvePath, calculateCardAnchor, LayoutSlot } from './layout';
 
 interface ConferenceMarkersProps {
   /** 月份锚点数组 */
@@ -24,6 +24,9 @@ interface ConferenceMarkersProps {
   now: Date;
 }
 
+const CARD_WIDTH = 84;
+const CARD_HEIGHT = 28;
+
 /**
  * 渲染单个会议标记（使用布局槽位）
  */
@@ -33,30 +36,41 @@ const renderConferenceMarker = (
   isPast: boolean,
   showPast: boolean
 ) => {
-  const { conference, dx, dy, isTop } = slot;
+  const { conference, dx, dy } = slot;
 
   // 显示缩写或名称，确保有兜底值
   const displayName = conference.abbr || conference.name || conference.id || '会议';
   const truncatedName = displayName.length > 12 ? `${displayName.slice(0, 10)}...` : displayName;
 
-  // 根据是否过去选择颜色
+  // 根据是否过去选择颜色 - 提高对比度
   const fillColor = isPast && showPast ? 'hsl(var(--muted))' : 'hsl(var(--primary))';
-  const opacity = isPast && showPast ? 0.5 : 1;
-  const strokeColor = isPast && showPast ? 'hsl(var(--muted))' : 'hsl(var(--primary))';
+  const textColor = isPast && showPast ? 'hsl(var(--muted-foreground))' : 'hsl(var(--primary-foreground))';
+  const opacity = isPast && showPast ? 0.75 : 1; // 提高已过去的可见度
+  const strokeColor = isPast && showPast ? 'hsl(var(--muted-foreground))' : 'hsl(var(--primary))';
 
-  // 计算卡片目标位置（连线终点在卡片边缘）
-  const cardPadding = isTop ? -16 : 16; // 卡片边缘到连接点的距离
-  const targetX = anchor.x + dx;
-  const targetY = anchor.y + dy + cardPadding;
+  // 计算卡片连接点（连线终点在卡片边缘）
+  const connectionPoint = calculateCardAnchor(anchor, slot, {
+    cardWidth: CARD_WIDTH,
+    cardHeight: CARD_HEIGHT,
+    gap: 2,
+  });
 
   // 生成平滑的贝塞尔曲线连线
-  const pathD = generateCurvePath({ x: anchor.x, y: anchor.y }, { x: targetX, y: targetY });
+  const pathD = generateCurvePath(
+    { x: anchor.x, y: anchor.y },
+    connectionPoint,
+    slot.direction
+  );
+
+  // 卡片中心位置
+  const cardCenterX = anchor.x + dx;
+  const cardCenterY = anchor.y + dy;
 
   return (
     <g
       key={conference.id}
       aria-label={`${conference.name}${conference.year ? ` ${conference.year}` : ''}`}
-      className="conference-marker"
+      className="conference-marker group"
     >
       {/* 贝塞尔曲线连线 */}
       <path
@@ -64,36 +78,38 @@ const renderConferenceMarker = (
         fill="none"
         stroke={strokeColor}
         strokeWidth={1.5}
-        opacity={opacity * 0.7}
+        strokeDasharray={isPast && showPast ? '4 2' : '0'}
+        opacity={isPast && showPast ? 0.6 : 0.8}
         aria-hidden="true"
         className="transition-all duration-300"
       />
 
       {/* 会议卡片 */}
-      <g transform={`translate(${targetX}, ${anchor.y + dy})`}>
+      <g transform={`translate(${cardCenterX}, ${cardCenterY})`}>
         <rect
-          x={-42}
-          y={-14}
-          width={84}
-          height={28}
+          x={-CARD_WIDTH / 2}
+          y={-CARD_HEIGHT / 2}
+          width={CARD_WIDTH}
+          height={CARD_HEIGHT}
           rx={6}
           fill={fillColor}
           opacity={opacity}
           aria-hidden="true"
-          className="transition-all duration-300 hover:opacity-100 cursor-pointer"
+          className="transition-all duration-300 group-hover:opacity-100 cursor-pointer"
           style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))' }}
         />
         <text
           x={0}
           y={4}
           textAnchor="middle"
-          className="fill-[hsl(var(--primary-foreground))] text-[10px] font-semibold pointer-events-none"
+          className="text-[10px] font-semibold pointer-events-none"
+          fill={textColor}
           style={{ userSelect: 'none' }}
         >
           {truncatedName}
         </text>
 
-        {/* Tooltip 信息（可选，hover时显示） */}
+        {/* Tooltip 信息 */}
         <title>
           {conference.name}
           {conference.year && ` (${conference.year})`}
@@ -127,7 +143,7 @@ export const ConferenceMarkers = ({
 
     if (selectedConferences.length === 0) return null;
 
-    // 使用智能布局算法计算位置
+    // 使用智能布局算法计算位置（四方向分布）
     const layout = computeMonthLayout(selectedConferences);
 
     return (

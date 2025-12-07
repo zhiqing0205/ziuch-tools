@@ -31,7 +31,6 @@ const AcademicCalendarPage = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>(initialSettings.selectedIds);
   const [showPast, setShowPast] = useState(initialSettings.showPast);
   const [cutoffMode, setCutoffMode] = useState<CutoffMode>(initialSettings.cutoffMode);
-  const [showAvatarIndicator, setShowAvatarIndicator] = useState(initialSettings.showAvatarIndicator);
   const [showMonthHighlight, setShowMonthHighlight] = useState(initialSettings.showMonthHighlight);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,10 +44,9 @@ const AcademicCalendarPage = () => {
       selectedIds,
       showPast,
       cutoffMode,
-      showAvatarIndicator,
       showMonthHighlight,
     }),
-    [selectedIds, showPast, cutoffMode, showAvatarIndicator, showMonthHighlight]
+    [selectedIds, showPast, cutoffMode, showMonthHighlight]
   );
 
   // 自动保存设置到 localStorage
@@ -170,8 +168,6 @@ const AcademicCalendarPage = () => {
         onToggleShowPast={setShowPast}
         cutoffMode={cutoffMode}
         onCutoffModeChange={setCutoffMode}
-        showAvatarIndicator={showAvatarIndicator}
-        onToggleAvatarIndicator={setShowAvatarIndicator}
         showMonthHighlight={showMonthHighlight}
         onToggleMonthHighlight={setShowMonthHighlight}
         onDownload={handleDownload}
@@ -220,7 +216,6 @@ const AcademicCalendarPage = () => {
               currentRatio={currentRatio}
               monthAnchors={monthAnchors}
               showPast={showPast}
-              showAvatarIndicator={showAvatarIndicator}
             />
 
             {/* 会议标记 */}

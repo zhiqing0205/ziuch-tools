@@ -82,8 +82,6 @@ export interface CalendarSettings {
   showPast: boolean;
   /** 时间分界模式 */
   cutoffMode: CutoffMode;
-  /** 是否显示人物形象指示器 */
-  showAvatarIndicator: boolean;
   /** 是否高亮当前月份 */
   showMonthHighlight: boolean;
 }
@@ -96,6 +94,5 @@ export const DEFAULT_SETTINGS: CalendarSettings = {
   selectedIds: [],
   showPast: true,
   cutoffMode: 'ddl',
-  showAvatarIndicator: true,
   showMonthHighlight: true,
 };

@@ -19,8 +19,6 @@ interface TimelineProps {
   monthAnchors: TimelineAnchor[];
   /** 是否显示已过去时间的样式 */
   showPast: boolean;
-  /** 是否显示人物形象指示器 */
-  showAvatarIndicator?: boolean;
 }
 
 /**
@@ -53,7 +51,7 @@ const calculateCurrentPoint = (
   };
 };
 
-export const Timeline = ({ pathD, viewBox, currentRatio, monthAnchors, showPast, showAvatarIndicator = true }: TimelineProps) => {
+export const Timeline = ({ pathD, viewBox, currentRatio, monthAnchors, showPast }: TimelineProps) => {
   const currentPoint = useMemo(
     () => calculateCurrentPoint(currentRatio, monthAnchors),
     [currentRatio, monthAnchors]
@@ -111,41 +109,13 @@ export const Timeline = ({ pathD, viewBox, currentRatio, monthAnchors, showPast,
         />
       )}
 
-      {/* 当前时间指示器 */}
+      {/* 当前时间指示器 - 只使用圆点样式 */}
       {currentPoint && (
         <g transform={`translate(${currentPoint.x}, ${currentPoint.y})`} aria-label="当前时间位置">
-          {showAvatarIndicator ? (
-            // 人物形象指示器
-            <>
-              {/* 外圈光晕 */}
-              <circle r={18} fill="hsl(var(--primary))" opacity={0.2} className="animate-pulse" />
-              {/* 背景圆 */}
-              <circle r={14} fill="hsl(var(--card))" stroke="hsl(var(--primary))" strokeWidth={2} />
-              {/* 人物SVG图标 */}
-              <g transform="translate(-8, -8)">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  {/* 头部 */}
-                  <circle cx="12" cy="8" r="4" fill="hsl(var(--primary))" />
-                  {/* 身体 */}
-                  <path
-                    d="M4 20c0-4 3.5-7 8-7s8 3 8 7"
-                    stroke="hsl(var(--primary))"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                </svg>
-              </g>
-            </>
-          ) : (
-            // 原有的圆点指示器
-            <>
-              {/* 外圈 */}
-              <circle r={12} fill="hsl(var(--card))" stroke="hsl(var(--primary))" strokeWidth={4} />
-              {/* 内圈 */}
-              <circle r={4} fill="hsl(var(--primary))" />
-            </>
-          )}
+          {/* 外圈 */}
+          <circle r={12} fill="hsl(var(--card))" stroke="hsl(var(--primary))" strokeWidth={4} />
+          {/* 内圈 */}
+          <circle r={4} fill="hsl(var(--primary))" />
         </g>
       )}
 

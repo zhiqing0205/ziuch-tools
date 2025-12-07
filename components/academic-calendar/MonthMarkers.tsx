@@ -30,15 +30,15 @@ export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true 
             {/* 外层光晕（仅当前月份） */}
             {isCurrentMonth && (
               <circle
-                r={14}
+                r={16}
                 fill="hsl(var(--primary))"
-                opacity={0.15}
+                opacity={0.2}
                 className="animate-pulse"
                 aria-hidden="true"
               />
             )}
 
-            {/* 月份圆点 - 添加更宽的背景描边确保清晰可见 */}
+            {/* 月份圆点 - 使用主题色高亮 */}
             <circle
               r={isCurrentMonth ? 12 : 10}
               fill="hsl(var(--background))"
@@ -46,7 +46,7 @@ export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true 
               strokeWidth={isCurrentMonth ? 4 : 3}
               aria-hidden="true"
               className={isCurrentMonth ? 'transition-all duration-300' : ''}
-              style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}
+              style={{ filter: isCurrentMonth ? 'drop-shadow(0 0 8px hsl(var(--primary) / 0.5))' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}
             />
 
             {/* 月份文字背景 - 确保文字不被遮挡 */}
@@ -66,15 +66,15 @@ export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true 
               x={0}
               y={32}
               textAnchor="middle"
-              className={`text-xs transition-all duration-300 ${
-                isCurrentMonth ? 'fill-primary font-bold' : 'fill-current font-medium'
+              className={`text-xs transition-all duration-300 font-bold ${
+                isCurrentMonth ? 'fill-primary' : 'fill-current'
               }`}
               aria-label={monthName}
               style={{
                 paintOrder: 'stroke fill',
                 stroke: 'hsl(var(--background))',
                 strokeWidth: '2px',
-                strokeLinejoin: 'round'
+                strokeLinejoin: 'round',
               }}
             >
               {monthName}

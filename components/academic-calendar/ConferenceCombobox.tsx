@@ -73,7 +73,7 @@ export const ConferenceCombobox = ({ conferences, selectedIds, onToggle }: Confe
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[min(400px,90vw)] p-0" align="start">
+      <PopoverContent className="w-[min(320px,90vw)] p-0" align="start">
         <Command>
           <CommandInput
             placeholder="搜索会议名称、年份或领域..."
