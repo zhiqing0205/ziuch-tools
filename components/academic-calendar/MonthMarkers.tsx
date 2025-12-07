@@ -27,26 +27,30 @@ export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true 
 
         return (
           <g key={anchor.month} transform={`translate(${anchor.x}, ${anchor.y})`} pointerEvents="none">
-            {/* 外层光晕（仅当前月份） */}
+            {/* 外层光晕（仅当前月份） - 使用accent色 */}
             {isCurrentMonth && (
               <circle
-                r={16}
-                fill="hsl(var(--primary))"
-                opacity={0.2}
+                r={18}
+                fill="hsl(var(--accent))"
+                opacity={0.25}
                 className="animate-pulse"
                 aria-hidden="true"
               />
             )}
 
-            {/* 月份圆点 - 使用主题色高亮 */}
+            {/* 月份圆点 - 使用accent色高亮 */}
             <circle
               r={isCurrentMonth ? 12 : 10}
               fill="hsl(var(--background))"
-              stroke={isCurrentMonth ? 'hsl(var(--primary))' : 'hsl(var(--border))'}
+              stroke={isCurrentMonth ? 'hsl(var(--accent))' : 'hsl(var(--border))'}
               strokeWidth={isCurrentMonth ? 4 : 3}
               aria-hidden="true"
               className={isCurrentMonth ? 'transition-all duration-300' : ''}
-              style={{ filter: isCurrentMonth ? 'drop-shadow(0 0 8px hsl(var(--primary) / 0.5))' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}
+              style={{
+                filter: isCurrentMonth
+                  ? 'drop-shadow(0 0 10px hsl(var(--accent) / 0.6))'
+                  : 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
+              }}
             />
 
             {/* 月份文字背景 - 确保文字不被遮挡 */}
@@ -67,13 +71,13 @@ export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true 
               y={32}
               textAnchor="middle"
               className={`text-xs transition-all duration-300 font-bold ${
-                isCurrentMonth ? 'fill-primary' : 'fill-current'
+                isCurrentMonth ? 'fill-accent' : 'fill-current'
               }`}
               aria-label={monthName}
               style={{
                 paintOrder: 'stroke fill',
                 stroke: 'hsl(var(--background))',
-                strokeWidth: '2px',
+                strokeWidth: '2.5px',
                 strokeLinejoin: 'round',
               }}
             >

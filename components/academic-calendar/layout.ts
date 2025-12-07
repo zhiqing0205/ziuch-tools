@@ -46,6 +46,16 @@ export interface LayoutConfig {
   gap?: number;
 }
 
+const DEFAULT_CONFIG: Required<LayoutConfig> = {
+  baseOffset: 52,
+  sideOffset: 70,
+  verticalJitter: 8,
+  horizontalJitter: 10,
+  cardWidth: 84,
+  cardHeight: 40,
+  gap: 4,
+};
+
 /**
  * 计算单个月份的会议布局（四方向分布）
  * @param conferences - 该月的所有会议

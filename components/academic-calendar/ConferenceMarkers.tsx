@@ -25,7 +25,7 @@ interface ConferenceMarkersProps {
 }
 
 const CARD_WIDTH = 84;
-const CARD_HEIGHT = 28;
+const CARD_HEIGHT = 40; // 增加高度以容纳两行文字
 
 /**
  * 渲染单个会议标记（使用布局槽位）
@@ -42,17 +42,30 @@ const renderConferenceMarker = (
   const displayName = conference.abbr || conference.name || conference.id || '会议';
   const truncatedName = displayName.length > 12 ? `${displayName.slice(0, 10)}...` : displayName;
 
+  // 格式化日期（xx月xx日）
+  let dateText = '';
+  if (conference.ddl) {
+    try {
+      const date = new Date(conference.ddl);
+      if (!isNaN(date.getTime())) {
+        dateText = `${date.getMonth() + 1}月${date.getDate()}日`;
+      }
+    } catch {
+      // 日期解析失败，不显示
+    }
+  }
+
   // 根据是否过去选择颜色 - 提高对比度
   const fillColor = isPast && showPast ? 'hsl(var(--muted))' : 'hsl(var(--primary))';
   const textColor = isPast && showPast ? 'hsl(var(--muted-foreground))' : 'hsl(var(--primary-foreground))';
-  const opacity = isPast && showPast ? 0.75 : 1; // 提高已过去的可见度
+  const opacity = isPast && showPast ? 0.75 : 1;
   const strokeColor = isPast && showPast ? 'hsl(var(--muted-foreground))' : 'hsl(var(--primary))';
 
   // 计算卡片连接点（连线终点在卡片边缘）
   const connectionPoint = calculateCardAnchor(anchor, slot, {
     cardWidth: CARD_WIDTH,
     cardHeight: CARD_HEIGHT,
-    gap: 2,
+    gap: 4,
   });
 
   // 生成平滑的贝塞尔曲线连线
@@ -98,9 +111,11 @@ const renderConferenceMarker = (
           className="transition-all duration-300 group-hover:opacity-100 cursor-pointer"
           style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))' }}
         />
+
+        {/* 第一行：会议名称 */}
         <text
           x={0}
-          y={4}
+          y={-4}
           textAnchor="middle"
           className="text-[10px] font-semibold pointer-events-none"
           fill={textColor}
@@ -108,6 +123,21 @@ const renderConferenceMarker = (
         >
           {truncatedName}
         </text>
+
+        {/* 第二行：日期 */}
+        {dateText && (
+          <text
+            x={0}
+            y={8}
+            textAnchor="middle"
+            className="text-[9px] font-medium pointer-events-none"
+            fill={textColor}
+            opacity={0.85}
+            style={{ userSelect: 'none' }}
+          >
+            {dateText}
+          </text>
+        )}
 
         {/* Tooltip 信息 */}
         <title>
