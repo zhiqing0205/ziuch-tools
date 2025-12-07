@@ -22,6 +22,9 @@ const MONTH_NAMES = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8�
 const INDICATOR_OUTER_RADIUS = 10;
 const INDICATOR_INNER_RADIUS = 3;
 
+// 当前月份高亮使用的红色
+const CURRENT_MONTH_COLOR = 'hsl(0, 84%, 60%)'; // 鲜艳的红色
+
 export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true }: MonthMarkersProps) => {
   return (
     <g aria-label="月份标记">
@@ -31,34 +34,34 @@ export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true 
 
         return (
           <g key={anchor.month} transform={`translate(${anchor.x}, ${anchor.y})`} pointerEvents="none">
-            {/* 外层光晕（仅当前月份） - 使用accent色 */}
+            {/* 外层光晕（仅当前月份） - 使用红色 */}
             {isCurrentMonth && (
               <circle
                 r={14}
-                fill="hsl(var(--accent))"
+                fill={CURRENT_MONTH_COLOR}
                 opacity={0.2}
                 className="animate-pulse"
                 aria-hidden="true"
               />
             )}
 
-            {/* 月份圆点 - 使用accent色高亮 */}
+            {/* 月份圆点 - 使用红色高亮 */}
             <circle
               r={INDICATOR_OUTER_RADIUS}
               fill="hsl(var(--background))"
-              stroke={isCurrentMonth ? 'hsl(var(--accent))' : 'hsl(var(--border))'}
+              stroke={isCurrentMonth ? CURRENT_MONTH_COLOR : 'hsl(var(--border))'}
               strokeWidth={isCurrentMonth ? 3 : 3}
               aria-hidden="true"
               className={isCurrentMonth ? 'transition-all duration-300' : ''}
               style={{
                 filter: isCurrentMonth
-                  ? 'drop-shadow(0 0 8px hsl(var(--accent) / 0.5))'
+                  ? `drop-shadow(0 0 8px ${CURRENT_MONTH_COLOR})`
                   : 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
               }}
             />
 
             {/* 中心点（仅当前月份） - 与当前时间指示器一致 */}
-            {isCurrentMonth && <circle r={INDICATOR_INNER_RADIUS} fill="hsl(var(--accent))" aria-hidden="true" />}
+            {isCurrentMonth && <circle r={INDICATOR_INNER_RADIUS} fill={CURRENT_MONTH_COLOR} aria-hidden="true" />}
 
             {/* 月份文字背景 - 确保文字不被遮挡 */}
             <rect
@@ -77,9 +80,8 @@ export const MonthMarkers = ({ monthAnchors, currentMonth, showHighlight = true 
               x={0}
               y={32}
               textAnchor="middle"
-              className={`text-xs transition-all duration-300 font-bold ${
-                isCurrentMonth ? 'fill-accent' : 'fill-current'
-              }`}
+              className={`text-xs transition-all duration-300 font-bold`}
+              fill={isCurrentMonth ? CURRENT_MONTH_COLOR : 'currentColor'}
               aria-label={monthName}
               style={{
                 paintOrder: 'stroke fill',

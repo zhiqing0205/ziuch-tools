@@ -10,6 +10,9 @@ const INDICATOR_OUTER_RADIUS = 10;
 const INDICATOR_INNER_RADIUS = 3;
 const INDICATOR_STROKE_WIDTH = 3;
 
+// 当前月份高亮使用的红色
+const CURRENT_MONTH_COLOR = 'hsl(0, 84%, 60%)';
+
 export const Legend = () => {
   return (
     <div
@@ -31,6 +34,22 @@ export const Legend = () => {
           <circle cx="12" cy="10" r={INDICATOR_INNER_RADIUS} fill="hsl(var(--primary))" />
         </svg>
         <span>当前时间</span>
+      </div>
+
+      {/* 当前月份高亮 */}
+      <div className="flex items-center gap-2">
+        <svg width="24" height="20" viewBox="0 0 24 20" aria-hidden="true">
+          <circle
+            cx="12"
+            cy="10"
+            r={INDICATOR_OUTER_RADIUS}
+            fill="hsl(var(--card))"
+            stroke={CURRENT_MONTH_COLOR}
+            strokeWidth={INDICATOR_STROKE_WIDTH}
+          />
+          <circle cx="12" cy="10" r={INDICATOR_INNER_RADIUS} fill={CURRENT_MONTH_COLOR} />
+        </svg>
+        <span>当前月份</span>
       </div>
 
       {/* 未来的时间线 */}
