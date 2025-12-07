@@ -54,6 +54,9 @@ export const useExportImage = () => {
         const scrollWidth = element.scrollWidth;
         const scrollHeight = element.scrollHeight;
 
+        // 确保居中显示
+        element.style.display = 'block';
+        element.style.margin = '0 auto';
         element.style.width = `${scrollWidth}px`;
         element.style.height = `${scrollHeight}px`;
         element.style.overflow = 'visible';

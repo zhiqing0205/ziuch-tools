@@ -47,10 +47,10 @@ export interface LayoutConfig {
 }
 
 const DEFAULT_CONFIG: Required<LayoutConfig> = {
-  baseOffset: 52,
-  sideOffset: 70,
-  verticalJitter: 8,
-  horizontalJitter: 10,
+  baseOffset: 38,
+  sideOffset: 50,
+  verticalJitter: 6,
+  horizontalJitter: 8,
   cardWidth: 84,
   cardHeight: 40,
   gap: 4,
@@ -67,10 +67,10 @@ export const computeMonthLayout = (
   config: LayoutConfig = {}
 ): LayoutSlot[] => {
   const {
-    baseOffset = 52,
-    sideOffset = 70,
-    verticalJitter = 8,
-    horizontalJitter = 10,
+    baseOffset = 38,
+    sideOffset = 50,
+    verticalJitter = 6,
+    horizontalJitter = 8,
   } = config;
 
   if (!conferences || conferences.length === 0) {
@@ -111,19 +111,19 @@ export const computeMonthLayout = (
 
     switch (direction) {
       case 'top':
-        dy = -(baseOffset + layer * 24);
+        dy = -(baseOffset + layer * 16);
         dx = jitterSign * horizontalJitter;
         break;
       case 'bottom':
-        dy = baseOffset + layer * 24;
+        dy = baseOffset + layer * 16;
         dx = jitterSign * horizontalJitter;
         break;
       case 'left':
-        dx = -(sideOffset + layer * 30);
+        dx = -(sideOffset + layer * 20);
         dy = jitterSign * verticalJitter;
         break;
       case 'right':
-        dx = sideOffset + layer * 30;
+        dx = sideOffset + layer * 20;
         dy = jitterSign * verticalJitter;
         break;
     }

@@ -73,7 +73,11 @@ const AcademicCalendarPage = () => {
   }, []);
 
   // 生成蛇形路径
-  const { pathD, viewBox, monthAnchors } = useSinePath({ months: 12 });
+  const { pathD, viewBox, monthAnchors } = useSinePath({
+    months: 12,
+    viewBoxWidth: 960,
+    viewBoxHeight: 520,
+  });
 
   // 图片导出
   const { exportAsImage, exporting, error: exportError } = useExportImage();
@@ -150,7 +154,7 @@ const AcademicCalendarPage = () => {
   }, [exportAsImage]);
 
   return (
-    <div className="container max-w-[1600px] mx-auto px-4 lg:px-8 py-8">
+    <div className="container max-w-[1200px] mx-auto px-4 lg:px-6 py-8">
       {/* 页面标题 */}
       <header className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">学术日历</h1>
@@ -201,10 +205,10 @@ const AcademicCalendarPage = () => {
 
       {/* 时间线视图 */}
       {!loading && !error && (
-        <div ref={containerRef} className="mt-6 rounded-lg border bg-card p-6 shadow-sm">
+        <div ref={containerRef} className="mt-6 rounded-lg border bg-card p-4 shadow-sm">
           <svg
             className="block mx-auto"
-            style={{ width: 'min(100%, 1200px)' }}
+            style={{ width: 'min(100%, 960px)' }}
             viewBox={viewBox}
             preserveAspectRatio="xMidYMid meet"
             role="img"
