@@ -155,14 +155,6 @@ const AcademicCalendarPage = () => {
 
   return (
     <div className="container max-w-[1200px] mx-auto px-4 lg:px-6 py-8">
-      {/* 页面标题 */}
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">学术日历</h1>
-        <p className="mt-2 text-muted-foreground">
-          基于 CCF 推荐会议数据的可视化时间线，帮助您规划学术投稿计划
-        </p>
-      </header>
-
       {/* 操作控制面板 */}
       <Controls
         conferences={conferences}
@@ -205,40 +197,42 @@ const AcademicCalendarPage = () => {
 
       {/* 时间线视图 */}
       {!loading && !error && (
-        <div ref={containerRef} className="mt-6 rounded-lg border bg-card p-4 shadow-sm">
-          <svg
-            className="block mx-auto"
-            style={{ width: 'min(100%, 960px)' }}
-            viewBox={viewBox}
-            preserveAspectRatio="xMidYMid meet"
-            role="img"
-            aria-label="学术日历蛇形时间线"
-          >
-            {/* 时间线曲线 */}
-            <Timeline
-              pathD={pathD}
+        <div className="mt-6 flex justify-center">
+          <div ref={containerRef} className="inline-block rounded-lg border bg-card p-4 shadow-sm">
+            <svg
+              className="block"
+              style={{ width: '960px', maxWidth: '100%' }}
               viewBox={viewBox}
-              currentRatio={currentRatio}
-              monthAnchors={monthAnchors}
-              showPast={showPast}
-            />
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              aria-label="学术日历蛇形时间线"
+            >
+              {/* 时间线曲线 */}
+              <Timeline
+                pathD={pathD}
+                viewBox={viewBox}
+                currentRatio={currentRatio}
+                monthAnchors={monthAnchors}
+                showPast={showPast}
+              />
 
-            {/* 会议标记 */}
-            <ConferenceMarkers
-              monthAnchors={monthAnchors}
-              monthMap={monthMap}
-              selectedConferenceIds={new Set(selectedIds)}
-              cutoffMode={cutoffMode}
-              showPast={showPast}
-              now={now}
-            />
+              {/* 会议标记 */}
+              <ConferenceMarkers
+                monthAnchors={monthAnchors}
+                monthMap={monthMap}
+                selectedConferenceIds={new Set(selectedIds)}
+                cutoffMode={cutoffMode}
+                showPast={showPast}
+                now={now}
+              />
 
-            {/* 月份标记 - 最后渲染，确保不被遮挡 */}
-            <MonthMarkers monthAnchors={monthAnchors} currentMonth={currentMonth} showHighlight={showMonthHighlight} />
-          </svg>
+              {/* 月份标记 - 最后渲染，确保不被遮挡 */}
+              <MonthMarkers monthAnchors={monthAnchors} currentMonth={currentMonth} showHighlight={showMonthHighlight} />
+            </svg>
 
-          {/* 图例说明 */}
-          <Legend />
+            {/* 图例说明 */}
+            <Legend />
+          </div>
         </div>
       )}
 
