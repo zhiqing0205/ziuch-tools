@@ -33,6 +33,13 @@ export const useExportImage = () => {
       setExporting(true);
       setError(null);
 
+      // 保存原始样式
+      const originalStyles = {
+        width: element.style.width,
+        height: element.style.height,
+        overflow: element.style.overflow,
+      };
+
       try {
         // 动态导入 html2canvas 以减少初始加载体积
         const html2canvas = (await import('html2canvas')).default;
@@ -40,16 +47,40 @@ export const useExportImage = () => {
         // 等待字体加载完成，确保截图准确
         await document.fonts?.ready;
 
+        // 额外等待确保 SVG 完全渲染
+        await new Promise((resolve) => setTimeout(resolve, 200));
+
+        // 临时调整容器样式以显示完整内容
+        const scrollWidth = element.scrollWidth;
+        const scrollHeight = element.scrollHeight;
+
+        element.style.width = `${scrollWidth}px`;
+        element.style.height = `${scrollHeight}px`;
+        element.style.overflow = 'visible';
+
+        // 等待样式应用
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
         // 获取元素背景色
         const computedStyle = getComputedStyle(element);
         const backgroundColor = options.backgroundColor || computedStyle.backgroundColor || '#ffffff';
 
+        // 计算实际尺寸
+        const rect = element.getBoundingClientRect();
+        const width = Math.max(scrollWidth, rect.width);
+        const height = Math.max(scrollHeight, rect.height);
+
         // 生成 canvas
         const canvas = await html2canvas(element, {
           backgroundColor,
+          width,
+          height,
+          scrollX: -window.scrollX,
+          scrollY: -window.scrollY,
           scale: options.scale ?? window.devicePixelRatio ?? 1,
-          useCORS: true, // 允许跨域图片
-          logging: false, // 禁用日志
+          useCORS: true,
+          logging: false,
+          foreignObjectRendering: false,
         });
 
         // 转换为 blob 并下载
@@ -82,6 +113,11 @@ export const useExportImage = () => {
         setError(errorMessage);
         console.error('图片导出错误:', err);
       } finally {
+        // 恢复原始样式
+        element.style.width = originalStyles.width;
+        element.style.height = originalStyles.height;
+        element.style.overflow = originalStyles.overflow;
+
         setExporting(false);
       }
     },
