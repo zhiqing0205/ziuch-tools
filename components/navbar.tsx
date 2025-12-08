@@ -35,8 +35,12 @@ export function Navbar() {
     return (
         <div className="border-b sticky top-0 bg-background z-50">
             <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                <NavigationMenu>
-                    <NavigationMenuList className="gap-6">
+                <div className="flex items-center gap-8">
+                    <Link href="/" className="text-xl font-bold text-primary">
+                        Ziuch Tools
+                    </Link>
+                    <NavigationMenu>
+                        <NavigationMenuList className="gap-6">
                         <NavigationMenuItem>
                             <Link href="/pub-finder" legacyBehavior passHref>
                                 <NavigationMenuLink 
@@ -91,6 +95,7 @@ export function Navbar() {
                         </NavigationMenuItem>
                     </NavigationMenuList>
                 </NavigationMenu>
+                </div>
 
                 <div className="flex items-center gap-2">
                     <Button
