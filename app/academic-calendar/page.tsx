@@ -76,7 +76,7 @@ const AcademicCalendarPage = () => {
   const { pathD, viewBox, monthAnchors } = useSinePath({
     months: 12,
     viewBoxWidth: 960,
-    viewBoxHeight: 520, // 回退到原始高度
+    viewBoxHeight: 480,
   });
 
   // 图片导出
@@ -202,7 +202,7 @@ const AcademicCalendarPage = () => {
             <svg
               className="block mx-auto"
               width={960}
-              height={520}
+              height={480}
               style={{ maxWidth: '100%', height: 'auto' }}
               viewBox={viewBox}
               preserveAspectRatio="xMidYMid meet"

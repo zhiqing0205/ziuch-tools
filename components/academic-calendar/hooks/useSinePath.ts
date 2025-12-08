@@ -30,7 +30,12 @@ export const useSinePath = ({
     const monthsPerRow = 3; // 每行3个月
     const rows = Math.ceil(validMonths / monthsPerRow);
     const horizontalSpacing = viewBoxWidth / (monthsPerRow + 1); // 水平间距
-    const verticalSpacing = viewBoxHeight / (rows + 1); // 垂直间距
+
+    // 减小上下边距
+    const topMargin = 60;  // 上边距
+    const bottomMargin = 60;  // 下边距
+    const contentHeight = viewBoxHeight - topMargin - bottomMargin;
+    const verticalSpacing = contentHeight / (rows - 1); // 行间距
 
     // 生成月份锚点（蛇形排列）
     for (let i = 0; i < validMonths; i++) {
@@ -41,7 +46,7 @@ export const useSinePath = ({
       const actualCol = row % 2 === 0 ? col : (monthsPerRow - 1 - col);
 
       const x = horizontalSpacing * (actualCol + 1);
-      const y = verticalSpacing * (row + 1);
+      const y = topMargin + verticalSpacing * row;
 
       anchors.push({
         month: i,
