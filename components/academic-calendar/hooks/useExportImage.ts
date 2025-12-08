@@ -197,7 +197,61 @@ function cloneAndFixSize(source: HTMLElement): HTMLElement {
     }
   });
 
+  // 解析 CSS 变量为实际颜色值
+  resolveCssVariables(clone, source);
+
   return clone;
+}
+
+/**
+ * 解析克隆元素中的 CSS 变量为实际颜色值
+ *
+ * 问题：SVG 中使用 hsl(var(--primary)) 等 CSS 变量，
+ * 克隆到离屏容器后这些变量无法解析，导致颜色丢失
+ *
+ * 解决：遍历所有元素，用 getComputedStyle 获取计算后的颜色值替换
+ */
+function resolveCssVariables(clone: HTMLElement, source: HTMLElement): void {
+  // SVG 属性中需要处理的颜色属性
+  const svgColorAttributes = ['fill', 'stroke', 'stop-color'];
+
+  // 获取所有子元素
+  const cloneElements = clone.querySelectorAll('*');
+  const sourceElements = source.querySelectorAll('*');
+
+  cloneElements.forEach((cloneEl, index) => {
+    const sourceEl = sourceElements[index];
+    if (!sourceEl) return;
+
+    // 获取源元素的计算样式（CSS 变量在这里会被解析为实际值）
+    const computedStyle = getComputedStyle(sourceEl);
+
+    // 处理 SVG 属性 (fill="hsl(var(--primary))" 等)
+    svgColorAttributes.forEach((attr) => {
+      const attrValue = cloneEl.getAttribute(attr);
+      if (attrValue && attrValue.includes('var(--')) {
+        // 从计算样式获取解析后的颜色值
+        const computedValue = computedStyle.getPropertyValue(attr);
+        if (computedValue && computedValue !== 'none') {
+          cloneEl.setAttribute(attr, computedValue);
+        }
+      }
+    });
+
+    // 处理 style 属性中的 CSS 变量
+    if (cloneEl instanceof HTMLElement || cloneEl instanceof SVGElement) {
+      const styleProps = ['fill', 'stroke', 'backgroundColor', 'color', 'borderColor'];
+      styleProps.forEach((prop) => {
+        const styleValue = (cloneEl as HTMLElement).style.getPropertyValue(prop);
+        if (styleValue && styleValue.includes('var(--')) {
+          const computedValue = computedStyle.getPropertyValue(prop);
+          if (computedValue) {
+            (cloneEl as HTMLElement).style.setProperty(prop, computedValue);
+          }
+        }
+      });
+    }
+  });
 }
 
 /**
