@@ -19,6 +19,11 @@ export default function AboutPage() {
                         {" - "}
                         基于图像识别的 LaTeX 公式转换工具
                     </li>
+                    <li>
+                        <span className="font-medium text-foreground">学术日历</span>
+                        {" - "}
+                        记录和可视化个人学术事件时间轴
+                    </li>
                 </ul>
                 <p className="text-sm text-muted-foreground pt-4">
                     2024 Ziuch Tools. All rights reserved.
