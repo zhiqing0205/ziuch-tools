@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Download, ExternalLink, ImagePlus, Plus, Send, Settings, Trash2 } from 'lucide-react';
+import { Download, ExternalLink, ImagePlus, Plus, RotateCcw, Send, Settings, Trash2 } from 'lucide-react';
 
 import type {
   SciPlotAspectRatio,
@@ -112,7 +112,8 @@ async function uploadReferenceImage(file: File) {
 }
 
 async function downloadImage(url: string, filename: string) {
-  const resp = await fetch(url);
+  const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`;
+  const resp = await fetch(proxyUrl);
   if (!resp.ok) throw new Error(`下载失败 (${resp.status})`);
   const blob = await resp.blob();
   const objectUrl = URL.createObjectURL(blob);
@@ -155,6 +156,7 @@ export default function SciPlotPage() {
 
   const [loading, setLoading] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteMessage, setDeleteMessage] = useState<{ threadId: string; messageId: string } | null>(null);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previewName, setPreviewName] = useState<string>('image');
@@ -225,6 +227,11 @@ export default function SciPlotPage() {
     clearAttachments();
     setPrompt('');
   };
+
+  const getLanguageSuffix = (lang: SciPlotLanguage) =>
+    lang === 'en'
+      ? '\n\nPlease ensure all labels/legends/annotations in the figure are in English.'
+      : '\n\n请确保图中所有标题/坐标轴/图例/注释文字均为中文。';
 
   const handlePickFiles = () => fileInputRef.current?.click();
 
@@ -328,10 +335,7 @@ export default function SciPlotPage() {
     setPrompt('');
     clearAttachments();
 
-    const languageSuffix =
-      language === 'en'
-        ? '\n\nPlease ensure all labels/legends/annotations in the figure are in English.'
-        : '\n\n请确保图中所有标题/坐标轴/图例/注释文字均为中文。';
+    const languageSuffix = getLanguageSuffix(nextThread.language);
 
     setLoading(true);
     try {
@@ -377,6 +381,107 @@ export default function SciPlotPage() {
     }
   };
 
+  const deleteMessageInfo = useMemo(() => {
+    if (!deleteMessage) return null;
+    const thread = threads.find((t) => t.id === deleteMessage.threadId);
+    if (!thread) return null;
+    const idx = thread.messages.findIndex((m) => m.id === deleteMessage.messageId && m.role === 'user');
+    if (idx < 0) return null;
+    const next = thread.messages[idx + 1];
+    const willDeleteNextImage =
+      next?.role === 'assistant' && Array.isArray(next.imageUrls) && next.imageUrls.length > 0;
+    return { thread, idx, willDeleteNextImage };
+  }, [deleteMessage, threads]);
+
+  const handleConfirmDeleteMessage = () => {
+    if (!deleteMessageInfo) {
+      setDeleteMessage(null);
+      return;
+    }
+
+    const { thread, idx, willDeleteNextImage } = deleteMessageInfo;
+    const removeCount = 1 + (willDeleteNextImage ? 1 : 0);
+    const newMessages = [...thread.messages.slice(0, idx), ...thread.messages.slice(idx + removeCount)];
+
+    if (newMessages.length === 0) {
+      deleteSciPlotThread(thread.id);
+      if (activeThreadId === thread.id) startNewChat();
+    } else {
+      upsertSciPlotThread({ ...thread, messages: newMessages, updatedAt: Date.now() });
+    }
+    refreshThreads();
+    setDeleteMessage(null);
+    toast({ title: '已删除消息' });
+  };
+
+  const handleRetry = async (userMessageId: string) => {
+    if (!ensureSettings()) return;
+    if (!activeThread) return;
+
+    const idx = activeThread.messages.findIndex((m) => m.id === userMessageId && m.role === 'user');
+    if (idx < 0) return;
+
+    const next = activeThread.messages[idx + 1];
+    const isTerminal =
+      idx === activeThread.messages.length - 1 ||
+      (next?.role === 'assistant' && idx + 1 === activeThread.messages.length - 1);
+
+    if (!isTerminal) {
+      toast({ title: '仅支持重试最后一条消息', variant: 'destructive' });
+      return;
+    }
+
+    const prunedMessages = activeThread.messages.slice(0, idx + 1);
+    const threadBase: SciPlotThread = { ...activeThread, messages: prunedMessages, updatedAt: Date.now() };
+    upsertSciPlotThread(threadBase);
+    refreshThreads();
+
+    const languageSuffix = getLanguageSuffix(threadBase.language);
+
+    setLoading(true);
+    try {
+      const res = await generateSciPlot({
+        apiBaseUrl: settings!.apiBaseUrl,
+        apiKey: settings!.apiKey,
+        model: threadBase.model,
+        aspectRatio: threadBase.aspectRatio,
+        language: threadBase.language,
+        messages: threadBase.messages.map((m) => ({
+          role: m.role,
+          text: m.id === userMessageId && m.text ? `${m.text}${languageSuffix}` : m.text,
+          imageUrls: m.imageUrls,
+        })),
+      });
+
+      if (!Array.isArray(res.imageUrls) || res.imageUrls.length === 0) {
+        throw new Error('未获取到图片');
+      }
+
+      const assistantAt = Date.now();
+      const assistantMsg: SciPlotMessage = {
+        id: uuidv4(),
+        role: 'assistant',
+        text: res.assistantText,
+        imageUrls: res.imageUrls,
+        createdAt: assistantAt,
+      };
+
+      const updated: SciPlotThread = {
+        ...threadBase,
+        messages: [...threadBase.messages, assistantMsg],
+        updatedAt: assistantAt,
+      };
+      upsertSciPlotThread(updated);
+      refreshThreads();
+      toast({ title: '已生成并上传到图床' });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '生成失败';
+      toast({ title: '生成失败', description: message, variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleConfirmDelete = () => {
     if (!deleteId) return;
     deleteSciPlotThread(deleteId);
@@ -399,13 +504,12 @@ export default function SciPlotPage() {
     } catch (err) {
       const message = err instanceof Error ? err.message : '下载失败';
       toast({ title: '下载失败', description: message, variant: 'destructive' });
-      window.open(previewUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
   return (
     <div className="w-full px-6 py-6">
-      {loading && <Loading text="正在生成并上传图片..." />}
+      {loading && <Loading text="正在努力生成中" />}
 
       <div className="mx-auto max-w-6xl space-y-4">
         <div className="flex items-start justify-between gap-4">
@@ -433,7 +537,7 @@ export default function SciPlotPage() {
           </Alert>
         )}
 
-        <div className="grid gap-4 md:grid-cols-[320px,1fr]">
+        <div className="grid gap-4 md:grid-cols-[380px,1fr] lg:grid-cols-[420px,1fr]">
           <Card className="md:h-[calc(100vh-240px)]">
             <CardHeader className="space-y-2 pb-3">
               <div className="flex items-center justify-between">
@@ -495,7 +599,11 @@ export default function SciPlotPage() {
                               <div className="truncate text-xs text-muted-foreground">
                                 {thread.model} · {thread.aspectRatio} · {thread.language === 'en' ? 'English' : '中文'}
                               </div>
-                              {lastUser && <div className="truncate text-xs text-muted-foreground">{lastUser}</div>}
+                              {lastUser && (
+                                <div className="text-xs text-muted-foreground overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
+                                  {lastUser}
+                                </div>
+                              )}
                               <div className="text-[11px] text-muted-foreground">{formatTime(thread.updatedAt)}</div>
                             </div>
                             <Button
@@ -601,11 +709,18 @@ export default function SciPlotPage() {
                       </ul>
                     </div>
                   ) : (
-                    activeThread.messages.map((msg) => {
+                    activeThread.messages.map((msg, messageIndex) => {
                       const isUser = msg.role === 'user';
                       const bubbleClass = isUser
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted text-foreground';
+                      const next = activeThread.messages[messageIndex + 1];
+                      const nextHasImages =
+                        next?.role === 'assistant' && Array.isArray(next.imageUrls) && next.imageUrls.length > 0;
+                      const isTerminalTurn =
+                        messageIndex === activeThread.messages.length - 1 ||
+                        (next?.role === 'assistant' && messageIndex + 1 === activeThread.messages.length - 1);
+                      const canRetry = isUser && isTerminalTurn && !nextHasImages;
 
                       return (
                         <div key={msg.id} className={cn('flex', isUser ? 'justify-end' : 'justify-start')}>
@@ -639,6 +754,37 @@ export default function SciPlotPage() {
                             <div className={cn('text-[11px] text-muted-foreground', isUser ? 'text-right' : 'text-left')}>
                               {formatTime(msg.createdAt)}
                             </div>
+
+                            {isUser && (
+                              <div className="flex justify-end gap-2">
+                                {canRetry && (
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={loading}
+                                    onClick={() => handleRetry(msg.id)}
+                                  >
+                                    <RotateCcw className="h-4 w-4" />
+                                    重试
+                                  </Button>
+                                )}
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() =>
+                                    setDeleteMessage({
+                                      threadId: activeThread.id,
+                                      messageId: msg.id,
+                                    })
+                                  }
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  删除
+                                </Button>
+                              </div>
+                            )}
                           </div>
                         </div>
                       );
@@ -799,6 +945,23 @@ export default function SciPlotPage() {
             <AlertDialogFooter>
               <AlertDialogCancel>取消</AlertDialogCancel>
               <AlertDialogAction onClick={handleConfirmDelete}>删除</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={!!deleteMessage} onOpenChange={(open) => !open && setDeleteMessage(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>确认删除这条消息？</AlertDialogTitle>
+              <AlertDialogDescription>
+                {deleteMessageInfo?.willDeleteNextImage
+                  ? '提示：下方本次生成的图片也会一并删除。'
+                  : '删除后将无法恢复（仅影响本地浏览器数据）。'}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>取消</AlertDialogCancel>
+              <AlertDialogAction onClick={handleConfirmDeleteMessage}>删除</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
