@@ -106,8 +106,8 @@ bun install
    PUB_FINDER_API_KEY=your_pub_finder_api_key
 
    # Image Hosting Configuration
-   NEXT_PUBLIC_IMAGE_HOSTING_URL=https://img.ziuch.top/api/index.php
-   NEXT_PUBLIC_IMAGE_HOSTING_KEY=your_image_hosting_token
+   IMAGE_HOSTING_URL=https://img.ziuch.top/api/index.php
+   IMAGE_HOSTING_KEY=your_image_hosting_key
    ```
 
 ### 运行开发服务器

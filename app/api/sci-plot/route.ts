@@ -27,11 +27,11 @@ type OpenAIMessage = {
 };
 
 function getImageHostingConfig() {
-  const url = process.env.NEXT_PUBLIC_IMAGE_HOSTING_URL;
-  const token = process.env.NEXT_PUBLIC_IMAGE_HOSTING_KEY;
+  const url = process.env.IMAGE_HOSTING_URL || process.env.NEXT_PUBLIC_IMAGE_HOSTING_URL;
+  const token = process.env.IMAGE_HOSTING_KEY || process.env.NEXT_PUBLIC_IMAGE_HOSTING_KEY;
   if (!url || !token) {
     throw new Error(
-      'Missing image hosting env: NEXT_PUBLIC_IMAGE_HOSTING_URL / NEXT_PUBLIC_IMAGE_HOSTING_KEY'
+      'Missing image hosting env: IMAGE_HOSTING_URL / IMAGE_HOSTING_KEY'
     );
   }
   return { url, token };
