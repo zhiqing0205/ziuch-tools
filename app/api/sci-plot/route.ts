@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+export const maxDuration = 300;
+
 type StoredMessage = {
   role: 'user' | 'assistant' | 'system';
   text?: string;
@@ -26,6 +28,16 @@ type OpenAIMessage = {
   role: 'system' | 'user' | 'assistant';
   content: string | OpenAIContentPart[];
 };
+
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs: number) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
 
 function getImageHostingConfig() {
   const url = process.env.IMAGE_HOSTING_URL || process.env.NEXT_PUBLIC_IMAGE_HOSTING_URL;
@@ -290,18 +302,22 @@ export async function POST(request: Request) {
     const openaiMessages = await buildOpenAIMessages(messages, aspectRatio, language);
     const upstreamUrl = resolveOpenAIUrl(apiBaseUrl, '/chat/completions');
 
-    const upstreamResp = await fetch(upstreamUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
+    const upstreamResp = await fetchWithTimeout(
+      upstreamUrl,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          messages: openaiMessages,
+          stream: false,
+        }),
       },
-      body: JSON.stringify({
-        model,
-        messages: openaiMessages,
-        stream: false,
-      }),
-    });
+      300_000
+    );
 
     const upstreamJson = await upstreamResp.json().catch(() => null);
     if (!upstreamResp.ok) {
