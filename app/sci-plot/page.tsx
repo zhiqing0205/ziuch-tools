@@ -112,8 +112,12 @@ async function uploadReferenceImage(file: File) {
 }
 
 async function downloadImage(url: string, filename: string) {
-  const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`;
-  const resp = await fetch(proxyUrl);
+  const shouldProxy = !url.startsWith('blob:') && !url.startsWith('data:');
+  const finalUrl = shouldProxy
+    ? `/api/image-proxy?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`
+    : url;
+
+  const resp = await fetch(finalUrl);
   if (!resp.ok) throw new Error(`下载失败 (${resp.status})`);
   const blob = await resp.blob();
   const objectUrl = URL.createObjectURL(blob);
@@ -155,6 +159,7 @@ export default function SciPlotPage() {
   const [isDragging, setIsDragging] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteMessage, setDeleteMessage] = useState<{ threadId: string; messageId: string } | null>(null);
 
@@ -501,16 +506,21 @@ export default function SciPlotPage() {
     if (!previewUrl) return;
     const safeName = previewName.replace(/[\\/:*?"<>|]+/g, '-');
     try {
+      setDownloading(true);
       await downloadImage(previewUrl, safeName);
     } catch (err) {
       const message = err instanceof Error ? err.message : '下载失败';
       toast({ title: '下载失败', description: message, variant: 'destructive' });
+    } finally {
+      setDownloading(false);
     }
   };
 
   return (
     <div className="w-full px-6 py-6">
-      {loading && <Loading text="正在努力生成中" />}
+      {(loading || downloading) && (
+        <Loading text={loading ? '正在努力生成中' : '努力下载图片中'} />
+      )}
 
       <div className="mx-auto max-w-6xl space-y-4">
         <div className="flex items-start justify-between gap-4">
@@ -538,7 +548,7 @@ export default function SciPlotPage() {
           </Alert>
         )}
 
-        <div className="grid gap-4 md:grid-cols-[380px,1fr] lg:grid-cols-[420px,1fr]">
+        <div className="grid gap-4 md:grid-cols-[420px,1fr] lg:grid-cols-[480px,1fr]">
           <Card className="md:h-[calc(100vh-240px)]">
             <CardHeader className="space-y-2 pb-3">
               <div className="flex items-center justify-between">
@@ -571,10 +581,26 @@ export default function SciPlotPage() {
                             if (e.key === 'Enter' || e.key === ' ') setActiveThreadId(thread.id);
                           }}
                           className={cn(
-                            'w-full rounded-lg border p-3 text-left transition-colors hover:bg-accent',
+                            'group relative w-full rounded-lg border p-3 pr-10 text-left transition-colors hover:bg-accent',
                             isActive && 'border-primary bg-accent'
                           )}
                         >
+                          <Button
+                            type="button"
+                            size="icon"
+                            variant="ghost"
+                            className={cn(
+                              'absolute right-2 top-2 h-8 w-8 text-destructive opacity-70 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100'
+                            )}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDeleteId(thread.id);
+                            }}
+                            aria-label="删除对话"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+
                           <div className="flex items-start gap-3">
                             <button
                               type="button"
@@ -596,8 +622,10 @@ export default function SciPlotPage() {
                               )}
                             </button>
                             <div className="min-w-0 flex-1">
-                              <div className="truncate text-sm font-medium">{thread.title || '未命名对话'}</div>
-                              <div className="truncate text-xs text-muted-foreground">
+                              <div className="text-sm font-medium overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
+                                {thread.title || '未命名对话'}
+                              </div>
+                              <div className="text-xs text-muted-foreground break-all">
                                 {thread.model} · {thread.aspectRatio} · {thread.language === 'en' ? 'English' : '中文'}
                               </div>
                               {lastUser && (
@@ -605,21 +633,8 @@ export default function SciPlotPage() {
                                   {lastUser}
                                 </div>
                               )}
-                              <div className="text-[11px] text-muted-foreground">{formatTime(thread.updatedAt)}</div>
+                              <div className="text-[11px] text-muted-foreground break-all">{formatTime(thread.updatedAt)}</div>
                             </div>
-                            <Button
-                              type="button"
-                              size="icon"
-                              variant="ghost"
-                              className="shrink-0"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setDeleteId(thread.id);
-                              }}
-                              aria-label="删除对话"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
                           </div>
                         </div>
                       );
@@ -725,7 +740,40 @@ export default function SciPlotPage() {
 
                       return (
                         <div key={msg.id} className={cn('flex', isUser ? 'justify-end' : 'justify-start')}>
-                          <div className={cn('max-w-[85%] space-y-2')}>
+                          <div className={cn('relative group max-w-[85%] space-y-2')}>
+                            {isUser && (
+                              <div className="absolute right-full top-2 mr-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+                                {canRetry && (
+                                  <Button
+                                    type="button"
+                                    size="icon"
+                                    variant="outline"
+                                    className="h-8 w-8"
+                                    disabled={loading}
+                                    onClick={() => handleRetry(msg.id)}
+                                    aria-label="重试"
+                                  >
+                                    <RotateCcw className="h-4 w-4" />
+                                  </Button>
+                                )}
+                                <Button
+                                  type="button"
+                                  size="icon"
+                                  variant="ghost"
+                                  className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                  onClick={() =>
+                                    setDeleteMessage({
+                                      threadId: activeThread.id,
+                                      messageId: msg.id,
+                                    })
+                                  }
+                                  aria-label="删除消息"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            )}
+
                             {msg.text && (
                               <div className={cn('rounded-lg px-3 py-2 text-sm whitespace-pre-wrap', bubbleClass)}>
                                 {msg.text}
@@ -755,37 +803,6 @@ export default function SciPlotPage() {
                             <div className={cn('text-[11px] text-muted-foreground', isUser ? 'text-right' : 'text-left')}>
                               {formatTime(msg.createdAt)}
                             </div>
-
-                            {isUser && (
-                              <div className="flex justify-end gap-2">
-                                {canRetry && (
-                                  <Button
-                                    type="button"
-                                    size="sm"
-                                    variant="outline"
-                                    disabled={loading}
-                                    onClick={() => handleRetry(msg.id)}
-                                  >
-                                    <RotateCcw className="h-4 w-4" />
-                                    重试
-                                  </Button>
-                                )}
-                                <Button
-                                  type="button"
-                                  size="sm"
-                                  variant="ghost"
-                                  onClick={() =>
-                                    setDeleteMessage({
-                                      threadId: activeThread.id,
-                                      messageId: msg.id,
-                                    })
-                                  }
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                  删除
-                                </Button>
-                              </div>
-                            )}
                           </div>
                         </div>
                       );
