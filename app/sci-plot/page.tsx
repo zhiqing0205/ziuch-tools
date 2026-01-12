@@ -2,7 +2,20 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { ChevronLeft, ChevronRight, Download, ExternalLink, ImagePlus, Loader2, Plus, RotateCcw, Send, Settings, Trash2 } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  ExternalLink,
+  ImagePlus,
+  Loader2,
+  Pencil,
+  Plus,
+  RotateCcw,
+  Send,
+  Settings,
+  Trash2,
+} from 'lucide-react';
 
 import type {
   SciPlotAspectRatio,
@@ -93,14 +106,6 @@ function getThreadLastImageUrl(thread: SciPlotThread): string | null {
   return null;
 }
 
-function getThreadLastUserText(thread: SciPlotThread): string | null {
-  for (let i = thread.messages.length - 1; i >= 0; i -= 1) {
-    const msg = thread.messages[i];
-    if (msg?.role === 'user' && typeof msg.text === 'string' && msg.text.trim()) return msg.text.trim();
-  }
-  return null;
-}
-
 async function uploadReferenceImage(file: File) {
   const formData = new FormData();
   formData.append('image', file);
@@ -166,6 +171,8 @@ export default function SciPlotPage() {
   const [downloading, setDownloading] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteMessage, setDeleteMessage] = useState<{ threadId: string; messageId: string } | null>(null);
+  const [editThreadId, setEditThreadId] = useState<string | null>(null);
+  const [editTitleDraft, setEditTitleDraft] = useState('');
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previewName, setPreviewName] = useState<string>('image');
@@ -523,6 +530,32 @@ export default function SciPlotPage() {
     toast({ title: '已删除' });
   };
 
+  const openEditTitle = (threadId: string) => {
+    const thread = threads.find((t) => t.id === threadId);
+    if (!thread) return;
+    setEditThreadId(threadId);
+    setEditTitleDraft(thread.title || '');
+  };
+
+  const handleSaveTitle = () => {
+    const threadId = editThreadId;
+    if (!threadId) return;
+    const thread = threads.find((t) => t.id === threadId);
+    if (!thread) {
+      setEditThreadId(null);
+      return;
+    }
+    const title = editTitleDraft.trim();
+    if (!title) {
+      toast({ title: '标题不能为空', variant: 'destructive' });
+      return;
+    }
+    upsertSciPlotThread({ ...thread, title, updatedAt: Date.now() });
+    refreshThreads();
+    setEditThreadId(null);
+    toast({ title: '已更新标题' });
+  };
+
   const openPreview = (url: string, name?: string) => {
     setPreviewUrl(url);
     setPreviewName(name || 'image');
@@ -621,7 +654,6 @@ export default function SciPlotPage() {
                   ) : (
                     threads.map((thread) => {
                       const lastImage = getThreadLastImageUrl(thread);
-                      const lastUser = getThreadLastUserText(thread);
                       const isActive = thread.id === activeThreadId;
 
                       return (
@@ -637,7 +669,7 @@ export default function SciPlotPage() {
                             title={thread.title || '未命名对话'}
                             aria-label={thread.title || '未命名对话'}
                           >
-                            <div className="h-10 w-10 overflow-hidden rounded-md border bg-background">
+                            <div className="h-12 w-12 overflow-hidden rounded-md border bg-background">
                               {lastImage ? (
                                 <img
                                   src={lastImage}
@@ -649,19 +681,34 @@ export default function SciPlotPage() {
                                 <div className="h-full w-full bg-muted" />
                               )}
                             </div>
-                            <Button
-                              type="button"
-                              size="icon"
-                              variant="ghost"
-                              className="absolute right-1 top-1 h-7 w-7 text-destructive opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setDeleteId(thread.id);
-                              }}
-                              aria-label="删除对话"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <div className="absolute right-1 top-1 flex flex-col gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                              <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                className="h-7 w-7 hover:bg-primary/10"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openEditTitle(thread.id);
+                                }}
+                                aria-label="编辑标题"
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                className="h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setDeleteId(thread.id);
+                                }}
+                                aria-label="删除对话"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </button>
                         ) : (
                           <div
@@ -677,26 +724,39 @@ export default function SciPlotPage() {
                               isActive && 'border-primary bg-accent'
                             )}
                           >
-                            <Button
-                              type="button"
-                              size="icon"
-                              variant="ghost"
-                              className={cn(
-                                'absolute right-2 top-2 h-8 w-8 text-destructive opacity-70 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100'
-                              )}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setDeleteId(thread.id);
-                              }}
-                              aria-label="删除对话"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <div className="absolute right-2 top-2 flex flex-col gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                              <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 hover:bg-primary/10"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openEditTitle(thread.id);
+                                }}
+                                aria-label="编辑标题"
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setDeleteId(thread.id);
+                                }}
+                                aria-label="删除对话"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
 
                             <div className="flex items-start gap-3">
                               <button
                                 type="button"
-                                className="h-10 w-10 shrink-0 overflow-hidden rounded-md border bg-background"
+                                className="h-12 w-12 shrink-0 overflow-hidden rounded-md border bg-background"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   if (lastImage) openPreview(lastImage, `${thread.title || 'sci-plot'}.png`);
@@ -717,15 +777,6 @@ export default function SciPlotPage() {
                                 <div className="text-sm font-medium overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
                                   {thread.title || '未命名对话'}
                                 </div>
-                                <div className="text-xs text-muted-foreground break-all">
-                                  {thread.model} · {thread.aspectRatio} ·{' '}
-                                  {thread.language === 'en' ? 'English' : '中文'}
-                                </div>
-                                {lastUser && (
-                                  <div className="text-xs text-muted-foreground overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
-                                    {lastUser}
-                                  </div>
-                                )}
                                 <div className="text-[11px] text-muted-foreground break-all">
                                   {formatTime(thread.updatedAt)}
                                 </div>
@@ -1099,6 +1150,32 @@ export default function SciPlotPage() {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        <Dialog open={!!editThreadId} onOpenChange={(open) => !open && setEditThreadId(null)}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>编辑对话标题</DialogTitle>
+              <DialogDescription>标题将用于历史列表展示（仅保存在浏览器本地）。</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-2">
+              <Label htmlFor="sci-plot-edit-title">标题</Label>
+              <Input
+                id="sci-plot-edit-title"
+                value={editTitleDraft}
+                onChange={(e) => setEditTitleDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSaveTitle();
+                }}
+              />
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEditThreadId(null)}>
+                取消
+              </Button>
+              <Button onClick={handleSaveTitle}>保存</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
