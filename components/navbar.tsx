@@ -29,6 +29,9 @@ export function Navbar() {
         if (path === '/academic-calendar') {
             return pathname === '/academic-calendar' || pathname.startsWith('/academic-calendar/');
         }
+        if (path === '/sci-plot') {
+            return pathname === '/sci-plot' || pathname.startsWith('/sci-plot/');
+        }
         return pathname === path;
     };
 
@@ -77,6 +80,19 @@ export function Navbar() {
                                     )}
                                 >
                                     学术日历
+                                </NavigationMenuLink>
+                            </Link>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <Link href="/sci-plot" legacyBehavior passHref>
+                                <NavigationMenuLink
+                                    className={cn(
+                                        navigationMenuTriggerStyle(),
+                                        "text-base font-medium",
+                                        isActive('/sci-plot') ? "text-primary" : "text-muted-foreground"
+                                    )}
+                                >
+                                    科研绘图
                                 </NavigationMenuLink>
                             </Link>
                         </NavigationMenuItem>

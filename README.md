@@ -46,6 +46,12 @@
 - **实时预览**: 显示渲染后的 LaTeX 公式和置信度分数
 - **可编辑结果**: 允许手动修正识别结果
 
+### 🎨 科研绘图 (Scientific Plot)
+- **文生图**: 使用 Gemini 图像模型生成科研风格图像
+- **多轮对话**: 生成结果可作为后续对话的图像上下文
+- **图床直链**: 返回图片自动上传到图床并替换为直链
+- **本地历史**: 对话与历史记录保存在浏览器本地
+
 ## 技术栈
 
 ### 前端
@@ -98,6 +104,10 @@ bun install
    
    # Publication Finder API 配置
    PUB_FINDER_API_KEY=your_pub_finder_api_key
+
+   # Image Hosting Configuration
+   NEXT_PUBLIC_IMAGE_HOSTING_URL=https://img.ziuch.top/api/index.php
+   NEXT_PUBLIC_IMAGE_HOSTING_KEY=your_image_hosting_token
    ```
 
 ### 运行开发服务器
