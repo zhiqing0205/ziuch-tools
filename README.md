@@ -205,6 +205,24 @@ ziuch-tools/
 ### Vercel 部署
 推荐使用 [Vercel 平台](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) 部署，它是 Next.js 的创建者提供的平台。
 
+### Docker 部署
+1. 准备环境变量文件（服务端使用）
+   - 复制 `.env.example` 为 `.env.local`，并填写：
+     - `LATEX_OCR_API_TOKEN`
+     - `PUB_FINDER_API_KEY`
+     - `IMAGE_HOSTING_URL` / `IMAGE_HOSTING_KEY`
+2. 构建镜像
+   ```bash
+   docker build -t ziuch-tools .
+   ```
+3. 启动容器
+   ```bash
+   docker run -d --name ziuch-tools -p 3000:3000 --env-file .env.local ziuch-tools
+   ```
+4. 访问
+   - 打开 `http://localhost:3000`
+   - “科研绘图”中的生图 API（URL/Key）需要在页面内配置，数据仅保存在浏览器本地。
+
 ### 自定义部署
 ```bash
 # 构建项目
