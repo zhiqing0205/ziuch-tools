@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 type StoredMessage = {
   role: 'user' | 'assistant' | 'system';
   text?: string;
-  imageUrl?: string;
+  imageUrls?: string[];
 };
 
 type GenerateRequestBody = {
@@ -14,6 +14,7 @@ type GenerateRequestBody = {
     | 'gemini-3-pro-image-preview-2k'
     | 'gemini-3-pro-image-preview-4k';
   aspectRatio: '1:1' | '4:3' | '3:4' | '16:9' | '9:16';
+  language?: 'zh' | 'en';
   messages: StoredMessage[];
 };
 
@@ -231,13 +232,23 @@ async function uploadToImageHosting(bytes: Buffer, mime: string) {
   return data.url;
 }
 
-async function buildOpenAIMessages(messages: StoredMessage[], aspectRatio: string): Promise<OpenAIMessage[]> {
+async function buildOpenAIMessages(
+  messages: StoredMessage[],
+  aspectRatio: string,
+  language: 'zh' | 'en'
+): Promise<OpenAIMessage[]> {
+  const languageHint =
+    language === 'en'
+      ? 'All text in the figure (title, axis labels, legend, annotations) must be in English.'
+      : '图中所有文字（标题、坐标轴、图例、注释）必须使用中文。';
+
   const openaiMessages: OpenAIMessage[] = [
     {
       role: 'system',
       content:
         `你是一名科研绘图助手。请生成清晰、出版级的科研风格图像，白色背景，干净无水印。` +
-        `优先使用矢量/图表风格，字体清晰。输出宽高比：${aspectRatio}。`,
+        `优先使用矢量/图表风格，字体清晰。输出宽高比：${aspectRatio}。` +
+        `语言要求：${languageHint}`,
     },
   ];
 
@@ -247,10 +258,11 @@ async function buildOpenAIMessages(messages: StoredMessage[], aspectRatio: strin
     if (typeof msg.text === 'string' && msg.text.trim()) {
       parts.push({ type: 'text', text: msg.text.trim() });
     }
-    if (typeof msg.imageUrl === 'string' && msg.imageUrl.trim()) {
-      const dataUrl = msg.imageUrl.trim().startsWith('data:image/')
-        ? msg.imageUrl.trim()
-        : await fetchUrlAsDataUrl(msg.imageUrl.trim());
+    const imageUrls = Array.isArray(msg.imageUrls) ? msg.imageUrls : [];
+    for (const url of imageUrls) {
+      if (typeof url !== 'string' || !url.trim()) continue;
+      const raw = url.trim();
+      const dataUrl = raw.startsWith('data:image/') ? raw : await fetchUrlAsDataUrl(raw);
       parts.push({ type: 'image_url', image_url: { url: dataUrl } });
     }
     if (parts.length === 0) continue;
@@ -268,13 +280,14 @@ export async function POST(request: Request) {
     const apiKey = body.apiKey?.trim();
     const model = body.model;
     const aspectRatio = body.aspectRatio;
+    const language = body.language === 'en' ? 'en' : 'zh';
     const messages = body.messages;
 
     if (!apiBaseUrl || !apiKey || !model || !aspectRatio || !Array.isArray(messages)) {
       return NextResponse.json({ error: '参数不完整' }, { status: 400 });
     }
 
-    const openaiMessages = await buildOpenAIMessages(messages, aspectRatio);
+    const openaiMessages = await buildOpenAIMessages(messages, aspectRatio, language);
     const upstreamUrl = resolveOpenAIUrl(apiBaseUrl, '/chat/completions');
 
     const upstreamResp = await fetch(upstreamUrl, {

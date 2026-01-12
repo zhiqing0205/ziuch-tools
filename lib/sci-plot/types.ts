@@ -5,13 +5,15 @@ export type SciPlotModel =
 
 export type SciPlotAspectRatio = '1:1' | '4:3' | '3:4' | '16:9' | '9:16';
 
+export type SciPlotLanguage = 'zh' | 'en';
+
 export type SciPlotMessageRole = 'user' | 'assistant';
 
 export type SciPlotMessage = {
   id: string;
   role: SciPlotMessageRole;
   text?: string;
-  imageUrl?: string;
+  imageUrls?: string[];
   createdAt: number;
 };
 
@@ -20,6 +22,7 @@ export type SciPlotThread = {
   title: string;
   model: SciPlotModel;
   aspectRatio: SciPlotAspectRatio;
+  language: SciPlotLanguage;
   messages: SciPlotMessage[];
   createdAt: number;
   updatedAt: number;
@@ -30,4 +33,3 @@ export type SciPlotSettings = {
   apiKey: string;
   updatedAt: number;
 };
-

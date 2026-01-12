@@ -5,10 +5,12 @@ export type SciPlotModel =
 
 export type SciPlotAspectRatio = '1:1' | '4:3' | '3:4' | '16:9' | '9:16';
 
+export type SciPlotLanguage = 'zh' | 'en';
+
 export type SciPlotStoredMessage = {
   role: 'user' | 'assistant' | 'system';
   text?: string;
-  imageUrl?: string;
+  imageUrls?: string[];
 };
 
 export type SciPlotGenerateRequest = {
@@ -16,6 +18,7 @@ export type SciPlotGenerateRequest = {
   apiKey: string;
   model: SciPlotModel;
   aspectRatio: SciPlotAspectRatio;
+  language: SciPlotLanguage;
   messages: SciPlotStoredMessage[];
 };
 
