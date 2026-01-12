@@ -681,7 +681,7 @@ export default function SciPlotPage() {
                                 <div className="h-full w-full bg-muted" />
                               )}
                             </div>
-                            <div className="absolute right-1 top-1 flex flex-col gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                            <div className="absolute right-1 top-1 flex flex-col gap-1 opacity-80 transition-opacity group-hover:opacity-100">
                               <Button
                                 type="button"
                                 size="icon"
