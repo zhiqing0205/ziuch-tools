@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Download, ExternalLink, ImagePlus, Plus, RotateCcw, Send, Settings, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, ExternalLink, ImagePlus, Plus, RotateCcw, Send, Settings, Trash2 } from 'lucide-react';
 
 import type {
   SciPlotAspectRatio,
@@ -47,6 +47,8 @@ type Attachment = {
   status: 'uploading' | 'uploaded' | 'error';
   error?: string;
 };
+
+const SIDEBAR_COLLAPSED_KEY = 'sci-plot-sidebar-collapsed';
 
 const MODEL_OPTIONS: Array<{ value: SciPlotModel; label: string }> = [
   { value: 'gemini-3-pro-image-preview', label: 'gemini-3-pro-image-preview' },
@@ -136,6 +138,8 @@ async function downloadImage(url: string, filename: string) {
 export default function SciPlotPage() {
   const { toast } = useToast();
 
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
   const [settings, setSettings] = useState<SciPlotSettings | null>(null);
   const [settingsDraft, setSettingsDraft] = useState<{ apiBaseUrl: string; apiKey: string }>({
     apiBaseUrl: '',
@@ -189,6 +193,13 @@ export default function SciPlotPage() {
 
     // 刷新默认进入“新对话”
     setActiveThreadId(null);
+
+    try {
+      const collapsed = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
+      if (collapsed === '1') setSidebarCollapsed(true);
+    } catch {
+      // ignore
+    }
   }, []);
 
   useEffect(() => {
@@ -231,6 +242,18 @@ export default function SciPlotPage() {
     setActiveThreadId(null);
     clearAttachments();
     setPrompt('');
+  };
+
+  const toggleSidebarCollapsed = () => {
+    setSidebarCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(SIDEBAR_COLLAPSED_KEY, next ? '1' : '0');
+      } catch {
+        // ignore
+      }
+      return next;
+    });
   };
 
   const getLanguageSuffix = (lang: SciPlotLanguage) =>
@@ -548,23 +571,50 @@ export default function SciPlotPage() {
           </Alert>
         )}
 
-        <div className="grid gap-4 md:grid-cols-[420px,1fr] lg:grid-cols-[480px,1fr]">
+        <div
+          className={cn(
+            'grid gap-4',
+            sidebarCollapsed ? 'md:grid-cols-[76px,1fr]' : 'md:grid-cols-[340px,1fr] lg:grid-cols-[380px,1fr]'
+          )}
+        >
           <Card className="md:h-[calc(100vh-240px)]">
-            <CardHeader className="space-y-2 pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base">历史对话</CardTitle>
-                <Button variant="outline" size="sm" onClick={startNewChat}>
-                  <Plus className="h-4 w-4" />
-                  新对话
-                </Button>
+            <CardHeader className={cn('space-y-2 pb-3', sidebarCollapsed && 'px-3')}>
+              <div className="flex items-center justify-between gap-2">
+                {!sidebarCollapsed && <CardTitle className="text-base">历史对话</CardTitle>}
+                <div className={cn('flex items-center gap-2', sidebarCollapsed && 'w-full justify-between')}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={toggleSidebarCollapsed}
+                    aria-label={sidebarCollapsed ? '展开侧栏' : '收起侧栏'}
+                  >
+                    {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                  </Button>
+
+                  {sidebarCollapsed ? (
+                    <Button type="button" variant="outline" size="icon" onClick={startNewChat} aria-label="新对话">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  ) : (
+                    <Button variant="outline" size="sm" onClick={startNewChat}>
+                      <Plus className="h-4 w-4" />
+                      新对话
+                    </Button>
+                  )}
+                </div>
               </div>
-              <div className="text-xs text-muted-foreground">点击条目继续对话（刷新默认新对话）。</div>
+              {!sidebarCollapsed && (
+                <div className="text-xs text-muted-foreground">点击条目继续对话（刷新默认新对话）。</div>
+              )}
             </CardHeader>
             <CardContent className="pt-0">
               <ScrollArea className="h-[calc(100vh-320px)] md:h-[calc(100vh-330px)]">
                 <div className="space-y-2 pr-3">
                   {threads.length === 0 ? (
-                    <div className="py-10 text-center text-sm text-muted-foreground">暂无历史记录</div>
+                    <div className="py-10 text-center text-sm text-muted-foreground">
+                      {sidebarCollapsed ? '—' : '暂无历史记录'}
+                    </div>
                   ) : (
                     threads.map((thread) => {
                       const lastImage = getThreadLastImageUrl(thread);
@@ -572,44 +622,19 @@ export default function SciPlotPage() {
                       const isActive = thread.id === activeThreadId;
 
                       return (
-                        <div
-                          key={thread.id}
-                          onClick={() => setActiveThreadId(thread.id)}
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') setActiveThreadId(thread.id);
-                          }}
-                          className={cn(
-                            'group relative w-full rounded-lg border p-3 pr-10 text-left transition-colors hover:bg-accent',
-                            isActive && 'border-primary bg-accent'
-                          )}
-                        >
-                          <Button
+                        sidebarCollapsed ? (
+                          <button
+                            key={thread.id}
                             type="button"
-                            size="icon"
-                            variant="ghost"
                             className={cn(
-                              'absolute right-2 top-2 h-8 w-8 text-destructive opacity-70 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100'
+                              'group relative flex w-full items-center justify-center rounded-lg border p-2 hover:bg-accent',
+                              isActive && 'border-primary bg-accent'
                             )}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setDeleteId(thread.id);
-                            }}
-                            aria-label="删除对话"
+                            onClick={() => setActiveThreadId(thread.id)}
+                            title={thread.title || '未命名对话'}
+                            aria-label={thread.title || '未命名对话'}
                           >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-
-                          <div className="flex items-start gap-3">
-                            <button
-                              type="button"
-                              className="h-10 w-10 shrink-0 overflow-hidden rounded-md border bg-background"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (lastImage) openPreview(lastImage, `${thread.title || 'sci-plot'}.png`);
-                              }}
-                            >
+                            <div className="h-10 w-10 overflow-hidden rounded-md border bg-background">
                               {lastImage ? (
                                 <img
                                   src={lastImage}
@@ -620,23 +645,91 @@ export default function SciPlotPage() {
                               ) : (
                                 <div className="h-full w-full bg-muted" />
                               )}
-                            </button>
-                            <div className="min-w-0 flex-1">
-                              <div className="text-sm font-medium overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
-                                {thread.title || '未命名对话'}
-                              </div>
-                              <div className="text-xs text-muted-foreground break-all">
-                                {thread.model} · {thread.aspectRatio} · {thread.language === 'en' ? 'English' : '中文'}
-                              </div>
-                              {lastUser && (
-                                <div className="text-xs text-muted-foreground overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
-                                  {lastUser}
-                                </div>
+                            </div>
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              className="absolute right-1 top-1 h-7 w-7 text-destructive opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDeleteId(thread.id);
+                              }}
+                              aria-label="删除对话"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </button>
+                        ) : (
+                          <div
+                            key={thread.id}
+                            onClick={() => setActiveThreadId(thread.id)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') setActiveThreadId(thread.id);
+                            }}
+                            className={cn(
+                              'group relative w-full rounded-lg border p-3 pr-10 text-left transition-colors hover:bg-accent',
+                              isActive && 'border-primary bg-accent'
+                            )}
+                          >
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              className={cn(
+                                'absolute right-2 top-2 h-8 w-8 text-destructive opacity-70 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100'
                               )}
-                              <div className="text-[11px] text-muted-foreground break-all">{formatTime(thread.updatedAt)}</div>
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDeleteId(thread.id);
+                              }}
+                              aria-label="删除对话"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+
+                            <div className="flex items-start gap-3">
+                              <button
+                                type="button"
+                                className="h-10 w-10 shrink-0 overflow-hidden rounded-md border bg-background"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (lastImage) openPreview(lastImage, `${thread.title || 'sci-plot'}.png`);
+                                }}
+                              >
+                                {lastImage ? (
+                                  <img
+                                    src={lastImage}
+                                    alt={thread.title}
+                                    className="h-full w-full object-cover"
+                                    loading="lazy"
+                                  />
+                                ) : (
+                                  <div className="h-full w-full bg-muted" />
+                                )}
+                              </button>
+                              <div className="min-w-0 flex-1">
+                                <div className="text-sm font-medium overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
+                                  {thread.title || '未命名对话'}
+                                </div>
+                                <div className="text-xs text-muted-foreground break-all">
+                                  {thread.model} · {thread.aspectRatio} ·{' '}
+                                  {thread.language === 'en' ? 'English' : '中文'}
+                                </div>
+                                {lastUser && (
+                                  <div className="text-xs text-muted-foreground overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
+                                    {lastUser}
+                                  </div>
+                                )}
+                                <div className="text-[11px] text-muted-foreground break-all">
+                                  {formatTime(thread.updatedAt)}
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )
                       );
                     })
                   )}
