@@ -388,9 +388,10 @@ export default function SciPlotPage() {
     const idx = thread.messages.findIndex((m) => m.id === deleteMessage.messageId && m.role === 'user');
     if (idx < 0) return null;
     const next = thread.messages[idx + 1];
+    const willDeleteNextAssistant = next?.role === 'assistant';
     const willDeleteNextImage =
-      next?.role === 'assistant' && Array.isArray(next.imageUrls) && next.imageUrls.length > 0;
-    return { thread, idx, willDeleteNextImage };
+      willDeleteNextAssistant && Array.isArray(next.imageUrls) && next.imageUrls.length > 0;
+    return { thread, idx, willDeleteNextAssistant, willDeleteNextImage };
   }, [deleteMessage, threads]);
 
   const handleConfirmDeleteMessage = () => {
@@ -399,8 +400,8 @@ export default function SciPlotPage() {
       return;
     }
 
-    const { thread, idx, willDeleteNextImage } = deleteMessageInfo;
-    const removeCount = 1 + (willDeleteNextImage ? 1 : 0);
+    const { thread, idx, willDeleteNextAssistant } = deleteMessageInfo;
+    const removeCount = 1 + (willDeleteNextAssistant ? 1 : 0);
     const newMessages = [...thread.messages.slice(0, idx), ...thread.messages.slice(idx + removeCount)];
 
     if (newMessages.length === 0) {
@@ -956,7 +957,9 @@ export default function SciPlotPage() {
               <AlertDialogDescription>
                 {deleteMessageInfo?.willDeleteNextImage
                   ? '提示：下方本次生成的图片也会一并删除。'
-                  : '删除后将无法恢复（仅影响本地浏览器数据）。'}
+                  : deleteMessageInfo?.willDeleteNextAssistant
+                    ? '提示：下方的回复也会一并删除。'
+                    : '删除后将无法恢复（仅影响本地浏览器数据）。'}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
