@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { ChevronLeft, ChevronRight, Download, ExternalLink, ImagePlus, Plus, RotateCcw, Send, Settings, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, ExternalLink, ImagePlus, Loader2, Plus, RotateCcw, Send, Settings, Trash2 } from 'lucide-react';
 
 import type {
   SciPlotAspectRatio,
@@ -318,9 +318,12 @@ export default function SciPlotPage() {
       return;
     }
 
-    const blocking = attachments.find((a) => a.status !== 'uploaded');
-    if (blocking) {
-      toast({ title: '参考图还未就绪', description: '请等待上传完成或移除失败的图片。', variant: 'destructive' });
+    if (attachments.some((a) => a.status === 'uploading')) {
+      toast({ title: '参考图上传中', description: '请等待上传完成后再发送。', variant: 'destructive' });
+      return;
+    }
+    if (attachments.some((a) => a.status === 'error')) {
+      toast({ title: '参考图上传失败', description: '请移除失败的图片后再发送。', variant: 'destructive' });
       return;
     }
 
@@ -919,22 +922,40 @@ export default function SciPlotPage() {
               {attachments.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {attachments.map((a) => (
-                    <div key={a.id} className="flex items-center gap-2 rounded-md border bg-background px-2 py-1">
+                    <div
+                      key={a.id}
+                      className={cn(
+                        'flex items-center gap-2 rounded-md border bg-background px-2 py-1',
+                        a.status === 'uploaded' && 'border-emerald-500/60',
+                        a.status === 'error' && 'border-destructive/60'
+                      )}
+                    >
                       <button
                         type="button"
-                        className="h-10 w-10 overflow-hidden rounded border"
+                        className={cn(
+                          'relative h-10 w-10 overflow-hidden rounded border',
+                          a.status === 'uploaded' && 'border-emerald-500/60',
+                          a.status === 'error' && 'border-destructive/60'
+                        )}
                         onClick={() => openPreview(a.remoteUrl || a.localUrl, a.name)}
                       >
                         <img src={a.localUrl} alt={a.name} className="h-full w-full object-cover" />
+                        {a.status === 'uploading' && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-background/70">
+                            <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                          </div>
+                        )}
                       </button>
                       <div className="min-w-0">
                         <div className="max-w-[220px] truncate text-xs font-medium">{a.name}</div>
-                        <div className="text-[11px] text-muted-foreground">
-                          {a.status === 'uploading'
-                            ? '上传中...'
-                            : a.status === 'uploaded'
-                              ? '已上传'
-                              : `失败：${a.error || ''}`}
+                        <div
+                          className={cn(
+                            'text-[11px]',
+                            a.status === 'uploaded' ? 'text-emerald-600' : 'text-muted-foreground',
+                            a.status === 'error' && 'text-destructive'
+                          )}
+                        >
+                          {a.status === 'uploading' ? '上传中...' : a.status === 'uploaded' ? '已上传' : `失败：${a.error || ''}`}
                         </div>
                       </div>
                       <Button
