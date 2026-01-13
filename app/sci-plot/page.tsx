@@ -113,6 +113,15 @@ function formatRelativeTime(ts: number) {
   return `${diffYear}年前`;
 }
 
+function safeUrlForLog(value: string) {
+  try {
+    const u = new URL(value);
+    return `${u.protocol}//${u.host}${u.pathname}`;
+  } catch {
+    return value;
+  }
+}
+
 function getThreadLastImageUrl(thread: SciPlotThread): string | null {
   for (let i = thread.messages.length - 1; i >= 0; i -= 1) {
     const urls = thread.messages[i]?.imageUrls;
@@ -392,9 +401,22 @@ export default function SciPlotPage() {
 
     const languageSuffix = getLanguageSuffix(nextThread.language);
 
+    const requestId = uuidv4();
+    const startedAt = Date.now();
+    console.log(`[sci-plot][client][${requestId}] start`, {
+      threadId: nextThread.id,
+      model: nextThread.model,
+      aspectRatio: nextThread.aspectRatio,
+      language: nextThread.language,
+      messages: nextThread.messages.length,
+      refImages: refUrls.length,
+      apiBaseUrl: safeUrlForLog(settings!.apiBaseUrl),
+    });
+
     setLoading(true);
     try {
       const res = await generateSciPlot({
+        requestId,
         apiBaseUrl: settings!.apiBaseUrl,
         apiKey: settings!.apiKey,
         model: nextThread.model,
@@ -427,9 +449,14 @@ export default function SciPlotPage() {
       };
       upsertSciPlotThread(updated);
       refreshThreads();
+      console.log(`[sci-plot][client][${requestId}] success`, {
+        durationMs: Date.now() - startedAt,
+        images: res.imageUrls.length,
+      });
       toast({ title: '已生成并上传到图床' });
     } catch (err) {
       const message = err instanceof Error ? err.message : '生成失败';
+      console.error(`[sci-plot][client][${requestId}] error`, { durationMs: Date.now() - startedAt, message, err });
       toast({ title: '生成失败', description: message, variant: 'destructive' });
     } finally {
       setLoading(false);
@@ -494,9 +521,22 @@ export default function SciPlotPage() {
 
     const languageSuffix = getLanguageSuffix(threadBase.language);
 
+    const requestId = uuidv4();
+    const startedAt = Date.now();
+    console.log(`[sci-plot][client][${requestId}] retry start`, {
+      threadId: threadBase.id,
+      userMessageId,
+      model: threadBase.model,
+      aspectRatio: threadBase.aspectRatio,
+      language: threadBase.language,
+      messages: threadBase.messages.length,
+      apiBaseUrl: safeUrlForLog(settings!.apiBaseUrl),
+    });
+
     setLoading(true);
     try {
       const res = await generateSciPlot({
+        requestId,
         apiBaseUrl: settings!.apiBaseUrl,
         apiKey: settings!.apiKey,
         model: threadBase.model,
@@ -529,9 +569,14 @@ export default function SciPlotPage() {
       };
       upsertSciPlotThread(updated);
       refreshThreads();
+      console.log(`[sci-plot][client][${requestId}] retry success`, {
+        durationMs: Date.now() - startedAt,
+        images: res.imageUrls.length,
+      });
       toast({ title: '已生成并上传到图床' });
     } catch (err) {
       const message = err instanceof Error ? err.message : '生成失败';
+      console.error(`[sci-plot][client][${requestId}] retry error`, { durationMs: Date.now() - startedAt, message, err });
       toast({ title: '生成失败', description: message, variant: 'destructive' });
     } finally {
       setLoading(false);

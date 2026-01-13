@@ -3,6 +3,50 @@ import { NextResponse } from 'next/server';
 export const maxDuration = 180;
 
 const SCI_PLOT_TIMEOUT_MS = 180_000;
+const SCI_PLOT_DEBUG = process.env.SCI_PLOT_DEBUG === '1';
+
+type LogMeta = Record<string, unknown>;
+type DebugLog = (message: string, meta?: LogMeta) => void;
+
+function safeStringify(meta: LogMeta) {
+  try {
+    return JSON.stringify(meta);
+  } catch {
+    return '';
+  }
+}
+
+function logInfo(requestId: string, message: string, meta?: LogMeta) {
+  const suffix = meta ? ` ${safeStringify(meta)}` : '';
+  console.log(`[sci-plot][${requestId}] ${message}${suffix}`);
+}
+
+function logError(requestId: string, message: string, meta?: LogMeta) {
+  const suffix = meta ? ` ${safeStringify(meta)}` : '';
+  console.error(`[sci-plot][${requestId}] ${message}${suffix}`);
+}
+
+function summarizeUrl(value: string) {
+  try {
+    const u = new URL(value);
+    return `${u.protocol}//${u.host}${u.pathname}`;
+  } catch {
+    return value.slice(0, 120);
+  }
+}
+
+function memorySnapshotMB() {
+  if (typeof process === 'undefined' || typeof process.memoryUsage !== 'function') return null;
+  const mem = process.memoryUsage();
+  const toMB = (n: number) => Math.round((n / 1024 / 1024) * 10) / 10;
+  return {
+    rss: toMB(mem.rss),
+    heapUsed: toMB(mem.heapUsed),
+    heapTotal: toMB(mem.heapTotal),
+    external: toMB(mem.external),
+    arrayBuffers: toMB(mem.arrayBuffers),
+  };
+}
 
 type StoredMessage = {
   role: 'user' | 'assistant' | 'system';
@@ -11,6 +55,7 @@ type StoredMessage = {
 };
 
 type GenerateRequestBody = {
+  requestId?: string;
   apiBaseUrl: string;
   apiKey: string;
   model:
@@ -162,13 +207,34 @@ function extractImagesFromUpstreamResponse(data: unknown): {
   return { images, assistantText: '' };
 }
 
-async function fetchUrlAsDataUrl(url: string) {
-  const resp = await fetchWithTimeout(url, {}, SCI_PLOT_TIMEOUT_MS);
-  if (!resp.ok) throw new Error(`Failed to fetch image url: ${resp.status}`);
-  const arrayBuffer = await resp.arrayBuffer();
-  const mime = resp.headers.get('content-type')?.split(';')?.[0]?.trim() || guessMimeFromUrl(url);
-  const base64 = Buffer.from(arrayBuffer).toString('base64');
-  return `data:${mime};base64,${base64}`;
+async function fetchUrlAsDataUrl(url: string, log?: DebugLog) {
+  const startedAt = Date.now();
+  log?.('fetchUrlAsDataUrl:start', { url: summarizeUrl(url) });
+  try {
+    const resp = await fetchWithTimeout(url, {}, SCI_PLOT_TIMEOUT_MS);
+    if (!resp.ok) {
+      log?.('fetchUrlAsDataUrl:failed', { url: summarizeUrl(url), status: resp.status, durationMs: Date.now() - startedAt });
+      throw new Error(`Failed to fetch image url: ${resp.status}`);
+    }
+    const arrayBuffer = await resp.arrayBuffer();
+    const mime = resp.headers.get('content-type')?.split(';')?.[0]?.trim() || guessMimeFromUrl(url);
+    log?.('fetchUrlAsDataUrl:ok', {
+      url: summarizeUrl(url),
+      status: resp.status,
+      mime,
+      bytes: arrayBuffer.byteLength,
+      durationMs: Date.now() - startedAt,
+    });
+    const base64 = Buffer.from(arrayBuffer).toString('base64');
+    return `data:${mime};base64,${base64}`;
+  } catch (error) {
+    log?.('fetchUrlAsDataUrl:error', {
+      url: summarizeUrl(url),
+      durationMs: Date.now() - startedAt,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    throw error;
+  }
 }
 
 function parseDataUrl(dataUrl: string): { mime: string; base64: string } {
@@ -200,30 +266,48 @@ function sniffImageMimeFromBytes(bytes: Buffer): string {
   return 'image/png';
 }
 
-async function imageSourceToBytes(source: ExtractedImageSource): Promise<{ bytes: Buffer; mime: string }> {
+async function imageSourceToBytes(source: ExtractedImageSource, log?: DebugLog): Promise<{ bytes: Buffer; mime: string }> {
+  const startedAt = Date.now();
   if (source.kind === 'data_url') {
     const { mime, base64 } = parseDataUrl(source.dataUrl);
+    log?.('imageSourceToBytes:data_url', { mime, bytes: Math.round(base64.length * 0.75), durationMs: Date.now() - startedAt });
     return { bytes: Buffer.from(base64, 'base64'), mime };
   }
   if (source.kind === 'b64_json') {
     const bytes = Buffer.from(source.b64, 'base64');
-    return { bytes, mime: source.mime || sniffImageMimeFromBytes(bytes) };
+    const mime = source.mime || sniffImageMimeFromBytes(bytes);
+    log?.('imageSourceToBytes:b64_json', { mime, bytes: bytes.length, durationMs: Date.now() - startedAt });
+    return { bytes, mime };
   }
+  log?.('imageSourceToBytes:url:start', { url: summarizeUrl(source.url) });
   const resp = await fetchWithTimeout(source.url, {}, SCI_PLOT_TIMEOUT_MS);
-  if (!resp.ok) throw new Error(`Failed to fetch upstream image: ${resp.status}`);
+  if (!resp.ok) {
+    log?.('imageSourceToBytes:url:failed', { url: summarizeUrl(source.url), status: resp.status, durationMs: Date.now() - startedAt });
+    throw new Error(`Failed to fetch upstream image: ${resp.status}`);
+  }
   const arrayBuffer = await resp.arrayBuffer();
   const bytes = Buffer.from(arrayBuffer);
   const mime =
     resp.headers.get('content-type')?.split(';')?.[0]?.trim() ||
     guessMimeFromUrl(source.url) ||
     sniffImageMimeFromBytes(bytes);
+  log?.('imageSourceToBytes:url:ok', {
+    url: summarizeUrl(source.url),
+    status: resp.status,
+    mime,
+    bytes: bytes.length,
+    durationMs: Date.now() - startedAt,
+  });
   return { bytes, mime };
 }
 
-async function uploadToImageHosting(bytes: Buffer, mime: string) {
+async function uploadToImageHosting(bytes: Buffer, mime: string, log?: DebugLog) {
   const { url, token } = getImageHostingConfig();
   const ext = mimeToExt(mime);
   const filename = `sci-plot-${Date.now()}.${ext}`;
+
+  const startedAt = Date.now();
+  log?.('uploadToImageHosting:start', { url: summarizeUrl(url), mime, bytes: bytes.length });
 
   const formData = new FormData();
   formData.append('token', token);
@@ -238,19 +322,24 @@ async function uploadToImageHosting(bytes: Buffer, mime: string) {
     // ignore
   }
   if (!resp.ok) {
+    log?.('uploadToImageHosting:failed', { status: resp.status, durationMs: Date.now() - startedAt });
     throw new Error(`Image hosting failed: ${resp.status} ${text.slice(0, 200)}`);
   }
   if (!isRecord(data) || data.result !== 'success' || typeof data.url !== 'string') {
+    log?.('uploadToImageHosting:invalid', { durationMs: Date.now() - startedAt });
     throw new Error(`Image hosting failed: ${text.slice(0, 200)}`);
   }
+  log?.('uploadToImageHosting:ok', { durationMs: Date.now() - startedAt });
   return data.url;
 }
 
 async function buildOpenAIMessages(
   messages: StoredMessage[],
   aspectRatio: string,
-  language: 'zh' | 'en'
+  language: 'zh' | 'en',
+  log?: DebugLog
 ): Promise<OpenAIMessage[]> {
+  const startedAt = Date.now();
   const languageHint =
     language === 'en'
       ? 'All text in the figure (title, axis labels, legend, annotations) must be in English.'
@@ -276,19 +365,31 @@ async function buildOpenAIMessages(
     for (const url of imageUrls) {
       if (typeof url !== 'string' || !url.trim()) continue;
       const raw = url.trim();
-      const dataUrl = raw.startsWith('data:image/') ? raw : await fetchUrlAsDataUrl(raw);
+      const dataUrl = raw.startsWith('data:image/') ? raw : await fetchUrlAsDataUrl(raw, log);
       parts.push({ type: 'image_url', image_url: { url: dataUrl } });
     }
     if (parts.length === 0) continue;
     openaiMessages.push({ role: msg.role, content: parts });
   }
 
+  log?.('buildOpenAIMessages:done', {
+    openaiMessages: openaiMessages.length,
+    durationMs: Date.now() - startedAt,
+  });
   return openaiMessages;
 }
 
 export async function POST(request: Request) {
+  const requestStartedAt = Date.now();
+  let requestId = '';
+
   try {
     const body = (await request.json()) as Partial<GenerateRequestBody>;
+
+    requestId =
+      typeof body.requestId === 'string' && body.requestId.trim()
+        ? body.requestId.trim()
+        : globalThis.crypto?.randomUUID?.() || `req_${Date.now()}_${Math.random().toString(16).slice(2)}`;
 
     const apiBaseUrl = body.apiBaseUrl?.trim();
     const apiKey = body.apiKey?.trim();
@@ -297,12 +398,40 @@ export async function POST(request: Request) {
     const language = body.language === 'en' ? 'en' : 'zh';
     const messages = body.messages;
 
+    const totalImageUrls =
+      Array.isArray(messages)
+        ? messages.reduce((sum, m) => sum + (Array.isArray(m?.imageUrls) ? m.imageUrls.length : 0), 0)
+        : 0;
+
+    logInfo(requestId, 'start', {
+      model,
+      aspectRatio,
+      language,
+      messages: Array.isArray(messages) ? messages.length : 'invalid',
+      imageUrls: totalImageUrls,
+      timeoutMs: SCI_PLOT_TIMEOUT_MS,
+      memMB: memorySnapshotMB(),
+      debug: SCI_PLOT_DEBUG,
+    });
+
     if (!apiBaseUrl || !apiKey || !model || !aspectRatio || !Array.isArray(messages)) {
-      return NextResponse.json({ error: '参数不完整' }, { status: 400 });
+      logError(requestId, 'bad_request', { hasApiBaseUrl: !!apiBaseUrl, hasApiKey: !!apiKey });
+      return NextResponse.json({ error: '参数不完整', requestId }, { status: 400 });
     }
 
-    const openaiMessages = await buildOpenAIMessages(messages, aspectRatio, language);
+    const debugLog: DebugLog | undefined = SCI_PLOT_DEBUG ? (msg, meta) => logInfo(requestId, msg, meta) : undefined;
+
+    const buildStartedAt = Date.now();
+    const openaiMessages = await buildOpenAIMessages(messages, aspectRatio, language, debugLog);
+    logInfo(requestId, 'buildOpenAIMessages:ok', {
+      durationMs: Date.now() - buildStartedAt,
+      openaiMessages: openaiMessages.length,
+      memMB: memorySnapshotMB(),
+    });
+
     const upstreamUrl = resolveOpenAIUrl(apiBaseUrl, '/chat/completions');
+    const upstreamStartedAt = Date.now();
+    logInfo(requestId, 'upstream:request', { url: summarizeUrl(upstreamUrl), model });
 
     const upstreamResp = await fetchWithTimeout(
       upstreamUrl,
@@ -321,33 +450,72 @@ export async function POST(request: Request) {
       SCI_PLOT_TIMEOUT_MS
     );
 
-    const upstreamJson = await upstreamResp.json().catch(() => null);
+    logInfo(requestId, 'upstream:response', {
+      status: upstreamResp.status,
+      durationMs: Date.now() - upstreamStartedAt,
+      memMB: memorySnapshotMB(),
+    });
+
+    const parseStartedAt = Date.now();
+    const upstreamJson = await upstreamResp.json().catch((err) => {
+      logError(requestId, 'upstream:json_parse_failed', {
+        durationMs: Date.now() - parseStartedAt,
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return null;
+    });
+
     if (!upstreamResp.ok) {
       const message =
         upstreamJson?.error?.message ||
         upstreamJson?.message ||
         `上游请求失败 (${upstreamResp.status})`;
-      return NextResponse.json({ error: message }, { status: upstreamResp.status });
+      logError(requestId, 'upstream:failed', { status: upstreamResp.status, message });
+      return NextResponse.json({ error: message, requestId }, { status: upstreamResp.status });
     }
 
+    const extractStartedAt = Date.now();
     const { images, assistantText } = extractImagesFromUpstreamResponse(upstreamJson);
+    logInfo(requestId, 'extract:ok', {
+      durationMs: Date.now() - extractStartedAt,
+      images: images.length,
+      assistantTextLen: assistantText.length,
+    });
+
     if (images.length === 0) {
-      return NextResponse.json({ error: '模型返回中未找到图片' }, { status: 500 });
+      logError(requestId, 'extract:no_images');
+      return NextResponse.json({ error: '模型返回中未找到图片', requestId }, { status: 500 });
     }
 
     const uploadedUrls: string[] = [];
-    for (const img of images) {
-      const { bytes, mime } = await imageSourceToBytes(img);
-      const directUrl = await uploadToImageHosting(bytes, mime);
+    for (let index = 0; index < images.length; index += 1) {
+      const img = images[index]!;
+      const stepStartedAt = Date.now();
+      logInfo(requestId, 'image:process_start', { index: index + 1, kind: img.kind, memMB: memorySnapshotMB() });
+
+      const { bytes, mime } = await imageSourceToBytes(img, debugLog);
+      logInfo(requestId, 'image:bytes_ok', { index: index + 1, mime, bytes: bytes.length, durationMs: Date.now() - stepStartedAt });
+
+      const directUrl = await uploadToImageHosting(bytes, mime, debugLog);
       uploadedUrls.push(directUrl);
+      logInfo(requestId, 'image:upload_ok', {
+        index: index + 1,
+        directUrl: summarizeUrl(directUrl),
+        durationMs: Date.now() - stepStartedAt,
+        memMB: memorySnapshotMB(),
+      });
     }
 
+    logInfo(requestId, 'success', { images: uploadedUrls.length, durationMs: Date.now() - requestStartedAt, memMB: memorySnapshotMB() });
     return NextResponse.json({
+      requestId,
       imageUrls: uploadedUrls,
       assistantText: assistantText || undefined,
     });
   } catch (error) {
-    console.error('sci-plot error:', error);
-    return NextResponse.json({ error: '生成失败，请重试' }, { status: 500 });
+    const rid = requestId || globalThis.crypto?.randomUUID?.() || `req_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    const message = error instanceof Error ? error.message : String(error);
+    logError(rid, 'error', { durationMs: Date.now() - requestStartedAt, message, memMB: memorySnapshotMB() });
+    return NextResponse.json({ error: '生成失败，请重试', requestId: rid }, { status: 500 });
   }
 }

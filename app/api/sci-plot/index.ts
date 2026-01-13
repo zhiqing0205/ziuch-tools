@@ -14,6 +14,7 @@ export type SciPlotStoredMessage = {
 };
 
 export type SciPlotGenerateRequest = {
+  requestId?: string;
   apiBaseUrl: string;
   apiKey: string;
   model: SciPlotModel;
@@ -23,6 +24,7 @@ export type SciPlotGenerateRequest = {
 };
 
 export type SciPlotGenerateResponse = {
+  requestId?: string;
   imageUrls: string[];
   assistantText?: string;
 };
@@ -33,6 +35,12 @@ function getErrorMessage(data: unknown): string | null {
   return typeof maybe.error === 'string' ? maybe.error : null;
 }
 
+function getRequestId(data: unknown): string | null {
+  if (!data || typeof data !== 'object') return null;
+  const maybe = data as { requestId?: unknown };
+  return typeof maybe.requestId === 'string' && maybe.requestId.trim() ? maybe.requestId.trim() : null;
+}
+
 export async function generateSciPlot(req: SciPlotGenerateRequest): Promise<SciPlotGenerateResponse> {
   const resp = await fetch('/api/sci-plot', {
     method: 'POST',
@@ -41,7 +49,9 @@ export async function generateSciPlot(req: SciPlotGenerateRequest): Promise<SciP
   });
   const data: unknown = await resp.json().catch(() => null);
   if (!resp.ok) {
-    throw new Error(getErrorMessage(data) || `生成失败 (${resp.status})`);
+    const requestId = getRequestId(data);
+    const message = getErrorMessage(data) || `生成失败 (${resp.status})`;
+    throw new Error(requestId ? `${message} (requestId: ${requestId})` : message);
   }
   return data as SciPlotGenerateResponse;
 }
