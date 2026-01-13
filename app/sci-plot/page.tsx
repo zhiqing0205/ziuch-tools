@@ -704,16 +704,7 @@ export default function SciPlotPage() {
                             title={thread.title || '未命名对话'}
                             aria-label={thread.title || '未命名对话'}
                           >
-                            <button
-                              type="button"
-                              className="aspect-square w-full overflow-hidden rounded-md border bg-background"
-                              onClick={(e) => {
-                                if (!lastImage) return;
-                                e.stopPropagation();
-                                openPreview(lastImage, `${thread.title || 'sci-plot'}.png`);
-                              }}
-                              aria-label="预览缩略图"
-                            >
+                            <div className="aspect-square w-full overflow-hidden rounded-md border bg-background">
                               {lastImage ? (
                                 <img
                                   src={lastImage}
@@ -724,7 +715,7 @@ export default function SciPlotPage() {
                               ) : (
                                 <div className="h-full w-full bg-muted" />
                               )}
-                            </button>
+                            </div>
 
                             <div className="mt-1 text-[11px] text-muted-foreground">
                               {formatRelativeTime(thread.updatedAt)}
@@ -774,15 +765,7 @@ export default function SciPlotPage() {
                             </div>
 
                             <div className="flex items-start gap-3">
-                              <button
-                                type="button"
-                                className="h-14 w-14 shrink-0 overflow-hidden rounded-md border bg-background"
-                                onClick={(e) => {
-                                  if (!lastImage) return;
-                                  e.stopPropagation();
-                                  openPreview(lastImage, `${thread.title || 'sci-plot'}.png`);
-                                }}
-                              >
+                              <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md border bg-background">
                                 {lastImage ? (
                                   <img
                                     src={lastImage}
@@ -793,7 +776,7 @@ export default function SciPlotPage() {
                                 ) : (
                                   <div className="h-full w-full bg-muted" />
                                 )}
-                              </button>
+                              </div>
                               <div className="min-w-0 flex-1">
                                 <div className="text-sm font-medium overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">
                                   {thread.title || '未命名对话'}
