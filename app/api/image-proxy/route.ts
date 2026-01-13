@@ -1,5 +1,19 @@
 import { NextResponse } from 'next/server';
 
+export const maxDuration = 180;
+
+const IMAGE_PROXY_TIMEOUT_MS = 180_000;
+
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs: number) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 function getAllowedImageHosts(): Set<string> {
   const hostingUrl =
     process.env.IMAGE_HOSTING_URL || process.env.NEXT_PUBLIC_IMAGE_HOSTING_URL;
@@ -56,7 +70,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: '该图片地址不允许代理下载' }, { status: 403 });
     }
 
-    const resp = await fetch(target.toString());
+    const resp = await fetchWithTimeout(target.toString(), {}, IMAGE_PROXY_TIMEOUT_MS);
     if (!resp.ok) {
       return NextResponse.json(
         { error: `图片获取失败 (${resp.status})` },

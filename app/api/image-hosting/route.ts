@@ -1,5 +1,19 @@
 import { NextResponse } from 'next/server';
 
+export const maxDuration = 180;
+
+const IMAGE_HOSTING_TIMEOUT_MS = 180_000;
+
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs: number) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
@@ -30,7 +44,7 @@ export async function POST(request: Request) {
     formData.append('token', token);
     formData.append('image', file, filename);
 
-    const resp = await fetch(url, { method: 'POST', body: formData });
+    const resp = await fetchWithTimeout(url, { method: 'POST', body: formData }, IMAGE_HOSTING_TIMEOUT_MS);
     const text = await resp.text();
     let data: unknown = null;
     try {
@@ -56,4 +70,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: '图床上传失败，请重试' }, { status: 500 });
   }
 }
-

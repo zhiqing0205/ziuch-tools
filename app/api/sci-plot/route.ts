@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 
-export const maxDuration = 300;
+export const maxDuration = 180;
+
+const SCI_PLOT_TIMEOUT_MS = 180_000;
 
 type StoredMessage = {
   role: 'user' | 'assistant' | 'system';
@@ -161,7 +163,7 @@ function extractImagesFromUpstreamResponse(data: unknown): {
 }
 
 async function fetchUrlAsDataUrl(url: string) {
-  const resp = await fetch(url);
+  const resp = await fetchWithTimeout(url, {}, SCI_PLOT_TIMEOUT_MS);
   if (!resp.ok) throw new Error(`Failed to fetch image url: ${resp.status}`);
   const arrayBuffer = await resp.arrayBuffer();
   const mime = resp.headers.get('content-type')?.split(';')?.[0]?.trim() || guessMimeFromUrl(url);
@@ -207,7 +209,7 @@ async function imageSourceToBytes(source: ExtractedImageSource): Promise<{ bytes
     const bytes = Buffer.from(source.b64, 'base64');
     return { bytes, mime: source.mime || sniffImageMimeFromBytes(bytes) };
   }
-  const resp = await fetch(source.url);
+  const resp = await fetchWithTimeout(source.url, {}, SCI_PLOT_TIMEOUT_MS);
   if (!resp.ok) throw new Error(`Failed to fetch upstream image: ${resp.status}`);
   const arrayBuffer = await resp.arrayBuffer();
   const bytes = Buffer.from(arrayBuffer);
@@ -227,7 +229,7 @@ async function uploadToImageHosting(bytes: Buffer, mime: string) {
   formData.append('token', token);
   formData.append('image', new Blob([bytes], { type: mime }), filename);
 
-  const resp = await fetch(url, { method: 'POST', body: formData });
+  const resp = await fetchWithTimeout(url, { method: 'POST', body: formData }, SCI_PLOT_TIMEOUT_MS);
   const text = await resp.text();
   let data: unknown = null;
   try {
@@ -316,7 +318,7 @@ export async function POST(request: Request) {
           stream: false,
         }),
       },
-      300_000
+      SCI_PLOT_TIMEOUT_MS
     );
 
     const upstreamJson = await upstreamResp.json().catch(() => null);
