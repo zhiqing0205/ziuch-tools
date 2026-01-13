@@ -96,6 +96,23 @@ function formatTime(ts: number) {
   }
 }
 
+function formatRelativeTime(ts: number) {
+  const now = Date.now();
+  const diffMs = now - ts;
+  if (!Number.isFinite(diffMs)) return '';
+  if (diffMs < 60_000) return '刚刚';
+  const diffMin = Math.floor(diffMs / 60_000);
+  if (diffMin < 60) return `${diffMin}分钟前`;
+  const diffHour = Math.floor(diffMin / 60);
+  if (diffHour < 24) return `${diffHour}小时前`;
+  const diffDay = Math.floor(diffHour / 24);
+  if (diffDay < 30) return `${diffDay}天前`;
+  const diffMonth = Math.floor(diffDay / 30);
+  if (diffMonth < 12) return `${diffMonth}个月前`;
+  const diffYear = Math.floor(diffMonth / 12);
+  return `${diffYear}年前`;
+}
+
 function getThreadLastImageUrl(thread: SciPlotThread): string | null {
   for (let i = thread.messages.length - 1; i >= 0; i -= 1) {
     const urls = thread.messages[i]?.imageUrls;
@@ -610,7 +627,7 @@ export default function SciPlotPage() {
         <div
           className={cn(
             'grid gap-4',
-            sidebarCollapsed ? 'md:grid-cols-[160px,1fr]' : 'md:grid-cols-[280px,1fr] lg:grid-cols-[300px,1fr]'
+            sidebarCollapsed ? 'md:grid-cols-[144px,1fr]' : 'md:grid-cols-[280px,1fr] lg:grid-cols-[300px,1fr]'
           )}
         >
           <Card className="md:h-[calc(100vh-240px)]">
@@ -658,7 +675,7 @@ export default function SciPlotPage() {
                 </>
               )}
             </CardHeader>
-            <CardContent className="pt-0">
+            <CardContent className={cn('pt-0', sidebarCollapsed && 'px-3')}>
               <ScrollArea className="h-[calc(100vh-320px)] md:h-[calc(100vh-330px)]">
                 <div className={cn('space-y-2', sidebarCollapsed ? 'pr-1' : 'pr-3')}>
                   {threads.length === 0 ? (
@@ -680,7 +697,10 @@ export default function SciPlotPage() {
                             onKeyDown={(e) => {
                               if (e.key === 'Enter' || e.key === ' ') setActiveThreadId(thread.id);
                             }}
-                            className={cn('group w-full rounded-lg border p-2 text-left hover:bg-accent', isActive && 'border-primary bg-accent')}
+                            className={cn(
+                              'group w-full rounded-lg border p-1.5 text-left hover:bg-accent',
+                              isActive && 'border-primary bg-accent'
+                            )}
                             title={thread.title || '未命名对话'}
                             aria-label={thread.title || '未命名对话'}
                           >
@@ -707,36 +727,7 @@ export default function SciPlotPage() {
                             </button>
 
                             <div className="mt-1 text-[11px] text-muted-foreground">
-                              {formatTime(thread.updatedAt)}
-                            </div>
-
-                            <div className="mt-2 flex flex-col gap-1">
-                              <Button
-                                type="button"
-                                size="sm"
-                                variant="ghost"
-                                className="h-8 w-full justify-start hover:bg-primary/10"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  openEditTitle(thread.id);
-                                }}
-                              >
-                                <Pencil className="h-4 w-4" />
-                                编辑
-                              </Button>
-                              <Button
-                                type="button"
-                                size="sm"
-                                variant="ghost"
-                                className="h-8 w-full justify-start text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setDeleteId(thread.id);
-                                }}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                                删除
-                              </Button>
+                              {formatRelativeTime(thread.updatedAt)}
                             </div>
                           </div>
                         ) : (
