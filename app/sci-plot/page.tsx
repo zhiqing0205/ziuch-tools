@@ -64,9 +64,9 @@ type Attachment = {
 const SIDEBAR_COLLAPSED_KEY = 'sci-plot-sidebar-collapsed';
 
 const MODEL_OPTIONS: Array<{ value: SciPlotModel; label: string }> = [
-  { value: 'gemini-3-pro-image-preview', label: 'gemini-3-pro-image-preview' },
-  { value: 'gemini-3-pro-image-preview-2k', label: 'gemini-3-pro-image-preview-2k' },
-  { value: 'gemini-3-pro-image-preview-4k', label: 'gemini-3-pro-image-preview-4k' },
+  { value: 'gemini-3-pro-image-preview', label: 'nano-banana-pro-1k' },
+  { value: 'gemini-3-pro-image-preview-2k', label: 'nano-banana-pro-2k' },
+  { value: 'gemini-3-pro-image-preview-4k', label: 'nano-banana-pro-4k' },
 ];
 
 const ASPECT_RATIO_OPTIONS: Array<{ value: SciPlotAspectRatio; label: string }> = [
@@ -835,7 +835,7 @@ export default function SciPlotPage() {
                   </Select>
 
                   <Select value={model} onValueChange={(v) => setModel(v as SciPlotModel)}>
-                    <SelectTrigger className="h-8 w-[220px]">
+                    <SelectTrigger className="h-8 w-[260px]">
                       <SelectValue placeholder="模型" />
                     </SelectTrigger>
                     <SelectContent>
