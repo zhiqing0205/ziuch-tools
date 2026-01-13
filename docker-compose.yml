@@ -1,0 +1,11 @@
+services:
+  ziuch-tools:
+    image: ziuch-tools:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3099:3000"
+    env_file:
+      - .env.local
+    restart: unless-stopped
